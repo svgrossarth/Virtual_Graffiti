@@ -20,4 +20,6 @@ target 'Login' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+  pod 'GoogleSignIn'
+  pod 'FBSDKLoginKit'
 end
