@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     
     let quadtree : BMQuadtree = BMQuadtree<CLLocation>(boundingQuad: BMQuad.init(quadMin: vector_float2(-180.0, -90.0), quadMax: vector_float2(180.0, 90.0)), minimumCellSize: 1.0)
     let checkedDegrees : Float = 1.0
-    let testDatabase : Array = [CLLocation(latitude: 0.0, longitude: 0.0),
+    var testDatabase : Array = [CLLocation(latitude: 0.0, longitude: 0.0),
                               CLLocation(latitude: 1.0, longitude: 0.0),
                               CLLocation(latitude: 0.0, longitude: 1.0),
                               CLLocation(latitude: 0.5, longitude: 0.0),
@@ -70,6 +70,7 @@ class ViewController: UIViewController {
     
     func saveLocation() {
         updateLocation()
+        testDatabase.append(currentLocation)
     }
 }
 
