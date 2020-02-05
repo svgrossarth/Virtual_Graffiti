@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'BMQuadtree_Example' do
+  pod 'BMQuadtree', :path => '../'
+
+  target 'BMQuadtree_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

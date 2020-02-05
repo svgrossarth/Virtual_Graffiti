@@ -22,6 +22,8 @@
 		77E74DCD23E240F000C6E65C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DCC23E240F000C6E65C /* Constants.swift */; };
 		840396B84711DBF0D8C708E9 /* Pods_Login_LoginUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 728D207DB3856DDE2413FBA7 /* Pods_Login_LoginUITests.framework */; };
 		8915D5995379065F1C653BEB /* Pods_LoginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59ECB37AE43FC4BFA2F06DC0 /* Pods_LoginTests.framework */; };
+		CE38708023E374F600B81D43 /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38707F23E374F600B81D43 /* DrawingViewController.swift */; };
+		CEFEDD6523E37AE4003B20BB /* DrawingUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFEDD6423E37AE4003B20BB /* DrawingUI.swift */; };
 		FFEC7F6A55F16F5916A05893 /* Pods_Login.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 329A5137A7D43F29383203FB /* Pods_Login.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +71,8 @@
 		77E74DCC23E240F000C6E65C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7C1A970FF1753B5DF0286F26 /* Pods-Login.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Login.release.xcconfig"; path = "Target Support Files/Pods-Login/Pods-Login.release.xcconfig"; sourceTree = "<group>"; };
 		B85FA82401D5724932CA74A7 /* Pods-Login-LoginUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Login-LoginUITests.release.xcconfig"; path = "Target Support Files/Pods-Login-LoginUITests/Pods-Login-LoginUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CE38707F23E374F600B81D43 /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
+		CEFEDD6423E37AE4003B20BB /* DrawingUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingUI.swift; sourceTree = "<group>"; };
 		D12B60A23CE2829BFF713547 /* Pods-LoginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoginTests.debug.xcconfig"; path = "Target Support Files/Pods-LoginTests/Pods-LoginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7AB918D93536D5B88048109 /* Pods-LoginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoginTests.release.xcconfig"; path = "Target Support Files/Pods-LoginTests/Pods-LoginTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +118,7 @@
 		7746C3A823DE581C00DDC27C = {
 			isa = PBXGroup;
 			children = (
+				CE38707E23E373B400B81D43 /* ToolPicker */,
 				7746C3B323DE581C00DDC27C /* Login */,
 				7746C3CA23DE581E00DDC27C /* LoginTests */,
 				7746C3D523DE581E00DDC27C /* LoginUITests */,
@@ -197,6 +202,15 @@
 				D7AB918D93536D5B88048109 /* Pods-LoginTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		CE38707E23E373B400B81D43 /* ToolPicker */ = {
+			isa = PBXGroup;
+			children = (
+				CE38707F23E374F600B81D43 /* DrawingViewController.swift */,
+				CEFEDD6423E37AE4003B20BB /* DrawingUI.swift */,
+			);
+			path = ToolPicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -441,9 +455,11 @@
 			files = (
 				7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */,
 				7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */,
+				CE38708023E374F600B81D43 /* DrawingViewController.swift in Sources */,
 				77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */,
 				77E74DC823E222CF00C6E65C /* LoginViewController.swift in Sources */,
 				77E74DCD23E240F000C6E65C /* Constants.swift in Sources */,
+				CEFEDD6523E37AE4003B20BB /* DrawingUI.swift in Sources */,
 				7746C3B723DE581C00DDC27C /* SceneDelegate.swift in Sources */,
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
 			);
@@ -621,6 +637,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Login/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -639,6 +656,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Login/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -658,7 +676,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = LoginTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -680,7 +698,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = LoginTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -701,6 +719,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = LoginUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -721,6 +740,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = LoginUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
