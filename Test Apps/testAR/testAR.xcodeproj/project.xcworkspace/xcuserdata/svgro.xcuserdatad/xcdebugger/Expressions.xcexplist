@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "ARView.renderPoints(currentPointPosition:previousPointPosition:point:worldOrigin:distance:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "entity.components">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ARView.touchesBegan(_:with:):ViewController.swift">
          <PersistentStrings>
             <PersistentString

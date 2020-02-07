@@ -14,8 +14,10 @@
             filePath = "testAR/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58">
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "touchesMoved(_:with:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -28,8 +30,8 @@
             filePath = "testAR/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "touchesBegan(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -38,15 +40,111 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "70702B4A-70A3-41F4-9CCE-13824D936B77"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "testAR/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "touchesBegan(_:with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B209A43D-9DC2-4B46-9E52-728D64A41401"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "testAR/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "generateMorePoints(currentPoint:previousPoint:worldOrigin:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "03B031A3-6445-45A7-8F32-9469B9087C22"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "testAR/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "generateMorePoints(currentPoint:previousPoint:worldOrigin:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "242649D0-392B-4A92-A5E4-D00CE1D71C9C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "testAR/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "touchesBegan(_:with:)"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "renderPoints(currentPointPosition:previousPointPosition:point:worldOrigin:distance:model:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "242649D0-392B-4A92-A5E4-D00CE1D71C9C - d05033d855173bd4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(extension in testAR):RealityKit.ARView.renderPoints(currentPointPosition: Swift.SIMD3&lt;Swift.Float&gt;, previousPointPosition: Swift.SIMD3&lt;Swift.Float&gt;, point: RealityKit.Entity, worldOrigin: RealityKit.Entity, distance: Swift.Float) -&gt; ()"
+                  moduleName = "testAR"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/svgro/Documents/UC%20Davis/Winter%202020/ecs_193A/Virtual_Graffiti/Test%20Apps/testAR/testAR/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "139"
+                  endingLineNumber = "139"
+                  offsetFromSymbolStart = "2364">
+               </Location>
+               <Location
+                  uuid = "242649D0-392B-4A92-A5E4-D00CE1D71C9C - d05033d855173bd4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(extension in testAR):RealityKit.ARView.renderPoints(currentPointPosition: Swift.SIMD3&lt;Swift.Float&gt;, previousPointPosition: Swift.SIMD3&lt;Swift.Float&gt;, point: RealityKit.Entity, worldOrigin: RealityKit.Entity, distance: Swift.Float) -&gt; ()"
+                  moduleName = "testAR"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/svgro/Documents/UC%20Davis/Winter%202020/ecs_193A/Virtual_Graffiti/Test%20Apps/testAR/testAR/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "139"
+                  endingLineNumber = "139"
+                  offsetFromSymbolStart = "3220">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "21E210E8-8287-43E2-9401-7F0896571733"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "testAR/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "renderPoints(currentPointPosition:previousPointPosition:point:worldOrigin:distance:model:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
