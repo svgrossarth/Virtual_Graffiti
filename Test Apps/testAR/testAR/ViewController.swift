@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         worldOrigin.name = WORLD_ORIGIN
         self.arView.scene.addAnchor(worldOrigin)
         self.arView.frame = .zero
-        self.arView.debugOptions = [.showAnchorGeometry, .showAnchorOrigins, .showWorldOrigin]
+        self.arView.debugOptions = [.showAnchorGeometry, .showAnchorOrigins, .showWorldOrigin, .showStatistics]
         
     
     }
