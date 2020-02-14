@@ -3,6 +3,17 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "ARView.touchesMoved(_:with:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cloneEntity.position(relativeTo: anchor)">
+            </PersistentString>
+            <PersistentString
+               value = "self.scene.anchors.first?.children.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ARView.renderPoints(currentPointPosition:previousPointPosition:point:worldOrigin:distance:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -11,21 +22,32 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ARView.findRotation(currentPointPosition:previousPointPosition:distance:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "angle * 180/.pi">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "ARView.touchesBegan(_:with:):ViewController.swift">
          <PersistentStrings>
+            <PersistentString
+               value = "entity.name">
+            </PersistentString>
             <PersistentString
                value = "cameraTran.matrix">
             </PersistentString>
             <PersistentString
                value = "entity.position">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ARView.renderPoints(currentPointPosition:previousPointPosition:point:worldOrigin:distance:model:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "clone.position">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ARView.findRotation(currentPointPosition:previousPointPosition:distance:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "angle * 180/.pi">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
