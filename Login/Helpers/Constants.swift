@@ -12,7 +12,10 @@ struct Constants {
     
     struct Storyboard {
         
+        // goes to AR view
         static let homeViewController = "HomeVC"
+        // goes to login view
+        static let loginViewController = "LoginVC"
         
     }
     

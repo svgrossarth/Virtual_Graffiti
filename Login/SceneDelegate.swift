@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FBSDKCoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -47,7 +48,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
+    
+    /*
+     Facebook Login [START]
+     */
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        let openURLContext = Array(URLContexts).first
+        if openURLContext != nil {
+            if let URL = openURLContext?.url, let annotation = openURLContext?.options.annotation {
+                ApplicationDelegate.shared.application(UIApplication.shared, open: URL, sourceApplication: openURLContext?.options.sourceApplication, annotation: annotation)
+            }
+        }
+        // Add any custom logic here.
+    }
+    /*
+     Facebook Login [END]
+     */
 }
 
