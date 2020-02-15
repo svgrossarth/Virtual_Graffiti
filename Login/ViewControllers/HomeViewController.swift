@@ -23,11 +23,11 @@ class HomeViewController: UIViewController {
         arView.renderOptions = [.disableDepthOfField, .disableCameraGrain, .disableMotionBlur, .disableFaceOcclusions, .disablePersonOcclusion, .disableGroundingShadows, .disableAREnvironmentLighting]
         
         //this anchor is at the origin world origin, it can be used a refence for other entities
-        var worldOrigin = AnchorEntity(world: [0,0,0])
+        let worldOrigin = AnchorEntity(world: [0,0,0])
         worldOrigin.name = WORLD_ORIGIN
         self.arView.scene.addAnchor(worldOrigin)
         self.arView.frame = .zero
-        self.arView.debugOptions = [.showAnchorGeometry, .showAnchorOrigins, .showWorldOrigin, .showStatistics]
+        self.arView.debugOptions = [.showAnchorGeometry, .showAnchorOrigins, .showWorldOrigin]
         
     
     }
@@ -39,7 +39,7 @@ extension ARView {
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //print("new touch")
         if let singleTouch = touches.first{
-            var touchLocation = singleTouch.location(in: self)
+            let touchLocation = singleTouch.location(in: self)
             var cameraTran = self.cameraTransform
             //this is important, or else the plan is off
             cameraTran.rotation = simd_quatf(angle: .pi/2 , axis: simd_float3(x: 1, y: 0, z: 0) )
@@ -54,7 +54,7 @@ extension ARView {
                 print("cant get anchor")
                 return
             }
-            let material = UnlitMaterial(color: .green)
+            let material = UnlitMaterial(color: PKCanvas().sendColor())
             let entity = ModelEntity(mesh: MeshResource.generateBox(width: 0.01, height: 0.01, depth: 0.01, cornerRadius: 1, splitFaces: false), materials: [material])
             //this is vital this realativeTo part is relative to the anchor at 0,0,o so the coordinates map properly
             entity.setPosition(pointIn3d, relativeTo: anchor)
@@ -72,7 +72,7 @@ extension ARView {
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
             
             if let singleTouch = touches.first{
-                var touchLocation = singleTouch.location(in: self)
+                let touchLocation = singleTouch.location(in: self)
                 var cameraTran = self.cameraTransform
                 //this is important, or else the plan is off
                 cameraTran.rotation = simd_quatf(angle: .pi/2 , axis: simd_float3(x: 1, y: 0, z: 0) )
@@ -177,3 +177,4 @@ extension ARView {
 //        return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
 //    }
 }
+

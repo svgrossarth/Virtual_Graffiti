@@ -32,13 +32,14 @@ class PKCanvas: UIView {
         addSubview(canvasView)
 
 
-     if let window = UIApplication.shared.windows.last, let toolPicker = PKToolPicker.shared(for: window) {
+     if let window = UIApplication.shared.windows.first, let toolPicker = PKToolPicker.shared(for: window) {
         //toolpicker shows up
            toolPicker.setVisible(true, forFirstResponder: canvasView)
            toolPicker.addObserver(canvasView)
            toolPicker.addObserver(self)
 
            canvasView.becomeFirstResponder()
+
         }
      }
 
@@ -56,7 +57,7 @@ class PKCanvas: UIView {
        //2.assign updated frame to self view
        self.frame = frame
     }
-    func sendColor() -> SimpleMaterial.Color{
+    func sendColor() -> UnlitMaterial.Color{
         return makeColor.getColor()
     }
 
@@ -95,17 +96,17 @@ extension PKCanvas: PKToolPickerObserver {
 }
 
 class MakeColor{
-    var color : SimpleMaterial.Color
+    var color : UnlitMaterial.Color
 
-    init(selectedColor:SimpleMaterial.Color) {
+    init(selectedColor:UnlitMaterial.Color) {
         print("========================= new class =========================")
         self.color = selectedColor
     }
-    func ChangeColor(newColor: SimpleMaterial.Color){
+    func ChangeColor(newColor: UnlitMaterial.Color){
           print("setting newColor to:", newColor)
           self.color = newColor
       }
-    func getColor() -> SimpleMaterial.Color{
+    func getColor() -> UnlitMaterial.Color{
         print("in the class: getColor()", self.color)
         return self.color
     }

@@ -17,6 +17,7 @@ struct Constants {
         // goes to login view
         static let loginViewController = "LoginVC"
         
+        static let pencilkitViewController = "PencilVC"
     }
     
 }

@@ -63,9 +63,9 @@ class ViewController: UIViewController, GIDSignInDelegate {
     
     func transitionToHome() {
         
-        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
+        let pencilkitViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.pencilkitViewController) as? PencilkitViewController
         
-        view.window?.rootViewController = homeViewController
+        view.window?.rootViewController = pencilkitViewController
         view.window?.makeKeyAndVisible()
         
     }

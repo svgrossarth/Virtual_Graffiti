@@ -241,7 +241,7 @@
         <!--ARView-->
         <scene sceneID="IfY-mq-7yE">
             <objects>
-                <viewController id="RGp-mB-gpr" userLabel="ARView" customClass="HomeViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeVC" id="RGp-mB-gpr" userLabel="ARView" customClass="HomeViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
                     <arView key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3Ak-6A-MRL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -258,7 +258,7 @@
         <!--Pencilkit View Controller-->
         <scene sceneID="Ijs-Lq-QCy">
             <objects>
-                <viewController storyboardIdentifier="HomeVC" id="fTY-vE-k7l" customClass="PencilkitViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PencilVC" id="fTY-vE-k7l" customClass="PencilkitViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f8l-Ls-DaQ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -271,6 +271,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="B3d-I6-3To"/>
                     </view>
+                    <connections>
+                        <outlet property="sceneView" destination="ofO-8n-6y0" id="zNV-XQ-AxY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hFc-EW-M2Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
