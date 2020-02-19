@@ -55,7 +55,8 @@ extension ARView {
                 return
             }
             let material = UnlitMaterial(color: .green)
-            let entity = ModelEntity(mesh: MeshResource.generateBox(width: 0.01, height: 0.01, depth: 0.01, cornerRadius: 1, splitFaces: false), materials: [material])
+            
+            let entity = ModelEntity(mesh: MeshResource.generateBox(width: 0.01, height: 0.01, depth: 0.01), materials: [material])
             //this is vital this realativeTo part is relative to the anchor at 0,0,o so the coordinates map properly
             entity.setPosition(pointIn3d, relativeTo: anchor)
             if let oldPreviousPoint = anchor.findEntity(named: PREVIOUS_POINT){
@@ -150,30 +151,30 @@ extension ARView {
         
     }
     
-//    func findRotation(currentPointPosition: simd_float3, previousPointPosition: simd_float3, distance : Float) -> simd_quatf{
-//        var oppositeSide = Float()
-//        var angle = Float()
-//
-//        //swipe upper right
-//        if(currentPointPosition.y > previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
-//            oppositeSide = currentPointPosition.y - previousPointPosition.y
-//            angle = asin(oppositeSide/distance)
-//
-//        //swipe bottom left
-//        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
-//            oppositeSide = previousPointPosition.y - currentPointPosition.y
-//            angle = asin(oppositeSide/distance) + .pi
-//        //swipe upper left
-//        } else if (currentPointPosition.y > previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
-//            oppositeSide = currentPointPosition.y - previousPointPosition.y
-//            angle = 2 * .pi -  asin(oppositeSide/distance)
-//        //swiper bottom right
-//        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
-//            oppositeSide = previousPointPosition.y - currentPointPosition.y
-//            angle = 2 * .pi -  asin(oppositeSide/distance)
-//            //angle = asin(oppositeSide/distance)
-//        }
-//
-//        return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
-//    }
+    func findRotation(currentPointPosition: simd_float3, previousPointPosition: simd_float3, distance : Float) -> simd_quatf{
+        var oppositeSide = Float()
+        var angle = Float()
+
+        //swipe upper right
+        if(currentPointPosition.y > previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
+            oppositeSide = currentPointPosition.y - previousPointPosition.y
+            angle = asin(oppositeSide/distance)
+
+        //swipe bottom left
+        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
+            oppositeSide = previousPointPosition.y - currentPointPosition.y
+            angle = asin(oppositeSide/distance) + .pi
+        //swipe upper left
+        } else if (currentPointPosition.y > previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
+            oppositeSide = currentPointPosition.y - previousPointPosition.y
+            angle = 2 * .pi -  asin(oppositeSide/distance)
+        //swiper bottom right
+        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
+            oppositeSide = previousPointPosition.y - currentPointPosition.y
+            angle = 2 * .pi -  asin(oppositeSide/distance)
+            //angle = asin(oppositeSide/distance)
+        }
+
+        return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
+    }
 }
