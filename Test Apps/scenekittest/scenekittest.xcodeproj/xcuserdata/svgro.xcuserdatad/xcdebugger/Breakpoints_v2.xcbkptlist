@@ -14,9 +14,9 @@
             filePath = "scenekittest/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "renderPoints(currentPointPosition:previousPointPosition:distance:)"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "distanceBetweenPoints(currentPointPosition:previousPointPosition:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,57 +30,9 @@
             filePath = "scenekittest/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
-            landmarkName = "generateMorePoints(currentPoint:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5C67D6EF-9E5E-42F7-9213-3874EDF4B60C"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "scenekittest/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "touchesMoved(_:with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5602C629-D5BD-4A79-AE3C-622074F2452E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "scenekittest/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "touchesMoved(_:with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8F2B7BF7-A9C5-423F-AE7B-163A67C20869"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "scenekittest/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "touchesMoved(_:with:)"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "resizeVector(vector:scalingFactor:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -88,14 +40,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5F159863-96EC-45C7-B5BB-FE530E51AA97"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scenekittest/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "touchesMoved(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -104,15 +56,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "860364D5-4F74-44BA-A02E-4ABFE3C16E02"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scenekittest/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "renderPoints(currentPointPosition:previousPointPosition:distance:)"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
+            landmarkName = "distanceBetweenPoints(currentPointPosition:previousPointPosition:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -126,25 +78,25 @@
             filePath = "scenekittest/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "renderPoints(currentPointPosition:previousPointPosition:distance:)"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "distanceBetweenPoints(currentPointPosition:previousPointPosition:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "019D1272-480E-41A1-8422-D8ED270548AC"
-            shouldBeEnabled = "Yes"
+            uuid = "AEE467B8-281E-4DB5-8D14-5E1E5C8989E9"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scenekittest/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "touchesMoved(_:with:)"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
+            landmarkName = "connectVertices()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

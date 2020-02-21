@@ -15,6 +15,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var sceneView: ARSCNView!
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
+    var strokeVertices = [SCNVector3]()
+    var touchMovedCalled = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +81,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
+            touchMovedCalled = false
             var touchLocation = singleTouch.location(in: sceneView)
             let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
             let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
@@ -88,16 +91,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
             let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
             
+            setInitialVertices(point3D: nodePosition1)
+            
+            print("first touch", nodePosition1)
+            
             let geom = SCNSphere(radius: 0.01)
             let material = SCNMaterial()
             material.diffuse.contents = UIColor.green
             geom.materials = [material]
-
+            
             let sphereNode = SCNNode(geometry: geom)
             //sphereNode.position = nodePosition1
             //sphereNode.position = nodePosition1
             sphereNode.worldPosition = nodePosition1
-            self.sceneView.scene.rootNode.addChildNode(sphereNode)
+            //self.sceneView.scene.rootNode.addChildNode(sphereNode)
             previousNode = sphereNode
         } else {
             print("can't get touch")
@@ -107,34 +114,44 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //print("touches Moved")
-        if let singleTouch = touches.first{
-            let test = sceneView.scene.rootNode.worldPosition
-            var touchLocation = singleTouch.location(in: sceneView)
-            let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
-            let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
-            let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
-            let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-            let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
-            let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
-            let nodePosition2 = SCNVector3(self.cameraTrans.x + resizedVector.x, self.cameraTrans.y + resizedVector.y, self.cameraTrans.y + resizedVector.z)
+        if touchMovedCalled == false {
+            touchMovedCalled = true
+            if let singleTouch = touches.first{
+                let test = sceneView.scene.rootNode.worldPosition
+                var touchLocation = singleTouch.location(in: sceneView)
+                let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+                let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+                let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+                let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+                let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+                let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
+                let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+                let nodePosition2 = SCNVector3(self.cameraTrans.x + resizedVector.x, self.cameraTrans.y + resizedVector.y, self.cameraTrans.y + resizedVector.z)
+                
+                
+                addVertices(point3D: nodePosition1)
+                
+                print("second touch", nodePosition1)
+                
+                
+                let clone = self.previousNode.clone()
+                //clone.position = nodePosition1
+                
+                clone.worldPosition = nodePosition1
+                // previousNode.addChildNode(clone)
+                clone.worldPosition = nodePosition1
+                
+                //self.sceneView.scene.rootNode.addChildNode(clone)
+                
+                generateMorePoints(currentPoint : clone)
+                self.previousNode = clone
+                // print("hi")
+            } else {
+                print("can't get touch")
+            }
             
-            
-            let clone = self.previousNode.clone()
-            //clone.position = nodePosition1
-            
-            clone.worldPosition = nodePosition1
-           // previousNode.addChildNode(clone)
-            clone.worldPosition = nodePosition1
-
-            self.sceneView.scene.rootNode.addChildNode(clone)
-            
-            generateMorePoints(currentPoint : clone)
-            self.previousNode = clone
-           // print("hi")
-        } else {
-            print("can't get touch")
         }
+        
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -192,7 +209,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             //clone.position = SCNVector3(x: previousPointPosition.x + midPoint.x, y: previousPointPosition.y + midPoint.y, z: previousPointPosition.z + midPoint.z)
             //previousNode.addChildNode(clone)
             clone.worldPosition = SCNVector3(x: previousPointPosition.x + midPoint.x, y: previousPointPosition.y + midPoint.y, z: previousPointPosition.z + midPoint.z)
-            self.sceneView.scene.rootNode.addChildNode(clone)
+            //self.sceneView.scene.rootNode.addChildNode(clone)
             
         } else {
             for i in 1...num - 1 {
@@ -203,7 +220,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                // clone.position = SCNVector3(x: previousPointPosition.x + scaledPoint.x, y: previousPointPosition.y + scaledPoint.y, z: previousPointPosition.z + scaledPoint.z)
                 //previousNode.addChildNode(clone)
                 clone.worldPosition = SCNVector3(x: previousPointPosition.x + scaledPoint.x, y: previousPointPosition.y + scaledPoint.y, z: previousPointPosition.z + scaledPoint.z)
-                self.sceneView.scene.rootNode.addChildNode(clone)
+               // self.sceneView.scene.rootNode.addChildNode(clone)
                 
                 
             }
@@ -240,4 +257,104 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
     }
+    
+    func setInitialVertices(point3D: SCNVector3){
+        let x = point3D.x
+        let y = point3D.y
+        let z = point3D.z
+        strokeVertices = [
+            SCNVector3(x, y + 0.1 , z - 0.1),
+            SCNVector3(x, y + 0.1 , z + 0.1),
+            SCNVector3(x, y - 0.1 , z + 0.1),
+            SCNVector3(x, y + 0.1 , z - 0.1),
+        ]
+//        strokeVertices = [
+//            SCNVector3(x - 0.1, y + 0.1 , z ),
+//            SCNVector3(x + 0.1, y + 0.1 , z ),
+//            SCNVector3(x + 0.1, y - 0.1 , z ),
+//            SCNVector3(x - 0.1, y - 0.1 , z ),
+//        ]
+        print(strokeVertices)
+  //      testVertices()
+        
+    }
+    
+    func addVertices(point3D: SCNVector3){
+        let x = point3D.x
+        let y = point3D.y
+        let z = point3D.z
+        strokeVertices += [
+            SCNVector3(x, y + 0.1 , z - 0.1),
+            SCNVector3(x, y + 0.1 , z + 0.1),
+            SCNVector3(x, y - 0.1 , z + 0.1),
+            SCNVector3(x, y - 0.1 , z - 0.1),
+        ]
+
+        print(strokeVertices)
+        connectVertices()
+    }
+    
+    func connectVertices(){
+        let indices: [UInt16] = [
+            2,5,1, //font
+            5,2,6,
+            7,5,4, //second square
+            5,7,6,
+            3,1,0, //first square
+            1,3,2,
+            
+
+            
+
+//
+//            1,2,6, //front
+//            1,5,6,
+//
+//            0,3,7, //back
+//            0,4,7,
+//
+//            2,3,7, //bottom
+//            2,6,6
+        ]
+        
+        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+        let source = SCNGeometrySource(vertices: strokeVertices)
+        let customGeom = SCNGeometry(sources: [source], elements: [element])
+        let node = SCNNode(geometry: customGeom)
+        self.sceneView.scene.rootNode.addChildNode(node)
+        
+    }
+    
+    
+    func testVertices(){
+        let indices: [UInt16] = [
+            3,1,0,
+            1,3,2
+            
+            
+//            4,7,6, //second square
+//            4,5,6,
+//
+//            0,1,5, //top
+//            0,4,5,
+//
+//            1,2,6, //front
+//            1,5,6,
+//
+//            0,3,7, //back
+//            0,4,7,
+//
+//            2,3,7, //bottom
+//            2,6,6
+        ]
+        
+        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+        let source = SCNGeometrySource(vertices: strokeVertices)
+        let customGeom = SCNGeometry(sources: [source], elements: [element])
+        let node = SCNNode(geometry: customGeom)
+        self.sceneView.scene.rootNode.addChildNode(node)
+        
+    }
+    
+    
 }
