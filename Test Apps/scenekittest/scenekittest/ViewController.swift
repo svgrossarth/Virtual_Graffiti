@@ -17,6 +17,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var previousNode = SCNNode()
     var strokeVertices = [SCNVector3]()
     var touchMovedCalled = false
+    var previousPoint = SCNVector3()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,7 +89,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
             let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
             let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
+            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 0.3)
             let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
             
             setInitialVertices(point3D: nodePosition1)
@@ -106,6 +107,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             sphereNode.worldPosition = nodePosition1
             //self.sceneView.scene.rootNode.addChildNode(sphereNode)
             previousNode = sphereNode
+            previousPoint = nodePosition1
         } else {
             print("can't get touch")
         }
@@ -124,7 +126,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
                 let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
                 let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-                let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
+                let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 0.3)
                 let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
                 let nodePosition2 = SCNVector3(self.cameraTrans.x + resizedVector.x, self.cameraTrans.y + resizedVector.y, self.cameraTrans.y + resizedVector.z)
                 
@@ -142,8 +144,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 clone.worldPosition = nodePosition1
                 
                 //self.sceneView.scene.rootNode.addChildNode(clone)
-                
-                generateMorePoints(currentPoint : clone)
+                extendStroke(currentPoint: nodePosition1)
+                //generateMorePoints(currentPoint : clone)
                 self.previousNode = clone
                 // print("hi")
             } else {
@@ -190,12 +192,25 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    func extendStroke(currentPoint : SCNVector3){
+        let distance = distanceBetweenPoints(currentPointPosition: currentPoint, previousPointPosition: previousPoint)
+        renderExtendedStroke(currentPointPosition: currentPoint, previousPointPosition: previousPoint, distance:distance)
+    }
+    
     func distanceBetweenPoints(currentPointPosition : SCNVector3, previousPointPosition : SCNVector3) -> Float {
         
         let xDist = (currentPointPosition.x - previousPointPosition.x)
         let yDist = (currentPointPosition.y - previousPointPosition.y)
         let zDist = (currentPointPosition.z - previousPointPosition.z)
         return sqrtf(pow(xDist, 2) + pow(yDist, 2) + pow(zDist, 2))
+    }
+    
+    
+    func renderExtendedStroke(currentPointPosition: SCNVector3, previousPointPosition: SCNVector3, distance : Float){
+        //print("rendering points")
+        let lineBetweenPoints = SCNVector3(x: currentPointPosition.x - previousPointPosition.x, y: currentPointPosition.y - previousPointPosition.y, z: currentPointPosition.z - previousPointPosition.z)
+
+
     }
     
     func renderPoints(currentPointPosition: SCNVector3, previousPointPosition: SCNVector3, distance : Float){
@@ -263,10 +278,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let y = point3D.y
         let z = point3D.z
         strokeVertices = [
-            SCNVector3(x, y + 0.1 , z - 0.1),
-            SCNVector3(x, y + 0.1 , z + 0.1),
-            SCNVector3(x, y - 0.1 , z + 0.1),
-            SCNVector3(x, y + 0.1 , z - 0.1),
+            SCNVector3(x, y + 0.01 , z - 0.01),
+            SCNVector3(x, y + 0.01 , z + 0.01),
+            SCNVector3(x, y - 0.01 , z + 0.01),
+            SCNVector3(x, y - 0.01 , z - 0.01),
         ]
 //        strokeVertices = [
 //            SCNVector3(x - 0.1, y + 0.1 , z ),
@@ -284,10 +299,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let y = point3D.y
         let z = point3D.z
         strokeVertices += [
-            SCNVector3(x, y + 0.1 , z - 0.1),
-            SCNVector3(x, y + 0.1 , z + 0.1),
-            SCNVector3(x, y - 0.1 , z + 0.1),
-            SCNVector3(x, y - 0.1 , z - 0.1),
+            SCNVector3(x, y + 0.01 , z - 0.01),
+            SCNVector3(x, y + 0.01 , z + 0.01),
+            SCNVector3(x, y - 0.01 , z + 0.01),
+            SCNVector3(x, y - 0.01 , z - 0.01),
         ]
 
         print(strokeVertices)
@@ -296,65 +311,72 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func connectVertices(){
         let indices: [UInt16] = [
-            2,5,1, //font
+            2,5,1, //front
             5,2,6,
-            7,5,4, //second square
-            5,7,6,
+            
+            
+            6,7,4, //second square
+            6,4,5,
+
             3,1,0, //first square
-            1,3,2,
-            
+            3,2,1,
 
-            
 
-//
-//            1,2,6, //front
-//            1,5,6,
-//
-//            0,3,7, //back
-//            0,4,7,
-//
-//            2,3,7, //bottom
-//            2,6,6
+            7,0,4, //back
+            0,7,3,
+
+            3,6,2, //bottom
+            6,3,7,
+            
+            1,4,0, //top
+            1,5,4
+            
         ]
         
         let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
         let source = SCNGeometrySource(vertices: strokeVertices)
         let customGeom = SCNGeometry(sources: [source], elements: [element])
+//        let material = SCNMaterial()
+//        material.isDoubleSided = true
+//        customGeom.materials = [material]
         let node = SCNNode(geometry: customGeom)
         self.sceneView.scene.rootNode.addChildNode(node)
         
     }
     
     
-    func testVertices(){
-        let indices: [UInt16] = [
-            3,1,0,
-            1,3,2
-            
-            
-//            4,7,6, //second square
-//            4,5,6,
+//    func testVertices(){
+//        let indices: [UInt16] = [
+//            3,1,0,
+//            1,3,2
 //
-//            0,1,5, //top
-//            0,4,5,
 //
-//            1,2,6, //front
-//            1,5,6,
+////            4,7,6, //second square
+////            4,5,6,
+////
+////            0,1,5, //top
+////            0,4,5,
+////
+////            1,2,6, //front
+////            1,5,6,
+////
+////            0,3,7, //back
+////            0,4,7,
+////
+////            2,3,7, //bottom
+////            2,6,6
+//        ]
 //
-//            0,3,7, //back
-//            0,4,7,
+//        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+//        let source = SCNGeometrySource(vertices: strokeVertices)
+//        let customGeom = SCNGeometry(sources: [source], elements: [element])
 //
-//            2,3,7, //bottom
-//            2,6,6
-        ]
-        
-        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
-        let source = SCNGeometrySource(vertices: strokeVertices)
-        let customGeom = SCNGeometry(sources: [source], elements: [element])
-        let node = SCNNode(geometry: customGeom)
-        self.sceneView.scene.rootNode.addChildNode(node)
-        
-    }
+//        let node = SCNNode(geometry: customGeom)
+//        self.sceneView.scene.rootNode.addChildNode(node)
+//
+//    }
+    
+    
     
     
 }
