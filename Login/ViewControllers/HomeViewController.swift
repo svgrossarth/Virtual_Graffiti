@@ -1,122 +1,190 @@
 //
 //  ViewController.swift
-//  testAR
+//  scenekittest
 //
-//  Created by Spencer Grossarth on 2/4/20.
+//  Created by Spencer Grossarth on 2/14/20.
 //  Copyright © 2020 Spencer Grossarth. All rights reserved.
 //
 
 import UIKit
-import RealityKit
+import SceneKit
+import ARKit
+import PencilKit
 
-let WORLD_ORIGIN : String = "worldOrigin"
-let PREVIOUS_POINT : String = "perviousPoint"
-let CURRENT_POINT : String = "currentPoint"
-let concurrentQueue = DispatchQueue(label: "com.queue.Concurrent", attributes: .concurrent)
-
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate {
     
-    @IBOutlet var arView: ARView!
+    @IBOutlet weak var sceneView: ARSCNView!
+    var pencilKitCanvas =  PKCanvas()
+    
+    var cameraTrans = simd_float4()
+    var previousNode = SCNNode()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addPencilKit()
+
+        sceneView.frame = view.frame
+        view.addSubview(sceneView)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        arView.renderOptions = [.disableDepthOfField, .disableCameraGrain, .disableMotionBlur, .disableFaceOcclusions, .disablePersonOcclusion, .disableGroundingShadows, .disableAREnvironmentLighting]
         
-        //this anchor is at the origin world origin, it can be used a refence for other entities
-        let worldOrigin = AnchorEntity(world: [0,0,0])
-        worldOrigin.name = WORLD_ORIGIN
-        self.arView.scene.addAnchor(worldOrigin)
-        self.arView.frame = .zero
-        self.arView.debugOptions = [.showAnchorGeometry, .showAnchorOrigins, .showWorldOrigin]
+        // Set the view's delegate
+        sceneView.delegate = self
         
-    
+        sceneView.session.delegate = self
+        
+        // Show statistics such as fps and timing information
+        sceneView.showsStatistics = true
+        
+        // Create a new scene
+        //let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        
+        let scene = SCNScene()
+        
+        // Set the scene to the view
+        sceneView.scene = scene
+        
+        
+        let geom = SCNSphere(radius: 0.01)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.red
+        geom.materials = [material]
+
+        let sphereNode = SCNNode(geometry: geom)
+        self.sceneView.scene.rootNode.addChildNode(sphereNode)
+
+        
+//        let rootNode = SCNNode()
+//        sceneView.scene.rootNode
     }
-}
-
-
-extension ARView {
     
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //print("new touch")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+
+        // Run the view's session
+        sceneView.session.run(configuration)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Pause the view's session
+        sceneView.session.pause()
+    }
+
+    // MARK: - ARSCNViewDelegate
+    
+/*
+    // Override to create and configure nodes for anchors added to the view's session.
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        let node = SCNNode()
+     
+        return node
+    }
+*/
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
-            let touchLocation = singleTouch.location(in: self)
-            var cameraTran = self.cameraTransform
-            //this is important, or else the plan is off
-            cameraTran.rotation = simd_quatf(angle: .pi/2 , axis: simd_float3(x: 1, y: 0, z: 0) )
-            //puts the points in front of camera
-            cameraTran.translation = SIMD3<Float>(cameraTran.translation.x, cameraTran.translation.y, cameraTran.translation.z - 0.3)
+            var touchLocation = singleTouch.location(in: sceneView)
+            let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+            let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+            let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+            let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+            let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
+            let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
             
-            guard let pointIn3d = self.unproject(touchLocation, ontoPlane: cameraTran.matrix) else {
-                print("can't unproject")
-                return
-            }
-            guard let anchor = self.scene.anchors.first else {
-                print("cant get anchor")
-                return
-            }
-            let material = UnlitMaterial(color: PKCanvas().sendColor())
-            let entity = ModelEntity(mesh: MeshResource.generateBox(width: 0.01, height: 0.01, depth: 0.01, cornerRadius: 1, splitFaces: false), materials: [material])
-            //this is vital this realativeTo part is relative to the anchor at 0,0,o so the coordinates map properly
-            entity.setPosition(pointIn3d, relativeTo: anchor)
-            if let oldPreviousPoint = anchor.findEntity(named: PREVIOUS_POINT){
-                oldPreviousPoint.name = ""
-            }
-            entity.name = PREVIOUS_POINT
-            anchor.addChild(entity)
+            let geom = SCNSphere(radius: 0.01)
+            let material = SCNMaterial()
+            material.diffuse.contents = PKCanvas().sendColor()
+            geom.materials = [material]
+
+            let sphereNode = SCNNode(geometry: geom)
+            //sphereNode.position = nodePosition1
+            //sphereNode.position = nodePosition1
+            sphereNode.worldPosition = nodePosition1
+            self.sceneView.scene.rootNode.addChildNode(sphereNode)
+            previousNode = sphereNode
         } else {
             print("can't get touch")
         }
-        
     }
     
-    override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //print("touches Moved")
+        if let singleTouch = touches.first{
+            let test = sceneView.scene.rootNode.worldPosition
+            var touchLocation = singleTouch.location(in: sceneView)
+            let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+            let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+            let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+            let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+            let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
+            let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+            let nodePosition2 = SCNVector3(self.cameraTrans.x + resizedVector.x, self.cameraTrans.y + resizedVector.y, self.cameraTrans.y + resizedVector.z)
             
-            if let singleTouch = touches.first{
-                let touchLocation = singleTouch.location(in: self)
-                var cameraTran = self.cameraTransform
-                //this is important, or else the plan is off
-                cameraTran.rotation = simd_quatf(angle: .pi/2 , axis: simd_float3(x: 1, y: 0, z: 0) )
-                //puts the points in front of camera
-                cameraTran.translation = SIMD3<Float>(cameraTran.translation.x, cameraTran.translation.y, cameraTran.translation.z - 0.3)
-                
-                guard let pointIn3d = self.unproject(touchLocation, ontoPlane: cameraTran.matrix) else {
-                    print("can't unproject")
-                    return
-                }
-                guard let anchor = self.scene.anchors.first else {
-                    print("cant get anchor")
-                    return
-                }
-                guard let previousPoint = self.scene.findEntity(named: PREVIOUS_POINT) as? ModelEntity else {
-                    print("can't find previous point")
-                    return
-                }
-                let cloneEntity = previousPoint.clone(recursive: false)
-                //this is vital this realativeTo part is relative to the anchor at 0,0,o so the coordinates map properly
-                cloneEntity.setPosition(pointIn3d, relativeTo: anchor)
-                guard let worldOrigin = self.scene.findEntity(named: WORLD_ORIGIN) else {
-                    print("can't find world origin")
-                    return
-                }
-                worldOrigin.addChild(cloneEntity)
-                self.generateMorePoints(currentPoint: cloneEntity, previousPoint: previousPoint, worldOrigin: worldOrigin)
-                previousPoint.name = ""
-                cloneEntity.name = PREVIOUS_POINT
-            } else {
-                print("can't get touch")
-            }
-    }
-    
-    func generateMorePoints(currentPoint : ModelEntity, previousPoint : ModelEntity, worldOrigin : Entity){
-        let currentPointPosition = currentPoint.position(relativeTo: worldOrigin)
-        let previousPointPosition = previousPoint.position(relativeTo: worldOrigin)
-        let distance = distanceBetweenPoints(currentPointPosition: currentPointPosition, previousPointPosition: previousPointPosition)
-        if(distance >= 0.002){
-            renderPoints(currentPointPosition: currentPointPosition, previousPointPosition: previousPointPosition, point : previousPoint, worldOrigin : worldOrigin, distance: distance, model: currentPoint)
+            
+            let clone = self.previousNode.clone()
+            //clone.position = nodePosition1
+            
+            clone.worldPosition = nodePosition1
+           // previousNode.addChildNode(clone)
+            clone.worldPosition = nodePosition1
+
+            self.sceneView.scene.rootNode.addChildNode(clone)
+            
+            generateMorePoints(currentPoint : clone)
+            self.previousNode = clone
+           // print("hi")
+        } else {
+            print("can't get touch")
         }
     }
     
-    func distanceBetweenPoints(currentPointPosition : simd_float3, previousPointPosition : simd_float3) -> Float {
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+         cameraTrans = frame.camera.transform * simd_float4(x: 1, y: 1, z: 1, w: 0)
+    }
+    
+    func session(_ session: ARSession, didFailWithError error: Error) {
+        // Present an error message to the user
+        
+    }
+    
+    func sessionWasInterrupted(_ session: ARSession) {
+        // Inform the user that the session has been interrupted, for example, by presenting an overlay
+        
+    }
+    
+    func sessionInterruptionEnded(_ session: ARSession) {
+        // Reset tracking and/or remove existing anchors if consistent tracking is required
+        
+    }
+    
+    func resizeVector(vector: SCNVector3, scalingFactor: Float) -> SCNVector3{
+        let length = sqrtf(powf(vector.x, 2) + powf(vector.y, 2) + powf(vector.z, 2))
+        return SCNVector3((vector.x/length) * scalingFactor, (vector.y/length) * scalingFactor, (vector.z/length) * scalingFactor)
+    }
+    
+    func generateMorePoints(currentPoint : SCNNode){
+        let currentPointPosition = currentPoint.position
+        let previousPointPosition = self.previousNode.position
+//        let currentPointPosition = currentPoint.worldPosition
+//        let previousPointPosition = self.previousNode.worldPosition
+
+        let distance = distanceBetweenPoints(currentPointPosition: currentPointPosition, previousPointPosition: previousPointPosition)
+        if(distance >= 0.002){
+            renderPoints(currentPointPosition: currentPointPosition, previousPointPosition: previousPointPosition, distance:distance)
+        }
+    }
+    
+    func distanceBetweenPoints(currentPointPosition : SCNVector3, previousPointPosition : SCNVector3) -> Float {
         
         let xDist = (currentPointPosition.x - previousPointPosition.x)
         let yDist = (currentPointPosition.y - previousPointPosition.y)
@@ -124,57 +192,89 @@ extension ARView {
         return sqrtf(pow(xDist, 2) + pow(yDist, 2) + pow(zDist, 2))
     }
     
-    func renderPoints(currentPointPosition: simd_float3, previousPointPosition: simd_float3, point: Entity, worldOrigin : Entity, distance : Float, model : ModelEntity){
-        let lineBetweenPoints = currentPointPosition - previousPointPosition
+    func renderPoints(currentPointPosition: SCNVector3, previousPointPosition: SCNVector3, distance : Float){
+        //print("rendering points")
+        let lineBetweenPoints = SCNVector3(x: currentPointPosition.x - previousPointPosition.x, y: currentPointPosition.y - previousPointPosition.y, z: currentPointPosition.z - previousPointPosition.z)
         let smallStep : Float = 0.002
         let num = Int(distance/smallStep)
         if num == 1 {
-            let clone = model.clone(recursive: false)
-            clone.name = ""
-            clone.setPosition(previousPointPosition + lineBetweenPoints * 0.05, relativeTo: worldOrigin)
-            worldOrigin.addChild(clone)
+            let clone = self.previousNode.clone()
+            let midPoint = SCNVector3(x: lineBetweenPoints.x * 0.5, y: lineBetweenPoints.y * 0.5, z: lineBetweenPoints.z * 0.5)
+            //clone.position = SCNVector3(x: previousPointPosition.x + midPoint.x, y: previousPointPosition.y + midPoint.y, z: previousPointPosition.z + midPoint.z)
+            //previousNode.addChildNode(clone)
+            clone.worldPosition = SCNVector3(x: previousPointPosition.x + midPoint.x, y: previousPointPosition.y + midPoint.y, z: previousPointPosition.z + midPoint.z)
+            self.sceneView.scene.rootNode.addChildNode(clone)
+            
         } else {
             for i in 1...num - 1 {
-                let clone = model.clone(recursive: false)
-                clone.name = ""
-                let test = Float(i)/Float(num)
-                clone.setPosition(previousPointPosition + lineBetweenPoints * test, relativeTo: worldOrigin)
-                worldOrigin.addChild(clone)
-                print("num children")
-                print(worldOrigin.children.count)
+                
+                let clone = self.previousNode.clone()
+                let scaleFactor = Float(i)/Float(num)
+                let scaledPoint = SCNVector3(x: lineBetweenPoints.x * scaleFactor, y: lineBetweenPoints.y * scaleFactor, z: lineBetweenPoints.z * scaleFactor)
+               // clone.position = SCNVector3(x: previousPointPosition.x + scaledPoint.x, y: previousPointPosition.y + scaledPoint.y, z: previousPointPosition.z + scaledPoint.z)
+                //previousNode.addChildNode(clone)
+                clone.worldPosition = SCNVector3(x: previousPointPosition.x + scaledPoint.x, y: previousPointPosition.y + scaledPoint.y, z: previousPointPosition.z + scaledPoint.z)
+                self.sceneView.scene.rootNode.addChildNode(clone)
+                
+                
             }
-            
-            
+
+
         }
-        
-        
+
+
     }
     
-//    func findRotation(currentPointPosition: simd_float3, previousPointPosition: simd_float3, distance : Float) -> simd_quatf{
-//        var oppositeSide = Float()
-//        var angle = Float()
-//
-//        //swipe upper right
-//        if(currentPointPosition.y > previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
-//            oppositeSide = currentPointPosition.y - previousPointPosition.y
-//            angle = asin(oppositeSide/distance)
-//
-//        //swipe bottom left
-//        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
-//            oppositeSide = previousPointPosition.y - currentPointPosition.y
-//            angle = asin(oppositeSide/distance) + .pi
-//        //swipe upper left
-//        } else if (currentPointPosition.y > previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
-//            oppositeSide = currentPointPosition.y - previousPointPosition.y
-//            angle = 2 * .pi -  asin(oppositeSide/distance)
-//        //swiper bottom right
-//        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
-//            oppositeSide = previousPointPosition.y - currentPointPosition.y
-//            angle = 2 * .pi -  asin(oppositeSide/distance)
-//            //angle = asin(oppositeSide/distance)
-//        }
-//
-//        return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
-//    }
+    func findRotation(currentPointPosition: simd_float3, previousPointPosition: simd_float3, distance : Float) -> simd_quatf{
+        var oppositeSide = Float()
+        var angle = Float()
+
+        //swipe upper right
+        if(currentPointPosition.y > previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
+            oppositeSide = currentPointPosition.y - previousPointPosition.y
+            angle = asin(oppositeSide/distance)
+
+        //swipe bottom left
+        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
+            oppositeSide = previousPointPosition.y - currentPointPosition.y
+            angle = asin(oppositeSide/distance) + .pi
+        //swipe upper left
+        } else if (currentPointPosition.y > previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
+            oppositeSide = currentPointPosition.y - previousPointPosition.y
+            angle = 2 * .pi -  asin(oppositeSide/distance)
+        //swiper bottom right
+        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
+            oppositeSide = previousPointPosition.y - currentPointPosition.y
+            angle = 2 * .pi -  asin(oppositeSide/distance)
+            //angle = asin(oppositeSide/distance)
+        }
+
+        return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
+    }
+    /*
+     Code below is used to create a canvas view and make it as a subview of our ARSCNView so that the ToolPicker will show up and left us change the color
+     */
+    
+    private func addPencilKit() {
+       view.backgroundColor = .clear
+       pencilKitCanvas  = createPencilKitCanvas(frame: view.frame, delegate: self)
+       view.addSubview(pencilKitCanvas)
+    }
+    
+    override func viewDidLayoutSubviews() {
+          super.viewDidLayoutSubviews()
+          updateCanvasOrientation(with: view.bounds)
+      }
+
+    //MARK: - iOS override properties
+    override var prefersHomeIndicatorAutoHidden: Bool {
+          return true
+      }
+
+    override var prefersStatusBarHidden: Bool {
+        return true;
+    }
+    
 }
+
 

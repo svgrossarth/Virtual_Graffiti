@@ -7,7 +7,6 @@
 //
 import UIKit
 import PencilKit
-import RealityKit
 
 //MARK: Global:
 var makeColor = MakeColor(selectedColor: .blue)
@@ -39,7 +38,6 @@ class PKCanvas: UIView {
            toolPicker.addObserver(self)
 
            canvasView.becomeFirstResponder()
-
         }
      }
 
@@ -57,7 +55,7 @@ class PKCanvas: UIView {
        //2.assign updated frame to self view
        self.frame = frame
     }
-    func sendColor() -> UnlitMaterial.Color{
+    func sendColor() -> UIColor {
         return makeColor.getColor()
     }
 
@@ -96,17 +94,17 @@ extension PKCanvas: PKToolPickerObserver {
 }
 
 class MakeColor{
-    var color : UnlitMaterial.Color
+    var color : UIColor
 
-    init(selectedColor:UnlitMaterial.Color) {
+    init(selectedColor: UIColor) {
         print("========================= new class =========================")
         self.color = selectedColor
     }
-    func ChangeColor(newColor: UnlitMaterial.Color){
+    func ChangeColor(newColor: UIColor){
           print("setting newColor to:", newColor)
           self.color = newColor
       }
-    func getColor() -> UnlitMaterial.Color{
+    func getColor() -> UIColor {
         print("in the class: getColor()", self.color)
         return self.color
     }

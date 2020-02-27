@@ -15,12 +15,11 @@
 		7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7746C3BF23DE581D00DDC27C /* LaunchScreen.storyboard */; };
 		7746C3CC23DE581E00DDC27C /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3CB23DE581E00DDC27C /* LoginTests.swift */; };
 		7746C3D723DE581E00DDC27C /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3D623DE581E00DDC27C /* LoginUITests.swift */; };
-		7783971723F75A87002A25AB /* PKCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7783971423F75A87002A25AB /* PKCanvas.swift */; };
-		7783971823F75A87002A25AB /* PencilKitInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7783971523F75A87002A25AB /* PencilKitInterface.swift */; };
-		7783971923F75A87002A25AB /* PencilkitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7783971623F75A87002A25AB /* PencilkitViewController.swift */; };
 		7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info.plist */; };
 		77D57EF423EE23D400A665A3 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770663F823EB860600E98F63 /* AppAuth.framework */; };
 		77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */; };
+		77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */; };
+		77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DD9B5224078DA6005AF15C /* PKCanvas.swift */; };
 		77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DC523E222C100C6E65C /* SignUpViewController.swift */; };
 		77E74DC823E222CF00C6E65C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DC723E222CF00C6E65C /* LoginViewController.swift */; };
 		77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DC923E222E700C6E65C /* HomeViewController.swift */; };
@@ -69,11 +68,10 @@
 		7746C3D223DE581E00DDC27C /* LoginUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoginUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7746C3D623DE581E00DDC27C /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		7746C3D823DE581E00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7783971423F75A87002A25AB /* PKCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCanvas.swift; sourceTree = "<group>"; };
-		7783971523F75A87002A25AB /* PencilKitInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilKitInterface.swift; sourceTree = "<group>"; };
-		7783971623F75A87002A25AB /* PencilkitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PencilkitViewController.swift; path = ../PencilKit/PencilkitViewController.swift; sourceTree = "<group>"; };
 		7791645923DECE6600BDDDCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
+		77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilKitInterface.swift; sourceTree = "<group>"; };
+		77DD9B5224078DA6005AF15C /* PKCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCanvas.swift; sourceTree = "<group>"; };
 		77E74DC523E222C100C6E65C /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		77E74DC723E222CF00C6E65C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		77E74DC923E222E700C6E65C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -150,7 +148,7 @@
 		7746C3B323DE581C00DDC27C /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				7783971323F75141002A25AB /* PencilKit */,
+				77DD9B5024078D7A005AF15C /* PencilKit */,
 				77E74DCB23E240BF00C6E65C /* Helpers */,
 				77E74DC423E2217100C6E65C /* ViewControllers */,
 				7746C3B423DE581C00DDC27C /* AppDelegate.swift */,
@@ -183,11 +181,11 @@
 			path = LoginUITests;
 			sourceTree = "<group>";
 		};
-		7783971323F75141002A25AB /* PencilKit */ = {
+		77DD9B5024078D7A005AF15C /* PencilKit */ = {
 			isa = PBXGroup;
 			children = (
-				7783971523F75A87002A25AB /* PencilKitInterface.swift */,
-				7783971423F75A87002A25AB /* PKCanvas.swift */,
+				77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */,
+				77DD9B5224078DA6005AF15C /* PKCanvas.swift */,
 			);
 			path = PencilKit;
 			sourceTree = "<group>";
@@ -200,7 +198,6 @@
 				77E74DC723E222CF00C6E65C /* LoginViewController.swift */,
 				77E74DC923E222E700C6E65C /* HomeViewController.swift */,
 				77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */,
-				7783971623F75A87002A25AB /* PencilkitViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -504,16 +501,15 @@
 			files = (
 				77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */,
 				7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */,
-				7783971923F75A87002A25AB /* PencilkitViewController.swift in Sources */,
 				7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */,
 				77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */,
 				77E74DC823E222CF00C6E65C /* LoginViewController.swift in Sources */,
 				77E74DCD23E240F000C6E65C /* Constants.swift in Sources */,
 				7746C3B723DE581C00DDC27C /* SceneDelegate.swift in Sources */,
 				77E804CE23EB6AE300432DCD /* Experience.rcproject in Sources */,
-				7783971723F75A87002A25AB /* PKCanvas.swift in Sources */,
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
-				7783971823F75A87002A25AB /* PencilKitInterface.swift in Sources */,
+				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
+				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

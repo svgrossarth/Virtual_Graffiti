@@ -242,42 +242,26 @@
         <scene sceneID="IfY-mq-7yE">
             <objects>
                 <viewController storyboardIdentifier="HomeVC" id="RGp-mB-gpr" userLabel="ARView" customClass="HomeViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
-                    <arView key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3Ak-6A-MRL">
+                    <view key="view" contentMode="scaleToFill" id="eov-Lh-X4h">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </arView>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-tW-E8K">
+                                <rect key="frame" x="0.0" y="32" width="414" height="830"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </arscnView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="za5-uP-9DW"/>
+                    </view>
                     <navigationItem key="navigationItem" id="sOD-KU-eMA"/>
                     <connections>
-                        <outlet property="arView" destination="3Ak-6A-MRL" id="hfG-n8-X3M"/>
+                        <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7SG-Oj-ba8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3471" y="-319"/>
-        </scene>
-        <!--Pencilkit View Controller-->
-        <scene sceneID="Ijs-Lq-QCy">
-            <objects>
-                <viewController storyboardIdentifier="PencilVC" id="fTY-vE-k7l" customClass="PencilkitViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="f8l-Ls-DaQ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <arView multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ofO-8n-6y0" userLabel="Scene View">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </arView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="B3d-I6-3To"/>
-                    </view>
-                    <connections>
-                        <outlet property="sceneView" destination="ofO-8n-6y0" id="zNV-XQ-AxY"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hFc-EW-M2Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3469.5652173913045" y="389.73214285714283"/>
+            <point key="canvasLocation" x="3469.5652173913045" y="-319.41964285714283"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7ui-NF-nfu">
@@ -320,7 +304,7 @@
                                             <action selector="resetPasswordTapped:" destination="bnm-dN-ciz" eventType="touchUpInside" id="Fcw-We-0t3"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNi-Zx-uwg">
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNi-Zx-uwg">
                                         <rect key="frame" x="0.0" y="104" width="334" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
