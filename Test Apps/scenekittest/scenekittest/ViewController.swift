@@ -18,6 +18,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var strokeVertices = [SCNVector3]()
     var touchMovedCalled = false
     var previousPoint = SCNVector3()
+    var lineBetweenNearFar = SCNVector3()
+    var indices = [UInt32]()
+    let initialIndices : [UInt32]  = [
+        2,5,1, //front
+        5,2,6,
+        
+        
+        6,7,4, //second square
+        6,4,5,
+
+        3,1,0, //first square
+        3,2,1,
+
+
+        7,0,4, //back
+        0,7,3,
+
+        3,6,2, //bottom
+        6,3,7,
+        
+        1,4,0, //top
+        1,5,4
+        
+    ]
+    var currentStroke = SCNNode()
+    var perviousPoint = SCNVector3()
+    var initialNearFarLine = SCNVector3()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,19 +109,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
-            touchMovedCalled = false
+            strokeVertices = [SCNVector3]()
+            indices = [UInt32]()
+
             var touchLocation = singleTouch.location(in: sceneView)
             let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
             let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
             let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
             let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-            let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 0.3)
+            initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+            let resizedVector  = resizeVector(vector: initialNearFarLine, scalingFactor: 0.3)
             let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+            previousPoint = nodePosition1
             
-            setInitialVertices(point3D: nodePosition1)
+            //setInitialVertices(point3D: nodePosition1)
             
-            print("first touch", nodePosition1)
+            //print("first touch", nodePosition1)
             
             let geom = SCNSphere(radius: 0.01)
             let material = SCNMaterial()
@@ -109,14 +139,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             previousNode = sphereNode
             previousPoint = nodePosition1
         } else {
-            print("can't get touch")
+            //print("can't get touch")
         }
     }
     
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //print("touches Moved")
-        if touchMovedCalled == false {
+       // if touchMovedCalled == false {
             touchMovedCalled = true
             if let singleTouch = touches.first{
                 let test = sceneView.scene.rootNode.worldPosition
@@ -125,15 +155,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
                 let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
                 let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-                let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-                let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 0.3)
+                lineBetweenNearFar = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+                let resizedVector  = resizeVector(vector: lineBetweenNearFar, scalingFactor: 0.3)
                 let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
                 let nodePosition2 = SCNVector3(self.cameraTrans.x + resizedVector.x, self.cameraTrans.y + resizedVector.y, self.cameraTrans.y + resizedVector.z)
                 
                 
                 addVertices(point3D: nodePosition1)
                 
-                print("second touch", nodePosition1)
+                //print("second touch", nodePosition1)
                 
                 
                 let clone = self.previousNode.clone()
@@ -147,12 +177,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 extendStroke(currentPoint: nodePosition1)
                 //generateMorePoints(currentPoint : clone)
                 self.previousNode = clone
+                previousPoint = nodePosition1
                 // print("hi")
             } else {
                 print("can't get touch")
             }
             
-        }
+        //}
         
     }
     
@@ -274,23 +305,25 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func setInitialVertices(point3D: SCNVector3){
+        let resizedVec = resizeVector(vector: lineBetweenNearFar, scalingFactor: 0.01)
         let x = point3D.x
         let y = point3D.y
         let z = point3D.z
-        strokeVertices = [
-            SCNVector3(x, y + 0.01 , z - 0.01),
-            SCNVector3(x, y + 0.01 , z + 0.01),
-            SCNVector3(x, y - 0.01 , z + 0.01),
-            SCNVector3(x, y - 0.01 , z - 0.01),
-        ]
 //        strokeVertices = [
-//            SCNVector3(x - 0.1, y + 0.1 , z ),
-//            SCNVector3(x + 0.1, y + 0.1 , z ),
-//            SCNVector3(x + 0.1, y - 0.1 , z ),
-//            SCNVector3(x - 0.1, y - 0.1 , z ),
+//            SCNVector3(x, y + 0.01 , z - 0.01),
+//            SCNVector3(x, y + 0.01 , z + 0.01),
+//            SCNVector3(x, y - 0.01 , z + 0.01),
+//            SCNVector3(x, y - 0.01 , z - 0.01),
 //        ]
-        print(strokeVertices)
-  //      testVertices()
+        strokeVertices = [
+            SCNVector3(x - resizedVec.x, y + 0.01 - resizedVec.y , z - resizedVec.z),
+            SCNVector3(x + resizedVec.x, y + 0.01 + resizedVec.y , z + resizedVec.z),
+            SCNVector3(x + resizedVec.x, y - 0.01 + resizedVec.y , z + resizedVec.z),
+            SCNVector3(x - resizedVec.x, y - 0.01 - resizedVec.y , z - resizedVec.z),
+        ]
+
+        //print(strokeVertices)
+        //      testVertices()
         
     }
     
@@ -298,50 +331,99 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let x = point3D.x
         let y = point3D.y
         let z = point3D.z
+        let prevX = previousPoint.x
+        let prevY = previousPoint.y
+        let prevZ = previousPoint.z
+        let lineBetweenPoints = SCNVector3(x: x - prevX, y: y - prevY, z: z - prevZ)
+        
+        //        strokeVertices += [
+        //            SCNVector3(x, y + 0.01 , z - 0.01),
+        //            SCNVector3(x, y + 0.01 , z + 0.01),
+        //            SCNVector3(x, y - 0.01 , z + 0.01),
+        //            SCNVector3(x, y - 0.01 , z - 0.01),
+        //        ]
+        
+        if strokeVertices.count == 0 {
+            let prevResizedNearFar = resizeVector(vector: initialNearFarLine, scalingFactor: 0.005)
+            let prevResizedNormal = resizeVector(vector: crossProduct(vec1: prevResizedNearFar, vec2: lineBetweenPoints), scalingFactor: 0.005)
+            strokeVertices = [
+                SCNVector3(prevX - prevResizedNearFar.x + prevResizedNormal.x, prevY - prevResizedNearFar.y + prevResizedNormal.y, prevZ - prevResizedNearFar.z + prevResizedNormal.z),
+                
+                SCNVector3(prevX + prevResizedNearFar.x + prevResizedNormal.x, prevY + prevResizedNearFar.y + prevResizedNormal.y, prevZ + prevResizedNearFar.z + prevResizedNormal.z),
+                
+                SCNVector3(prevX + prevResizedNearFar.x - prevResizedNormal.x, prevY + prevResizedNearFar.y - prevResizedNormal.y, prevZ + prevResizedNearFar.z - prevResizedNormal.z),
+                
+                SCNVector3(prevX - prevResizedNearFar.x - prevResizedNormal.x, prevY - prevResizedNearFar.y - prevResizedNormal.y, prevZ - prevResizedNearFar.z - prevResizedNormal.z)
+            ]
+        }
+        
+        let resizedNearFar = resizeVector(vector: lineBetweenNearFar, scalingFactor: 0.005)
+        let resizedNormal = resizeVector(vector: crossProduct(vec1: resizedNearFar, vec2: lineBetweenPoints), scalingFactor: 0.005)
         strokeVertices += [
-            SCNVector3(x, y + 0.01 , z - 0.01),
-            SCNVector3(x, y + 0.01 , z + 0.01),
-            SCNVector3(x, y - 0.01 , z + 0.01),
-            SCNVector3(x, y - 0.01 , z - 0.01),
+            SCNVector3(x - resizedNearFar.x + resizedNormal.x, y - resizedNearFar.y + resizedNormal.y, z - resizedNearFar.z + resizedNormal.z),
+            
+            SCNVector3(x + resizedNearFar.x + resizedNormal.x, y + resizedNearFar.y  + resizedNormal.y, z + resizedNearFar.z + resizedNormal.z),
+            
+            SCNVector3(x + resizedNearFar.x - resizedNormal.x, y + resizedNearFar.y  - resizedNormal.y, z + resizedNearFar.z - resizedNormal.z),
+            
+            SCNVector3(x - resizedNearFar.x - resizedNormal.x, y - resizedNearFar.y  - resizedNormal.y, z - resizedNearFar.z - resizedNormal.z),
         ]
+        
+        
+        
 
-        print(strokeVertices)
+
+        //print(strokeVertices)
         connectVertices()
     }
     
     func connectVertices(){
-        let indices: [UInt16] = [
-            2,5,1, //front
-            5,2,6,
-            
-            
-            6,7,4, //second square
-            6,4,5,
-
-            3,1,0, //first square
-            3,2,1,
-
-
-            7,0,4, //back
-            0,7,3,
-
-            3,6,2, //bottom
-            6,3,7,
-            
-            1,4,0, //top
-            1,5,4
-            
-        ]
         
-        let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
-        let source = SCNGeometrySource(vertices: strokeVertices)
-        let customGeom = SCNGeometry(sources: [source], elements: [element])
-//        let material = SCNMaterial()
-//        material.isDoubleSided = true
-//        customGeom.materials = [material]
-        let node = SCNNode(geometry: customGeom)
-        self.sceneView.scene.rootNode.addChildNode(node)
+        if indices.count == 0 {
+            indices = initialIndices
+            let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+            let source = SCNGeometrySource(vertices: strokeVertices)
+            let customGeom = SCNGeometry(sources: [source], elements: [element])
+            //        let material = SCNMaterial()
+            //        material.isDoubleSided = true
+            //        customGeom.materials = [material]
+            currentStroke = SCNNode(geometry: customGeom)
+            self.sceneView.scene.rootNode.addChildNode(currentStroke)
+            
+            
+            
+            
+        } else {
+            // (number of points - 2 becuase already did first 2 points) * 4 becuase 4 vertices per point
+            let indexAdder = UInt32(((strokeVertices.count / 4) - 2) * 4)
+            
+            var newIndices = [UInt32]()
+            
+            for index in initialIndices {
+                newIndices.append(index + indexAdder)
+            }
+            
+            indices += newIndices
+            
+            let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+            let source = SCNGeometrySource(vertices: strokeVertices)
+            let customGeom = SCNGeometry(sources: [source], elements: [element])
+            
+            currentStroke.geometry = customGeom
+            
+            
+            
+        }
         
+        
+
+        
+
+        
+    }
+    
+    func crossProduct(vec1: SCNVector3, vec2: SCNVector3) -> SCNVector3{
+        return SCNVector3(x: vec1.y * vec2.z - vec1.z * vec2.y, y: vec1.z * vec2.x - vec1.x * vec2.z, z: vec1.x * vec2.y - vec1.y * vec2.x)
     }
     
     
