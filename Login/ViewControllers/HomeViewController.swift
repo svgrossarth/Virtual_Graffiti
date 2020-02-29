@@ -16,15 +16,44 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     @IBOutlet weak var sceneView: ARSCNView!
     var pencilKitCanvas =  PKCanvas()
     
+    @IBOutlet weak var button: UIButton!
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
+    var strokeVertices = [SCNVector3]()
+    var touchMovedCalled = false
+    var previousPoint = SCNVector3()
+    var lineBetweenNearFar = SCNVector3()
+    var indices = [UInt32]()
+    let initialIndices : [UInt32]  = [
+        2,5,1, //front
+        5,2,6,
+        
+        
+        6,7,4, //second square
+        6,4,5,
+
+        3,1,0, //first square
+        3,2,1,
+
+
+        7,0,4, //back
+        0,7,3,
+
+        3,6,2, //bottom
+        6,3,7,
+        
+        1,4,0, //top
+        1,5,4
+        
+    ]
+    var currentStroke = SCNNode()
+    var perviousPoint = SCNVector3()
+    var initialNearFarLine = SCNVector3()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         addPencilKit()
-
-        sceneView.frame = view.frame
-        view.addSubview(sceneView)
+        self.view.addSubview(sceneView)
     }
     
     override func viewDidLoad() {
@@ -45,19 +74,6 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         
         // Set the scene to the view
         sceneView.scene = scene
-        
-        
-        let geom = SCNSphere(radius: 0.01)
-        let material = SCNMaterial()
-        material.diffuse.contents = UIColor.red
-        geom.materials = [material]
-
-        let sphereNode = SCNNode(geometry: geom)
-        self.sceneView.scene.rootNode.addChildNode(sphereNode)
-
-        
-//        let rootNode = SCNNode()
-//        sceneView.scene.rootNode
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,26 +106,18 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
-            var touchLocation = singleTouch.location(in: sceneView)
+            strokeVertices = [SCNVector3]()
+            indices = [UInt32]()
+            let touchLocation = singleTouch.location(in: sceneView)
             let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
             let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
             let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
             let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-            let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
+            initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+            let resizedVector  = resizeVector(vector: initialNearFarLine, scalingFactor: 0.3)
             let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
-            
-            let geom = SCNSphere(radius: 0.01)
-            let material = SCNMaterial()
-            material.diffuse.contents = PKCanvas().sendColor()
-            geom.materials = [material]
-
-            let sphereNode = SCNNode(geometry: geom)
-            //sphereNode.position = nodePosition1
-            //sphereNode.position = nodePosition1
-            sphereNode.worldPosition = nodePosition1
-            self.sceneView.scene.rootNode.addChildNode(sphereNode)
-            previousNode = sphereNode
+            previousPoint = nodePosition1
+            previousPoint = nodePosition1
         } else {
             print("can't get touch")
         }
@@ -117,35 +125,24 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //print("touches Moved")
-        if let singleTouch = touches.first{
-            let test = sceneView.scene.rootNode.worldPosition
-            var touchLocation = singleTouch.location(in: sceneView)
-            let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
-            let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
-            let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
-            let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-            let lineBetweenPoints = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: lineBetweenPoints, scalingFactor: 1)
-            let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
-            let nodePosition2 = SCNVector3(self.cameraTrans.x + resizedVector.x, self.cameraTrans.y + resizedVector.y, self.cameraTrans.y + resizedVector.z)
-            
-            
-            let clone = self.previousNode.clone()
-            //clone.position = nodePosition1
-            
-            clone.worldPosition = nodePosition1
-           // previousNode.addChildNode(clone)
-            clone.worldPosition = nodePosition1
-
-            self.sceneView.scene.rootNode.addChildNode(clone)
-            
-            generateMorePoints(currentPoint : clone)
-            self.previousNode = clone
-           // print("hi")
-        } else {
-            print("can't get touch")
-        }
+            touchMovedCalled = true
+            if let singleTouch = touches.first{
+                let touchLocation = singleTouch.location(in: sceneView)
+                let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+                let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+                let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+                let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+                lineBetweenNearFar = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+                let resizedVector  = resizeVector(vector: lineBetweenNearFar, scalingFactor: 0.3)
+                let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+                
+                
+                addVertices(point3D: nodePosition1)
+                
+                previousPoint = nodePosition1
+            } else {
+                print("can't get touch")
+            }
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -172,84 +169,81 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         return SCNVector3((vector.x/length) * scalingFactor, (vector.y/length) * scalingFactor, (vector.z/length) * scalingFactor)
     }
     
-    func generateMorePoints(currentPoint : SCNNode){
-        let currentPointPosition = currentPoint.position
-        let previousPointPosition = self.previousNode.position
-//        let currentPointPosition = currentPoint.worldPosition
-//        let previousPointPosition = self.previousNode.worldPosition
-
-        let distance = distanceBetweenPoints(currentPointPosition: currentPointPosition, previousPointPosition: previousPointPosition)
-        if(distance >= 0.002){
-            renderPoints(currentPointPosition: currentPointPosition, previousPointPosition: previousPointPosition, distance:distance)
-        }
-    }
-    
-    func distanceBetweenPoints(currentPointPosition : SCNVector3, previousPointPosition : SCNVector3) -> Float {
+    func addVertices(point3D: SCNVector3){
+        let x = point3D.x
+        let y = point3D.y
+        let z = point3D.z
+        let prevX = previousPoint.x
+        let prevY = previousPoint.y
+        let prevZ = previousPoint.z
+        let lineBetweenPoints = SCNVector3(x: x - prevX, y: y - prevY, z: z - prevZ)
         
-        let xDist = (currentPointPosition.x - previousPointPosition.x)
-        let yDist = (currentPointPosition.y - previousPointPosition.y)
-        let zDist = (currentPointPosition.z - previousPointPosition.z)
-        return sqrtf(pow(xDist, 2) + pow(yDist, 2) + pow(zDist, 2))
-    }
-    
-    func renderPoints(currentPointPosition: SCNVector3, previousPointPosition: SCNVector3, distance : Float){
-        //print("rendering points")
-        let lineBetweenPoints = SCNVector3(x: currentPointPosition.x - previousPointPosition.x, y: currentPointPosition.y - previousPointPosition.y, z: currentPointPosition.z - previousPointPosition.z)
-        let smallStep : Float = 0.002
-        let num = Int(distance/smallStep)
-        if num == 1 {
-            let clone = self.previousNode.clone()
-            let midPoint = SCNVector3(x: lineBetweenPoints.x * 0.5, y: lineBetweenPoints.y * 0.5, z: lineBetweenPoints.z * 0.5)
-            //clone.position = SCNVector3(x: previousPointPosition.x + midPoint.x, y: previousPointPosition.y + midPoint.y, z: previousPointPosition.z + midPoint.z)
-            //previousNode.addChildNode(clone)
-            clone.worldPosition = SCNVector3(x: previousPointPosition.x + midPoint.x, y: previousPointPosition.y + midPoint.y, z: previousPointPosition.z + midPoint.z)
-            self.sceneView.scene.rootNode.addChildNode(clone)
+        if strokeVertices.count == 0 {
+            let prevResizedNearFar = resizeVector(vector: initialNearFarLine, scalingFactor: 0.005)
+            let prevResizedNormal = resizeVector(vector: crossProduct(vec1: prevResizedNearFar, vec2: lineBetweenPoints), scalingFactor: 0.005)
+            strokeVertices = [
+                SCNVector3(prevX - prevResizedNearFar.x + prevResizedNormal.x, prevY - prevResizedNearFar.y + prevResizedNormal.y, prevZ - prevResizedNearFar.z + prevResizedNormal.z),
+                
+                SCNVector3(prevX + prevResizedNearFar.x + prevResizedNormal.x, prevY + prevResizedNearFar.y + prevResizedNormal.y, prevZ + prevResizedNearFar.z + prevResizedNormal.z),
+                
+                SCNVector3(prevX + prevResizedNearFar.x - prevResizedNormal.x, prevY + prevResizedNearFar.y - prevResizedNormal.y, prevZ + prevResizedNearFar.z - prevResizedNormal.z),
+                
+                SCNVector3(prevX - prevResizedNearFar.x - prevResizedNormal.x, prevY - prevResizedNearFar.y - prevResizedNormal.y, prevZ - prevResizedNearFar.z - prevResizedNormal.z)
+            ]
+        }
+        let resizedNearFar = resizeVector(vector: lineBetweenNearFar, scalingFactor: 0.005)
+        let resizedNormal = resizeVector(vector: crossProduct(vec1: resizedNearFar, vec2: lineBetweenPoints), scalingFactor: 0.005)
+        strokeVertices += [
+            SCNVector3(x - resizedNearFar.x + resizedNormal.x, y - resizedNearFar.y + resizedNormal.y, z - resizedNearFar.z + resizedNormal.z),
             
-        } else {
-            for i in 1...num - 1 {
-                
-                let clone = self.previousNode.clone()
-                let scaleFactor = Float(i)/Float(num)
-                let scaledPoint = SCNVector3(x: lineBetweenPoints.x * scaleFactor, y: lineBetweenPoints.y * scaleFactor, z: lineBetweenPoints.z * scaleFactor)
-               // clone.position = SCNVector3(x: previousPointPosition.x + scaledPoint.x, y: previousPointPosition.y + scaledPoint.y, z: previousPointPosition.z + scaledPoint.z)
-                //previousNode.addChildNode(clone)
-                clone.worldPosition = SCNVector3(x: previousPointPosition.x + scaledPoint.x, y: previousPointPosition.y + scaledPoint.y, z: previousPointPosition.z + scaledPoint.z)
-                self.sceneView.scene.rootNode.addChildNode(clone)
-                
-                
-            }
-
-
-        }
-
-
+            SCNVector3(x + resizedNearFar.x + resizedNormal.x, y + resizedNearFar.y  + resizedNormal.y, z + resizedNearFar.z + resizedNormal.z),
+            
+            SCNVector3(x + resizedNearFar.x - resizedNormal.x, y + resizedNearFar.y  - resizedNormal.y, z + resizedNearFar.z - resizedNormal.z),
+            
+            SCNVector3(x - resizedNearFar.x - resizedNormal.x, y - resizedNearFar.y  - resizedNormal.y, z - resizedNearFar.z - resizedNormal.z),
+        ]
+        connectVertices()
     }
     
-    func findRotation(currentPointPosition: simd_float3, previousPointPosition: simd_float3, distance : Float) -> simd_quatf{
-        var oppositeSide = Float()
-        var angle = Float()
+    func connectVertices(){
+        if indices.count == 0 {
+            indices = initialIndices
+            let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+            let source = SCNGeometrySource(vertices: strokeVertices)
+            let customGeom = SCNGeometry(sources: [source], elements: [element])
+            
+            let material = SCNMaterial()
+            material.diffuse.contents = PKCanvas().sendColor()
+            customGeom.materials = [material]
+            
+            currentStroke = SCNNode(geometry: customGeom)
+            self.sceneView.scene.rootNode.addChildNode(currentStroke)
+        } else {
+            // (number of points - 2 becuase already did first 2 points) * 4 becuase 4 vertices per point
+            let indexAdder = UInt32(((strokeVertices.count / 4) - 2) * 4)
+            
+            var newIndices = [UInt32]()
+            
+            for index in initialIndices {
+                newIndices.append(index + indexAdder)
+            }
+            
+            indices += newIndices
+            
+            let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+            let source = SCNGeometrySource(vertices: strokeVertices)
+            let customGeom = SCNGeometry(sources: [source], elements: [element])
+            
+            let material = SCNMaterial()
+            material.diffuse.contents = PKCanvas().sendColor()
+            customGeom.materials = [material]
 
-        //swipe upper right
-        if(currentPointPosition.y > previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
-            oppositeSide = currentPointPosition.y - previousPointPosition.y
-            angle = asin(oppositeSide/distance)
-
-        //swipe bottom left
-        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
-            oppositeSide = previousPointPosition.y - currentPointPosition.y
-            angle = asin(oppositeSide/distance) + .pi
-        //swipe upper left
-        } else if (currentPointPosition.y > previousPointPosition.y && currentPointPosition.x < previousPointPosition.x){
-            oppositeSide = currentPointPosition.y - previousPointPosition.y
-            angle = 2 * .pi -  asin(oppositeSide/distance)
-        //swiper bottom right
-        } else if (currentPointPosition.y < previousPointPosition.y && currentPointPosition.x > previousPointPosition.x){
-            oppositeSide = previousPointPosition.y - currentPointPosition.y
-            angle = 2 * .pi -  asin(oppositeSide/distance)
-            //angle = asin(oppositeSide/distance)
+            currentStroke.geometry = customGeom
         }
-
-        return simd_quatf(angle: angle, axis: simd_float3(x: 0, y: 0, z: 1))
+    }
+    
+    func crossProduct(vec1: SCNVector3, vec2: SCNVector3) -> SCNVector3{
+        return SCNVector3(x: vec1.y * vec2.z - vec1.z * vec2.y, y: vec1.z * vec2.x - vec1.x * vec2.z, z: vec1.x * vec2.y - vec1.y * vec2.x)
     }
     /*
      Code below is used to create a canvas view and make it as a subview of our ARSCNView so that the ToolPicker will show up and left us change the color
@@ -277,4 +271,11 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     
 }
 
+// debug purposes
+extension UIView {
 
+    func subviewsRecursive() -> [UIView] {
+        return subviews + subviews.flatMap { $0.subviewsRecursive() }
+    }
+
+}
