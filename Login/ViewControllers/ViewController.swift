@@ -5,7 +5,6 @@
 //  Created by Elvis Alvarado on 1/26/20.
 //  Copyright © 2020 Team Rocket. All rights reserved.
 //
-
 import UIKit
 import Firebase
 import GoogleSignIn
@@ -22,57 +21,7 @@ class ViewController: UIViewController, GIDSignInDelegate {
         super.viewDidLoad()
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance()?.presentingViewController = self
-        /*
-         Facebook Login [START]
-         */
-        //FBLoginButton.self
-//        let loginButton = FBLoginButton()
-//
-//        // Optional: Place the button in the center of your view.
-//        loginButton.center = view.center
-//        view.addSubview(loginButton)
-        
-//        if (AccessToken.current != nil) {
-//          // User is logged in, do work such as go to next view controller.
-//            let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
-//
-//            Auth.auth().signIn(with: credential) { (authResult, error) in
-//                if let error = error {
-//                    print(error)
-//                    return
-//                }
-//                self.transitionToHome()
-//            }
-//        }
-        /*
-         Facebook Login [END]
-         */
     }
-    
-    /*
-     Facebook Login [START]
-     */
-    /*func loginButton(_ loginButton: FBLoginButton!, didCompleteWith result: LoginManagerLoginResult!, error: Error!) {
-        if let error = error {
-            print(error.localizedDescription)
-            return
-      }
-        
-        let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
-        
-        Auth.auth().signIn(with: credential) { (authResult, error) in
-          if let error = error {
-            print(error)
-            return
-          }
-            self.transitionToHome()
-        }
-      
-    }*/
-    /*
-     Facebook Login [END]
-     */
-    
     /*
      Google Sign In [START]
      */
@@ -121,4 +70,3 @@ class ViewController: UIViewController, GIDSignInDelegate {
         
     }
 }
-

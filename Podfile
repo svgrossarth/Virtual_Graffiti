@@ -22,4 +22,5 @@ target 'Login' do
   pod 'Firebase/Firestore'
   pod 'GoogleSignIn'
   pod 'FBSDKLoginKit'
+  pod 'ProgressHUD'
 end
