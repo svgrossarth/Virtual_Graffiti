@@ -10,8 +10,20 @@ import UIKit
 import SceneKit
 import ARKit
 import PencilKit
+import CoreLocation
 
-class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate {
+
+public struct Point : Codable {
+    var x : Float
+    var y : Float
+    var z : Float
+    //var material = SCNMaterial()
+}
+
+
+class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate, CLLocationManagerDelegate {
+    let locationManager : CLLocationManager = CLLocationManager()
+    var location : CLLocation = CLLocation()
     
     @IBOutlet weak var sceneView: ARSCNView!
     var pencilKitCanvas =  PKCanvas()
@@ -47,8 +59,9 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         
     ]
     var currentStroke = SCNNode()
-    var perviousPoint = SCNVector3()
     var initialNearFarLine = SCNVector3()
+    
+    var points : [Point] = []
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -58,6 +71,15 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set up location manager
+        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        }
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -170,9 +192,14 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     }
     
     func addVertices(point3D: SCNVector3){
+        
         let x = point3D.x
         let y = point3D.y
         let z = point3D.z
+        
+        let newPoint = Point(x: x, y: y, z: z)
+        points.append(newPoint)
+        
         let prevX = previousPoint.x
         let prevY = previousPoint.y
         let prevZ = previousPoint.z
@@ -215,6 +242,8 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             let material = SCNMaterial()
             material.diffuse.contents = PKCanvas().sendColor()
             customGeom.materials = [material]
+            
+            //points[points.count - 1].material = material
             
             currentStroke = SCNNode(geometry: customGeom)
             self.sceneView.scene.rootNode.addChildNode(currentStroke)
@@ -269,6 +298,25 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         return true;
     }
     
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let loc = manager.location {
+            location = loc
+        }
+    }
+    
+    func save() {
+        Database().saveDrawing(location: location, points: points)
+    }
+    
+    func load() {
+        Database().retrieveDrawing(location: location, drawFunction: { retrievedPoints in
+            for point in retrievedPoints {
+                self.addVertices(point3D: SCNVector3Make(point.x, point.y, point.z))
+            }
+        })
+        
+    }
 }
 
 // debug purposes
