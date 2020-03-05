@@ -73,13 +73,14 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         super.viewDidLoad()
         
         // Set up location manager
-        locationManager.requestAlwaysAuthorization()
-        locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
-        }
+        location = CLLocation(latitude: -51, longitude: -51)
+//        locationManager.requestAlwaysAuthorization()
+//        locationManager.requestWhenInUseAuthorization()
+//        if CLLocationManager.locationServicesEnabled() {
+//            locationManager.delegate = self
+//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//            locationManager.startUpdatingLocation()
+//        }
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -316,6 +317,12 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             }
         })
         
+    }
+    @IBAction func saveButton(_ sender: Any) {
+        save()
+    }
+    @IBAction func loadButton(_ sender: Any) {
+        load()
     }
 }
 
