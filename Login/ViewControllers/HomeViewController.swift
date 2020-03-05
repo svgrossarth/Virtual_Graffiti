@@ -60,6 +60,8 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     ]
     var currentStroke = SCNNode()
     var initialNearFarLine = SCNVector3()
+    var userRootNode = SCNNode()
+    var hasLocationBeenSaved =  false
     
     var points : [Point] = []
     
@@ -78,7 +80,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
 //        locationManager.requestWhenInUseAuthorization()
 //        if CLLocationManager.locationServicesEnabled() {
 //            locationManager.delegate = self
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//            locationManager.desiredAccuracy = kCLLocationAccuracyBestTenMeters
 //            locationManager.startUpdatingLocation()
 //        }
         
@@ -97,6 +99,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         
         // Set the scene to the view
         sceneView.scene = scene
+        sceneView.scene.rootNode.addChildNode(userRootNode)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -247,7 +250,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             //points[points.count - 1].material = material
             
             currentStroke = SCNNode(geometry: customGeom)
-            self.sceneView.scene.rootNode.addChildNode(currentStroke)
+            userRootNode.addChildNode(currentStroke)
         } else {
             // (number of points - 2 becuase already did first 2 points) * 4 becuase 4 vertices per point
             let indexAdder = UInt32(((strokeVertices.count / 4) - 2) * 4)
@@ -303,11 +306,18 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let loc = manager.location {
             location = loc
+            if(!hasLocationBeenSaved){
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+                let now = df.string(from: Date())
+                userRootNode.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
+            }
+            
         }
     }
     
     func save() {
-        Database().saveDrawing(location: location, points: points)
+        Database().saveDrawing(location: location, userRootNode: userRootNode)
     }
     
     func load() {
