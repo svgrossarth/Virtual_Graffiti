@@ -202,10 +202,13 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         let db = Database()
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
             for node in retrievedNodes {
-                let loc = self.location
-                let dLat = self.location.coordinate.latitude * Float.pi / 180 - node.location.coordinate.latitude * Float.pi / 180;
-                let dLon = self.location.coordinate.longitutde * Float.pi / 180 - node.location.coordinate.longitutde * Float.pi / 180;
-                node.simdPosition = SIMD3<Float>(dLat, dLon, Float(node.location.altitude))
+                let lat1 = Float(self.location.coordinate.latitude) * Float.pi / 180.0
+                let lat2 = Float(node.location.coordinate.latitude) * Float.pi / 180.0
+                let dLat = lat2 - lat1
+                let long1 = Float(self.location.coordinate.longitude) * Float.pi / 180.0
+                let long2 = Float(node.location.coordinate.longitude) * Float.pi / 180.0
+                let dLong = long2 - long1
+                node.simdPosition = SIMD3<Float>(dLat, dLong, Float(node.location.altitude))
                 
                 self.sceneView.scene.rootNode.addChildNode(node)
             }
