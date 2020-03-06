@@ -13,14 +13,6 @@ import PencilKit
 import CoreLocation
 
 
-public struct Point : Codable {
-    var x : Float
-    var y : Float
-    var z : Float
-    //var material = SCNMaterial()
-}
-
-
 class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate, CLLocationManagerDelegate {
     let locationManager : CLLocationManager = CLLocationManager()
     var location : CLLocation = CLLocation()
@@ -38,8 +30,6 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     var initialNearFarLine = SCNVector3()
     var userRootNode : SecondTierRoot?
     var hasLocationBeenSaved =  false
-    
-    var points : [Point] = []
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -209,9 +199,15 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     }
     
     func load() {
-        Database().retrieveDrawing(location: location, drawFunction: { retrievedPoints in
-            for point in retrievedPoints {
-               // self.addVertices(point3D: SCNVector3Make(point.x, point.y, point.z))
+        let db = Database()
+        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
+            for node in retrievedNodes {
+                let loc = self.location
+                let latDiff = node.location.coordinate.latitude - loc.coordinate.latitude
+                let longDiff = node.location.coordinate.longitude - loc.coordinate.longitude
+                node.simdPosition = SIMD3<Float>(Float(latDiff), Float(longDiff), Float(node.location.altitude))
+                
+                self.sceneView.scene.rootNode.addChildNode(node)
             }
         })
         

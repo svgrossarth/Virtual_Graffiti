@@ -21,7 +21,7 @@ class Database {
     let DICT_KEY = "node"
     
     // retval: Local save success
-    func saveDrawing(location : CLLocation, userRootNode : SCNNode) -> Void {
+    func saveDrawing(location : CLLocation, userRootNode : SecondTierRoot) -> Void {
         let latitude : CLLocationDegrees = location.coordinate.latitude
         let longitude : CLLocationDegrees = location.coordinate.longitude
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
@@ -57,12 +57,12 @@ class Database {
     }
     
     
-    func retrieveDrawing(location: CLLocation, drawFunction: @escaping (_ nodes : [SCNNode]) -> Void) {
+    func retrieveDrawing(location: CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
         _drawPoints3x3(location: location, drawFunction: drawFunction)
     }
     
     
-    func _drawPoints3x3(location: CLLocation, drawFunction: @escaping (_ nodes : [SCNNode]) -> Void) {
+    func _drawPoints3x3(location: CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
         let tile : CLLocation = location
         for lat in [-1, 0, 1] {
             for long in [-1, 0, 1] {
@@ -74,7 +74,7 @@ class Database {
     }
     
     
-    func _drawPoints(location : CLLocation, drawFunction: @escaping (_ nodes : [SCNNode]) -> Void) {
+    func _drawPoints(location : CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
         // Get points
         let latitude : CLLocationDegrees = location.coordinate.latitude
         let longitude : CLLocationDegrees = location.coordinate.longitude
@@ -88,16 +88,16 @@ class Database {
                 return
             } else {
                 if let snapshot = querySnapshot {
-                    var nodes : [SCNNode] = []
+                    var nodes : [SecondTierRoot] = []
                     for response in snapshot.documents {
-                        do{
+                        do {
                             let dictionary = response.data()
                             guard let nodeData = dictionary[self.DICT_KEY] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
                             let newData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData)
-                            let newNode = newData as! SCNNode
+                            let newNode = newData as! SecondTierRoot
                             nodes.append(newNode)
                         } catch {
                             print("Could not pull down node")
