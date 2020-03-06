@@ -203,9 +203,9 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
             for node in retrievedNodes {
                 let loc = self.location
-                let latDiff = node.location.coordinate.latitude - loc.coordinate.latitude
-                let longDiff = node.location.coordinate.longitude - loc.coordinate.longitude
-                node.simdPosition = SIMD3<Float>(Float(latDiff), Float(longDiff), Float(node.location.altitude))
+                let dLat = self.location.coordinate.latitude * Float.pi / 180 - node.location.coordinate.latitude * Float.pi / 180;
+                let dLon = self.location.coordinate.longitutde * Float.pi / 180 - node.location.coordinate.longitutde * Float.pi / 180;
+                node.simdPosition = SIMD3<Float>(dLat, dLon, Float(node.location.altitude))
                 
                 self.sceneView.scene.rootNode.addChildNode(node)
             }
