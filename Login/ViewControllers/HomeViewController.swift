@@ -208,7 +208,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
                 let long1 = Float(self.location.coordinate.longitude) * Float.pi / 180.0
                 let long2 = Float(node.location.coordinate.longitude) * Float.pi / 180.0
                 let dLong = long2 - long1
-                node.simdPosition = SIMD3<Float>(dLat, dLong, Float(node.location.altitude))
+                node.simdPosition = SIMD3<Float>(dLat, 0, dLong)
                 
                 self.sceneView.scene.rootNode.addChildNode(node)
             }
