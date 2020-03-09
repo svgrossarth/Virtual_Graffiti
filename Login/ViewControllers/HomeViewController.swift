@@ -30,6 +30,8 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     var initialNearFarLine = SCNVector3()
     var userRootNode : SecondTierRoot?
     var hasLocationBeenSaved =  false
+    var heading : CLHeading = CLHeading()
+    var headingSet : Bool = false
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -189,9 +191,17 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
                 userRootNode = SecondTierRoot(location: location)
                 userRootNode?.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
                 sceneView.scene.rootNode.addChildNode(userRootNode!)
+                locationManager.startUpdatingHeading()
             }
-            
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        heading = newHeading
+        headingSet = true
+        let angle = deg2rad(heading.trueHeading)
+        userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
+        locationManager.stopUpdatingHeading()
     }
     
     func save() {
@@ -199,6 +209,10 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     }
     
     func load() {
+        if !headingSet {
+            return
+        }
+        
         let db = Database()
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
             for node in retrievedNodes {
@@ -209,6 +223,9 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
                 let long2 = Float(node.location.coordinate.longitude) * Float.pi / 180.0
                 let dLong = long2 - long1
                 node.simdPosition = SIMD3<Float>(dLat, 0, dLong)
+                
+                let angle = deg2rad(self.heading.trueHeading)
+                node.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
                 
                 self.sceneView.scene.rootNode.addChildNode(node)
             }
@@ -230,4 +247,9 @@ extension UIView {
         return subviews + subviews.flatMap { $0.subviewsRecursive() }
     }
 
+}
+
+
+func deg2rad(_ number: Double) -> Double {
+    return number * .pi / 180
 }
