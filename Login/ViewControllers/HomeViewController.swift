@@ -17,6 +17,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     let locationManager : CLLocationManager = CLLocationManager()
     var location : CLLocation = CLLocation()
     var currentStroke : Stroke?
+    var hasAngleBeenSaved = false
     
     @IBOutlet weak var sceneView: ARSCNView!
     var pencilKitCanvas =  PKCanvas()
@@ -49,9 +50,11 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.requestAlwaysAuthorization()
             locationManager.startUpdatingLocation()
         }
         
+        let test = locationManager.location
         // Set the view's delegate
         sceneView.delegate = self
         
@@ -67,6 +70,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         
         // Set the scene to the view
         sceneView.scene = scene
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -134,6 +138,11 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             }
     }
     
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        Database().saveDrawing(location: location, userRootNode: userRootNode!)
+    }
+    
+    
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
          cameraTrans = frame.camera.transform * simd_float4(x: 1, y: 1, z: 1, w: 0)
     }
@@ -185,12 +194,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         if let loc = manager.location {
             location = loc
             if(!hasLocationBeenSaved){
-                let df = DateFormatter()
-                df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-                let now = df.string(from: Date())
-                userRootNode = SecondTierRoot(location: location)
-                userRootNode?.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
-                sceneView.scene.rootNode.addChildNode(userRootNode!)
+                hasLocationBeenSaved = true
                 locationManager.startUpdatingHeading()
             }
         }
@@ -200,10 +204,26 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         heading = newHeading
         headingSet = true
         let angle = deg2rad(heading.trueHeading)
-        userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
-        locationManager.stopUpdatingHeading()
+        if !hasAngleBeenSaved {
+            hasAngleBeenSaved = true
+            
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            let now = df.string(from: Date())
+            userRootNode = SecondTierRoot(location: self.location, angleToNorth: angle)
+            userRootNode?.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
+            sceneView.scene.rootNode.addChildNode(userRootNode!)
+            load()
+        }
+        print("the angle", angle)
+        
+       // userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
+        //locationManager.stopUpdatingHeading()
     }
     
+    @IBAction func save(_ sender: Any) {
+        print("hi")
+    }
     func save() {
         Database().saveDrawing(location: location, userRootNode: userRootNode!)
     }
@@ -224,8 +244,9 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
                 let dLong = long2 - long1
                 node.simdPosition = SIMD3<Float>(dLat, 0, dLong)
                 
-                let angle = deg2rad(self.heading.trueHeading)
-                node.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
+                let currentAngle = deg2rad(self.heading.trueHeading)
+                let angleOfRotation = currentAngle - node.angleToNorth
+                node.rotate(by: SCNQuaternion(0, 1, 0, angleOfRotation), aroundTarget: SCNVector3Make(0, 0, 0))
                 
                 self.sceneView.scene.rootNode.addChildNode(node)
             }

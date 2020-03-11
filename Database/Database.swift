@@ -18,7 +18,9 @@ class Database {
     let db = Firestore.firestore()
     var colRef : CollectionReference!
     var docRef : DocumentReference!
-    let DICT_KEY = "node"
+    let DICT_KEY_NODE = "node"
+    let DICT_KEY_LOCATION = "location"
+    let DICT_KEY_ANGLE = "angle"
     
     // retval: Local save success
     func saveDrawing(location : CLLocation, userRootNode : SecondTierRoot) -> Void {
@@ -38,10 +40,15 @@ class Database {
         // TODO: Save drawing!
         var dataToSave: [String: Any] = [:]
         do{
-            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode, requiringSecureCoding: false)
+            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
+            let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
+            let nodeAngle = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.angleToNorth, requiringSecureCoding: false)
             
             
-            dataToSave[DICT_KEY] = nodeData
+            dataToSave[DICT_KEY_NODE] = nodeData
+            dataToSave[DICT_KEY_LOCATION] = nodeLocation
+            dataToSave[DICT_KEY_ANGLE] = nodeAngle
+            
             docRef.setData(dataToSave) { (error) in
                 if let error = error {
                     print("Error saving drawing: \(error.localizedDescription)")
@@ -66,7 +73,7 @@ class Database {
         let tile : CLLocation = location
         for lat in [-1, 0, 1] {
             for long in [-1, 0, 1] {
-                let newCoordinate = CLLocationCoordinate2DMake(tile.coordinate.latitude + Double(lat * 10^(-degreeDecimalPlaces)), tile.coordinate.longitude + Double(long * 10^(-degreeDecimalPlaces)))
+                let newCoordinate = CLLocationCoordinate2DMake(tile.coordinate.latitude + Double(lat) * pow(10.0, -Double(degreeDecimalPlaces)), tile.coordinate.longitude + Double(long) * pow(10.0, -Double(degreeDecimalPlaces)))
                 let currentTile = CLLocation(coordinate: newCoordinate, altitude: tile.altitude, horizontalAccuracy: tile.horizontalAccuracy, verticalAccuracy: tile.verticalAccuracy, course: tile.course, speed: tile.speed, timestamp: tile.timestamp)
                 _drawPoints(location:currentTile, drawFunction: drawFunction)
             }
@@ -92,12 +99,23 @@ class Database {
                     for response in snapshot.documents {
                         do {
                             let dictionary = response.data()
-                            guard let nodeData = dictionary[self.DICT_KEY] as? Data else{
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
-                            let newData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData)
-                            let newNode = newData as! SecondTierRoot
+                            guard let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data else{
+                                print("can't convert to data")
+                                return
+                            }
+                            guard let nodeAngle = dictionary[self.DICT_KEY_ANGLE] as? Data else{
+                                print("can't convert to data")
+                                return
+                            }
+                            let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
+                            let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
+                            let newAngle = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeAngle) as! Double
+                            newNode.location = newLocation
+                            newNode.angleToNorth = newAngle
                             nodes.append(newNode)
                         } catch {
                             print("Could not pull down node")

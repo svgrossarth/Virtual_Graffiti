@@ -43,7 +43,9 @@ class Stroke : SCNNode {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.previousPoint = SCNVector3()
+        super.init(coder: coder)
+        //fatalError("init(coder:) has not been implemented")
     }
     
     func addVertices(point3D: SCNVector3, initialNearFarLine: SCNVector3, lineBetweenNearFar: SCNVector3){
