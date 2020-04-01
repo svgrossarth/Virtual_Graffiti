@@ -12,29 +12,42 @@ class EmojiScnController : UIViewController, ARSCNViewDelegate{
     var name : String! = "bandage"
     let modelExtension = ".obj"
     lazy var modelName = name + modelExtension
-    lazy var pathName = "Models.scnassets/" + name + "/" + modelName
+    lazy var pathName = "Models.scnassets/" + modelName
 
     var session: ARSession {
           return sceneView.session
-      }
+    }
+
+    func setModel(){
+        //ModelIO
+        guard let emojiScene = SCNScene(named:"Models.scnassets/bandage.scn") else {
+            print("model does not exist")
+            fatalError()
+        }
+        ObjNode = emojiScene.rootNode.childNode(withName: "Group50555", recursively: true)
+        ObjNode.position = SCNVector3(0, 0, -50)
+//        self.sceneView.scene.rootNode.addChildNode(ObjNode!)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
     // Set the view's delegate
         sceneView.delegate = self
     // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-    // Create a new scene
-        let scene = SCNScene()
 
     // Set the scene to the view
-        sceneView.scene = scene
+//        guard  let url = Bundle.main.url(forResource: "bandage", withExtension: "scn") else {
+//            fatalError("bandage.scn not exit.")
+//        }
+//        guard let customNode = SCNReferenceNode(url: url) else {
+//            fatalError("load bandage error.")
+//        }
+//        customNode.load()
+//        ObjNode.addChildNode(customNode)
 
-        guard let modelScene = SCNScene(named: "Models.scnassets/bandage/bandage.obj") else {
-            print("file does not exist!")
-            fatalError()
-        }
-        ObjNode =  modelScene.rootNode.childNode(withName: name!, recursively: true)
-//        sceneView.scene.rootNode.addChildNode(ObjNode)
+//        setModel()
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -60,33 +73,25 @@ class EmojiScnController : UIViewController, ARSCNViewDelegate{
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//-------------------------------------------------------------------------------
-//        guard let touch = touches.first else {
-//            print("Unable to identify touches on any plane. Ignoring interaction...")
-//            return
-//        }
-//        let touchPoint = touch.location(in: sceneView)
-//        print("Touch happened at point: \(touchPoint)")
-//        self.initializeNode()
-//       }
-//-------------------------------------------------------------------------------
-        let location = touches.first!.location(in:sceneView)
-        var hitTestOptions = [SCNHitTestOption: Any]()
-        hitTestOptions[SCNHitTestOption.boundingBoxOnly] = true
-        let hitResults: [SCNHitTestResult] = sceneView.hitTest(location, options: hitTestOptions)
-        if let hit = hitResults.first {
-            if let node = getParent(hit.node) {
-              node.removeFromParentNode()
-              return
+        guard let touch = touches.first else {
+            print("Unable to identify touches on any plane. Ignoring interaction...")
+            return
+        }
+        let touchPoint = touch.location(in: sceneView)
+
+        self.setModel()
+    //add to plane
+        let hits = sceneView.hitTest(touchPoint, types: .estimatedHorizontalPlane)
+        print(hits.first)
+        if hits.count >= 0, let firstHit = hits.first {
+               print("Touch happened at point: \(touchPoint)")
+            if let anotherNode = ObjNode?.clone() {
+                anotherNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
+                sceneView.scene.rootNode.addChildNode(anotherNode)
             }
-          }
-        // find a feature point at the touch location and add an ARAnchor to it
-        let hitResultsFeaturePoints: [ARHitTestResult] =
-                sceneView.hitTest(location, types: .featurePoint)
-        if let hit = hitResultsFeaturePoints.first {
-          sceneView.session.add(anchor: ARAnchor(transform: hit.worldTransform))
         }
     }
+
     func getParent(_ nodeFound: SCNNode?) -> SCNNode? {
         if let node = nodeFound {
           if node.name == name {
@@ -98,20 +103,12 @@ class EmojiScnController : UIViewController, ARSCNViewDelegate{
         return nil
       }
 
+    // MARK: ar scnview delegate
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-      if !anchor.isKind(of: ARPlaneAnchor.self) {
-//        node.addChildNode(self.ObjNode)
-//        DispatchQueue.main.async {
-            let modelClone = self.ObjNode.clone()
-            modelClone.position = SCNVector3Zero
-//
-            // Add model as a child of the node
-           node.addChildNode(modelClone)
-//          }
-      }
+        guard anchor is ARPlaneAnchor  else { return }
+        print("-----------------------> session did add anchor!")
+        node.addChildNode(ObjNode)
     }
-
-
 
      func session(_ session: ARSession, didFailWithError error: Error) {
          // Present an error message to the user
@@ -130,5 +127,7 @@ class EmojiScnController : UIViewController, ARSCNViewDelegate{
 
 
 }
+
+
 
 
