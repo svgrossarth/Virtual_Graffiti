@@ -247,21 +247,27 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-tW-E8K">
-                                <rect key="frame" x="0.0" y="32" width="414" height="830"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jNr-A1-KWt">
-                                <rect key="frame" x="332" y="77" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fhd-eu-mHn">
+                                <rect key="frame" x="301" y="76" width="69" height="30"/>
+                                <color key="backgroundColor" red="0.32549019610000002" green="0.84313725490000002" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="MFr-fa-sxJ"/>
+                                    <constraint firstAttribute="width" constant="69" id="Wzy-ei-aeW"/>
+                                </constraints>
+                                <state key="normal" title="Add Emoji"/>
+                                <connections>
+                                    <action selector="addEmojiButtonTouched:" destination="RGp-mB-gpr" eventType="touchUpInside" id="D0h-yc-e2Z"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="jNr-A1-KWt" secondAttribute="trailing" constant="36" id="6Xx-XJ-O8x"/>
-                            <constraint firstItem="jNr-A1-KWt" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="332" id="9n8-RX-rRe"/>
+                            <constraint firstItem="IvR-tW-E8K" firstAttribute="top" secondItem="eov-Lh-X4h" secondAttribute="top" id="Nr7-rD-jC0"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" id="Pb4-aF-Sgh"/>
-                            <constraint firstItem="za5-uP-9DW" firstAttribute="bottom" secondItem="jNr-A1-KWt" secondAttribute="bottom" constant="755" id="VEx-db-JY8"/>
-                            <constraint firstItem="jNr-A1-KWt" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="33" id="jE2-bm-8zM"/>
-                            <constraint firstItem="IvR-tW-E8K" firstAttribute="top" secondItem="eov-Lh-X4h" secondAttribute="top" constant="32" id="q33-49-Vzh"/>
+                            <constraint firstItem="Fhd-eu-mHn" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="32" id="b37-Tp-cvD"/>
+                            <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="Fhd-eu-mHn" secondAttribute="trailing" constant="44" id="fKW-GX-yD0"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="bottom" secondItem="za5-uP-9DW" secondAttribute="bottom" id="rUE-Ay-8hl"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="trailing" secondItem="za5-uP-9DW" secondAttribute="trailing" id="z4b-gJ-tUS"/>
                         </constraints>
@@ -269,7 +275,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="sOD-KU-eMA"/>
                     <connections>
-                        <outlet property="button" destination="jNr-A1-KWt" id="848-rH-Lk8"/>
+                        <outlet property="addEmojiButton" destination="Fhd-eu-mHn" id="xQ9-Ih-AAk"/>
                         <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
                     </connections>
                 </viewController>
@@ -318,7 +324,7 @@
                                             <action selector="resetPasswordTapped:" destination="bnm-dN-ciz" eventType="touchUpInside" id="Fcw-We-0t3"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNi-Zx-uwg">
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNi-Zx-uwg">
                                         <rect key="frame" x="0.0" y="104" width="334" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

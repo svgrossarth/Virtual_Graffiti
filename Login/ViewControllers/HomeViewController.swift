@@ -7,16 +7,19 @@
 //
 
 import UIKit
+import ModelIO
 import SceneKit
+import SceneKit.ModelIO
 import ARKit
 import PencilKit
 
 class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate {
     
+    @IBOutlet weak var addEmojiButton: UIButton!
     @IBOutlet weak var sceneView: ARSCNView!
     var pencilKitCanvas =  PKCanvas()
     
-    @IBOutlet weak var button: UIButton!
+    var addingEmoji = false
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
     var strokeVertices = [SCNVector3]()
@@ -54,6 +57,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         super.viewDidAppear(animated)
         addPencilKit()
         self.view.addSubview(sceneView)
+        self.view.bringSubviewToFront(addEmojiButton)
     }
     
     override func viewDidLoad() {
@@ -74,6 +78,25 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         
         // Set the scene to the view
         sceneView.scene = scene
+        
+        /*let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
+        let source = SCNGeometrySource(vertices: strokeVertices)
+        let customGeom = SCNGeometry(sources: [source], elements: [element])
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = PKCanvas().sendColor()
+        customGeom.materials = [material]
+        
+        print(customGeom.materials[0].diffuse.contents)
+        
+        var dictionaryExample : [String:Any] = ["user":"UserName", "pass":"password", "token":"0123456789", "image":0, "test": customGeom]
+        let dataExample: Data = NSKeyedArchiver.archivedData(withRootObject: dictionaryExample)
+        let dictionary: Dictionary? = NSKeyedUnarchiver.unarchiveObject(with: dataExample) as! [String : Any]
+        
+        let geom: SCNGeometry = dictionary!["test"] as! SCNGeometry
+        print("reee: ", geom.materials[0].diffuse.contents)
+        print("reee part 2")*/
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,7 +115,14 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         // Pause the view's session
         sceneView.session.pause()
     }
-
+    
+    
+    @IBAction func addEmojiButtonTouched(_ sender: Any) {
+        addingEmoji = true
+        print("Adding emoji")
+    }
+    
+    
     // MARK: - ARSCNViewDelegate
     
 /*
@@ -105,21 +135,48 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
 */
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let singleTouch = touches.first{
-            strokeVertices = [SCNVector3]()
-            indices = [UInt32]()
-            let touchLocation = singleTouch.location(in: sceneView)
-            let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
-            let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
-            let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
-            let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-            initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: initialNearFarLine, scalingFactor: 0.3)
-            let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
-            previousPoint = nodePosition1
-            previousPoint = nodePosition1
+        if addingEmoji == true {
+            if let singleTouch = touches.first {
+                strokeVertices = [SCNVector3]()
+                indices = [UInt32]()
+                let touchLocation = singleTouch.location(in: sceneView)
+                let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+                let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+                let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+                let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+                initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+                let resizedVector  = resizeVector(vector: initialNearFarLine, scalingFactor: 0.3)
+                let nodePosition = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+                print("YOOOO ", nodePosition)
+                guard let tempScene = SCNScene(named: "emojis.scnassets/bandage.scn") else {
+                    print("file does not exist!")
+                    fatalError()
+                }
+                let modelNode = tempScene.rootNode.childNode(withName: "Group50555", recursively: true)
+
+                modelNode?.position = nodePosition
+                //var cubeNode = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
+                //cubeNode.position = SCNVector3(0, 0, -0.2)
+                addingEmoji = false
+                self.sceneView.scene.rootNode.addChildNode(modelNode!)
+            }
         } else {
-            print("can't get touch")
+            if let singleTouch = touches.first {
+                strokeVertices = [SCNVector3]()
+                indices = [UInt32]()
+                let touchLocation = singleTouch.location(in: sceneView)
+                let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+                let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+                let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+                let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+                initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+                let resizedVector  = resizeVector(vector: initialNearFarLine, scalingFactor: 0.3)
+                let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+                previousPoint = nodePosition1
+                previousPoint = nodePosition1
+            } else {
+                print("can't get touch")
+            }
         }
     }
     
