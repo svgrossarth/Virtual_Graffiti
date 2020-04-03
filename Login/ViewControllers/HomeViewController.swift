@@ -138,9 +138,9 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        Database().saveDrawing(location: location, userRootNode: userRootNode!)
-    }
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        Database().saveDrawing(location: location, userRootNode: userRootNode!)
+//    }
     
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -213,7 +213,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             userRootNode = SecondTierRoot(location: self.location, angleToNorth: angle)
             userRootNode?.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
             sceneView.scene.rootNode.addChildNode(userRootNode!)
-            load()
+           // load()
         }
         print("the angle", angle)
         
@@ -224,40 +224,40 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     @IBAction func save(_ sender: Any) {
         print("hi")
     }
-    func save() {
-        Database().saveDrawing(location: location, userRootNode: userRootNode!)
-    }
+//    func save() {
+//        Database().saveDrawing(location: location, userRootNode: userRootNode!)
+//    }
     
-    func load() {
-        if !headingSet {
-            return
-        }
-        
-        let db = Database()
-        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
-            for node in retrievedNodes {
-                let lat1 = Float(self.location.coordinate.latitude) * Float.pi / 180.0
-                let lat2 = Float(node.location.coordinate.latitude) * Float.pi / 180.0
-                let dLat = lat2 - lat1
-                let long1 = Float(self.location.coordinate.longitude) * Float.pi / 180.0
-                let long2 = Float(node.location.coordinate.longitude) * Float.pi / 180.0
-                let dLong = long2 - long1
-                node.simdPosition = SIMD3<Float>(dLat, 0, dLong)
-                
-                let currentAngle = deg2rad(self.heading.trueHeading)
-                let angleOfRotation = currentAngle - node.angleToNorth
-                node.rotate(by: SCNQuaternion(0, 1, 0, angleOfRotation), aroundTarget: SCNVector3Make(0, 0, 0))
-                
-                self.sceneView.scene.rootNode.addChildNode(node)
-            }
-        })
-        
-    }
+//    func load() {
+//        if !headingSet {
+//            return
+//        }
+//
+//        let db = Database()
+//        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
+//            for node in retrievedNodes {
+//                let lat1 = Float(self.location.coordinate.latitude) * Float.pi / 180.0
+//                let lat2 = Float(node.location.coordinate.latitude) * Float.pi / 180.0
+//                let dLat = lat2 - lat1
+//                let long1 = Float(self.location.coordinate.longitude) * Float.pi / 180.0
+//                let long2 = Float(node.location.coordinate.longitude) * Float.pi / 180.0
+//                let dLong = long2 - long1
+//                node.simdPosition = SIMD3<Float>(dLat, 0, dLong)
+//
+//                let currentAngle = deg2rad(self.heading.trueHeading)
+//                let angleOfRotation = currentAngle - node.angleToNorth
+//                node.rotate(by: SCNQuaternion(0, 1, 0, angleOfRotation), aroundTarget: SCNVector3Make(0, 0, 0))
+//
+//                self.sceneView.scene.rootNode.addChildNode(node)
+//            }
+//        })
+//
+//    }
     @IBAction func saveButton(_ sender: Any) {
-        save()
+     //   save()
     }
     @IBAction func loadButton(_ sender: Any) {
-        load()
+     //   load()
     }
 }
 
