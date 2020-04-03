@@ -26,9 +26,8 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
     var touchMovedCalled = false
-    var lineBetweenNearFar = SCNVector3()
-
-    var initialNearFarLine = SCNVector3()
+    var lineBetweenNearFar : SCNVector3?
+    var initialNearFarLine : SCNVector3?
     var userRootNode : SecondTierRoot?
     var hasLocationBeenSaved =  false
     var heading : CLHeading = CLHeading()
@@ -103,15 +102,8 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
-            let touchLocation = singleTouch.location(in: sceneView)
-            let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
-            let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
-            let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
-            let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-            initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            let resizedVector  = resizeVector(vector: initialNearFarLine, scalingFactor: 0.3)
-            let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
-            currentStroke = Stroke(firstPoint: nodePosition1)
+            let touchLocation = touchLocationIn3D(touch: singleTouch)
+            currentStroke = Stroke(firstPoint: touchLocation)
             userRootNode?.addChildNode(currentStroke!)
         } else {
             print("can't get touch")
@@ -122,25 +114,30 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
             touchMovedCalled = true
             if let singleTouch = touches.first{
-                let touchLocation = singleTouch.location(in: sceneView)
-                let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
-                let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
-                let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
-                let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
-                lineBetweenNearFar = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-                let resizedVector  = resizeVector(vector: lineBetweenNearFar, scalingFactor: 0.3)
-                let nodePosition1 = SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
-                
-                currentStroke?.addVertices(point3D: nodePosition1, initialNearFarLine: initialNearFarLine, lineBetweenNearFar: lineBetweenNearFar)
-                currentStroke?.previousPoint = nodePosition1
+                let touchLocation = touchLocationIn3D(touch: singleTouch)
+                guard let firstNearFarLine = initialNearFarLine else { return }
+                guard let nearFar = lineBetweenNearFar else { return }
+                currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
+                currentStroke?.previousPoint = touchLocation
             } else {
                 print("can't get touch")
             }
     }
     
-//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        Database().saveDrawing(location: location, userRootNode: userRootNode!)
-//    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //        Database().saveDrawing(location: location, userRootNode: userRootNode!)
+        if !touchMovedCalled {
+            if let singleTouch = touches.first{
+                let touchLocation = touchLocationIn3D(touch: singleTouch)
+                let sphereNode = createSphere(position: touchLocation)
+                userRootNode?.addChildNode(sphereNode)
+            } else {
+                print("can't get touch")
+            }
+        }
+        initialNearFarLine = nil
+        touchMovedCalled = false
+    }
     
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -258,6 +255,33 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     }
     @IBAction func loadButton(_ sender: Any) {
      //   load()
+    }
+    
+    func touchLocationIn3D (touch: UITouch) -> SCNVector3 {
+        let touchLocation = touch.location(in: sceneView)
+        let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
+        let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+        let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
+        let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
+        var resizedVector = SCNVector3()
+        if initialNearFarLine == nil {
+            initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+            resizedVector  = resizeVector(vector: initialNearFarLine!, scalingFactor: 0.3)
+        } else {
+            lineBetweenNearFar = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
+            resizedVector  = resizeVector(vector: lineBetweenNearFar!, scalingFactor: 0.3)
+        }
+        return SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
+    }
+    
+    func createSphere(position : SCNVector3) -> SCNNode {
+        let sphere = SCNSphere(radius: 0.005)
+        let material = SCNMaterial()
+        material.diffuse.contents = PKCanvas().sendColor()
+        sphere.materials = [material]
+        let node = SCNNode(geometry: sphere)
+        node.position = position
+        return node
     }
 }
 
