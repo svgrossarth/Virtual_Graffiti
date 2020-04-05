@@ -13,9 +13,11 @@ import PencilKit
 import CoreLocation
 
 
-class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate, CLLocationManagerDelegate {
+class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, PencilKitInterface, PencilKitDelegate {
     let locationManager : CLLocationManager = CLLocationManager()
     var location : CLLocation = CLLocation()
+    var currentTile : String = ""
+    
     var currentStroke : Stroke?
     var hasAngleBeenSaved = false
     
@@ -188,38 +190,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     override var prefersStatusBarHidden: Bool {
         return true;
     }
-    
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let loc = manager.location {
-            location = loc
-            if(!hasLocationBeenSaved){
-                hasLocationBeenSaved = true
-                locationManager.startUpdatingHeading()
-            }
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        heading = newHeading
-        headingSet = true
-        let angle = deg2rad(heading.trueHeading)
-        if !hasAngleBeenSaved {
-            hasAngleBeenSaved = true
-            
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-            let now = df.string(from: Date())
-            userRootNode = SecondTierRoot(location: self.location, angleToNorth: angle)
-            userRootNode?.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
-            sceneView.scene.rootNode.addChildNode(userRootNode!)
-            load()
-        }
-        print("the angle", angle)
-        
-       // userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
-        //locationManager.stopUpdatingHeading()
-    }
+
     
     @IBAction func save(_ sender: Any) {
         print("hi")
@@ -234,7 +205,20 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
         }
         
         let db = Database()
+        currentTile = db.getTile(location: location)
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
+            for node in self.sceneView.scene.rootNode.childNodes{
+                node.removeFromParentNode()
+            }
+            
+            let angle = deg2rad(self.heading.trueHeading)
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            let now = df.string(from: Date())
+            self.userRootNode = SecondTierRoot(location: self.location, angleToNorth: angle)
+            self.userRootNode?.name = db.getTile(location: self.location) + now
+            self.sceneView.scene.rootNode.addChildNode(self.userRootNode!)
+            
             for node in retrievedNodes {
                 let lat1 = Float(self.location.coordinate.latitude) * Float.pi / 180.0
                 let lat2 = Float(node.location.coordinate.latitude) * Float.pi / 180.0
@@ -273,4 +257,39 @@ extension UIView {
 
 func deg2rad(_ number: Double) -> Double {
     return number * .pi / 180
+}
+
+
+extension HomeViewController : CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let loc = manager.location {
+            location = loc
+            if(!hasLocationBeenSaved){
+                hasLocationBeenSaved = true
+                locationManager.startUpdatingHeading()
+            }
+            
+            if hasAngleBeenSaved {
+                let db = Database()
+                if db.getTile(location: loc) != currentTile {
+                    load()
+                }
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        heading = newHeading
+        headingSet = true
+        
+        let angle = deg2rad(heading.trueHeading)
+        if !hasAngleBeenSaved {
+            hasAngleBeenSaved = true
+            load()
+        }
+        print("the angle", angle)
+        
+       // userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
+        //locationManager.stopUpdatingHeading()
+    }
 }

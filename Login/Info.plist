@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location?</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Where are you?</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -72,6 +68,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Virtual Graffiti requires access to your phone’s camera.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Where are you?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location?</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

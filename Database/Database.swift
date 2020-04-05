@@ -24,11 +24,9 @@ class Database {
     
     // retval: Local save success
     func saveDrawing(location : CLLocation, userRootNode : SecondTierRoot) -> Void {
-        let latitude : CLLocationDegrees = location.coordinate.latitude
-        let longitude : CLLocationDegrees = location.coordinate.longitude
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
-        let tile = doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
+        let tile = getTile(location: location)
         let collectionPath = "tiles/\(tile)/nodes"
         guard let nodeName = userRootNode.name else {
             print("Node doesn't have name")
@@ -128,6 +126,12 @@ class Database {
                 }
             }
         }
+    }
+    
+    func getTile(location : CLLocation) -> String {
+        let latitude : CLLocationDegrees = location.coordinate.latitude
+        let longitude : CLLocationDegrees = location.coordinate.longitude
+        return doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
     }
 }
 
