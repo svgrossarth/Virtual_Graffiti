@@ -17,6 +17,8 @@ class DrawState: State {
     
     let locationManager : CLLocationManager = CLLocationManager()
     var location : CLLocation = CLLocation()
+    var currentTile : String = ""
+    
     var currentStroke : Stroke?
     var hasAngleBeenSaved = false
     
@@ -170,6 +172,7 @@ extension DrawState: ARSessionDelegate {
 
 
 extension DrawState: CLLocationManagerDelegate {
+    // Update location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let loc = manager.location {
             location = loc
@@ -177,9 +180,16 @@ extension DrawState: CLLocationManagerDelegate {
                 hasLocationBeenSaved = true
                 locationManager.startUpdatingHeading()
             }
+            
+            if hasAngleBeenSaved {
+                if Database().getTile(location: loc) != currentTile {
+//                    load()
+                }
+            }
         }
     }
     
+    // Update header
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         heading = newHeading
         headingSet = true
@@ -215,7 +225,12 @@ extension DrawState {
     //        }
     //
     //        let db = Database()
+    //        currentTile = db.getTile(location: location)
     //        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
+    //            for node in self.sceneView.scene.rootNode.childNodes {
+    //                node.removeFromParentNode()
+    //            }
+    //
     //            for node in retrievedNodes {
     //                let lat1 = Float(self.location.coordinate.latitude) * Float.pi / 180.0
     //                let lat2 = Float(node.location.coordinate.latitude) * Float.pi / 180.0

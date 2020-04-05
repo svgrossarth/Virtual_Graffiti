@@ -59,7 +59,6 @@ class HomeViewController: UIViewController {
         state.touchesEnded(touches, with: event)
     }
     
-    
     //MARK: - iOS override properties
     override var prefersHomeIndicatorAutoHidden: Bool {
           return true

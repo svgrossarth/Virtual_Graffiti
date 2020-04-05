@@ -1,34 +1,32 @@
-////
-////  Database.swift
-////  Login
-////
-////  Created by Stephen Ednave on 2/8/20.
-////  Copyright © 2020 Team Rocket. All rights reserved.
-////
 //
-//import Foundation
-//import CoreLocation
+//  Database.swift
+//  Login
+//
+//  Created by Stephen Ednave on 2/8/20.
+//  Copyright © 2020 Team Rocket. All rights reserved.
+//
+
+import Foundation
+import CoreLocation
 //import Firebase
-//import SceneKit
-//
-//
-//class Database {
-//    let degreeDecimalPlaces : Int = 4
-//    
+import SceneKit
+
+
+class Database {
+    let degreeDecimalPlaces : Int = 4
+
 //    let db = Firestore.firestore()
 //    var colRef : CollectionReference!
 //    var docRef : DocumentReference!
-//    let DICT_KEY_NODE = "node"
-//    let DICT_KEY_LOCATION = "location"
-//    let DICT_KEY_ANGLE = "angle"
-//    
+    let DICT_KEY_NODE = "node"
+    let DICT_KEY_LOCATION = "location"
+    let DICT_KEY_ANGLE = "angle"
+//
 //    // retval: Local save success
 //    func saveDrawing(location : CLLocation, userRootNode : SecondTierRoot) -> Void {
-//        let latitude : CLLocationDegrees = location.coordinate.latitude
-//        let longitude : CLLocationDegrees = location.coordinate.longitude
 //        // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
 //        // Longitude gets bigger at the equator and smaller at poles
-//        let tile = doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
+//        let tile = getTile(location: location)
 //        let collectionPath = "tiles/\(tile)/nodes"
 //        guard let nodeName = userRootNode.name else {
 //            print("Node doesn't have name")
@@ -36,19 +34,19 @@
 //        }
 //        let docPath = collectionPath + "/" + nodeName
 //        docRef = db.document(docPath)
-//        
+//
 //        // TODO: Save drawing!
 //        var dataToSave: [String: Any] = [:]
 //        do{
 //            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
 //            let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
 //            let nodeAngle = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.angleToNorth, requiringSecureCoding: false)
-//            
-//            
+//
+//
 //            dataToSave[DICT_KEY_NODE] = nodeData
 //            dataToSave[DICT_KEY_LOCATION] = nodeLocation
 //            dataToSave[DICT_KEY_ANGLE] = nodeAngle
-//            
+//
 //            docRef.setData(dataToSave) { (error) in
 //                if let error = error {
 //                    print("Error saving drawing: \(error.localizedDescription)")
@@ -59,16 +57,16 @@
 //            }
 //        } catch{
 //            print("Can't convert node to data")
-//            
+//
 //        }
 //    }
-//    
-//    
+//
+//
 //    func retrieveDrawing(location: CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
 //        _drawPoints3x3(location: location, drawFunction: drawFunction)
 //    }
-//    
-//    
+//
+//
 //    func _drawPoints3x3(location: CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
 //        let tile : CLLocation = location
 //        for lat in [-1, 0, 1] {
@@ -79,8 +77,8 @@
 //            }
 //        }
 //    }
-//    
-//    
+//
+//
 //    func _drawPoints(location : CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
 //        // Get points
 //        let latitude : CLLocationDegrees = location.coordinate.latitude
@@ -120,7 +118,7 @@
 //                        } catch {
 //                            print("Could not pull down node")
 //                        }
-//                        
+//
 //                    }
 //                    drawFunction(nodes)
 //                } else{
@@ -129,9 +127,15 @@
 //            }
 //        }
 //    }
-//}
-//
-//
-//func doubleToString(number:Double, numberOfDecimalPlaces:Int) -> String {
-//    return String(format:"%.*f", numberOfDecimalPlaces, number)
-//}
+    
+    func getTile(location : CLLocation) -> String {
+        let latitude : CLLocationDegrees = location.coordinate.latitude
+        let longitude : CLLocationDegrees = location.coordinate.longitude
+        return doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
+    }
+}
+
+
+func doubleToString(number:Double, numberOfDecimalPlaces:Int) -> String {
+    return String(format:"%.*f", numberOfDecimalPlaces, number)
+}

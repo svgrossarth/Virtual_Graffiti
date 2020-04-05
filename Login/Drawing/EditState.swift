@@ -21,12 +21,12 @@ class EditState: State {
     
     
     override func enter() {
-        // Do nothing
+        isHidden = false
     }
     
     
     override func exit() {
-        // Do nothing
+        isHidden = true
     }
 }
 
