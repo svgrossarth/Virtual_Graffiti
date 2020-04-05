@@ -12,7 +12,6 @@ import PencilKit
 var makeColor = MakeColor(selectedColor: .blue)
 
 class PKCanvas: UIView {
-
     var canvasView: PKCanvasView!
     weak var pencilKitDelegate: PencilKitDelegate?
 
@@ -55,6 +54,7 @@ class PKCanvas: UIView {
        //2.assign updated frame to self view
        self.frame = frame
     }
+    
     func sendColor() -> UIColor {
         return makeColor.getColor()
     }

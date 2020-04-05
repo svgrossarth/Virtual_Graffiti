@@ -16,7 +16,6 @@ protocol PencilKitDelegate: class {
 }
 
 extension PencilKitDelegate {
-
     func snapshot(from canvas: PKCanvas) -> UIImage {
         //Take PencilKit Drawings snapshot
         return UIImage()
@@ -30,7 +29,6 @@ protocol PencilKitInterface: NSObject {
 }
 
 extension PencilKitInterface {
-
     func createPencilKitCanvas(frame: CGRect, delegate: PencilKitDelegate) -> PKCanvas {
       //1. Assign PKCanvas to our interface property
       pencilKitCanvas = PKCanvas(frame: frame)
