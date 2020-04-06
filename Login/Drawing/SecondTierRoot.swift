@@ -33,4 +33,5 @@ class SecondTierRoot : SCNNode{
         super.init(coder: coder)
 
         //.fatalError("init(coder:) has not been implemented")
-    }}
+    }
+}

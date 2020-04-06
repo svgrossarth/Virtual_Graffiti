@@ -249,54 +249,18 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-tW-E8K">
                                 <rect key="frame" x="0.0" y="32" width="414" height="830"/>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jNr-A1-KWt">
-                                <rect key="frame" x="332" y="77" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wlh-jy-V9r">
-                                <rect key="frame" x="26" y="77" width="34" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="34" id="4Jv-0n-6s5"/>
-                                    <constraint firstAttribute="height" constant="30" id="Qiq-4C-wjI"/>
-                                </constraints>
-                                <state key="normal" title="Save"/>
-                                <connections>
-                                    <action selector="save:" destination="RGp-mB-gpr" eventType="touchUpInside" id="ACZ-ie-7Rh"/>
-                                    <action selector="saveButton:" destination="RGp-mB-gpr" eventType="touchUpInside" id="Pls-Vc-0og"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qp7-fy-nc6">
-                                <rect key="frame" x="26" y="115" width="34" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="34" id="AR1-He-0Xd"/>
-                                    <constraint firstAttribute="height" constant="30" id="WIi-Yb-tdT"/>
-                                </constraints>
-                                <state key="normal" title="Load"/>
-                                <connections>
-                                    <action selector="loadButton:" destination="RGp-mB-gpr" eventType="touchUpInside" id="SZA-f1-Zef"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="qp7-fy-nc6" firstAttribute="top" secondItem="Wlh-jy-V9r" secondAttribute="bottom" constant="8" id="4vS-7R-miN"/>
-                            <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="jNr-A1-KWt" secondAttribute="trailing" constant="36" id="6Xx-XJ-O8x"/>
-                            <constraint firstItem="Wlh-jy-V9r" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="33" id="8iD-lY-23G"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" id="Pb4-aF-Sgh"/>
-                            <constraint firstItem="za5-uP-9DW" firstAttribute="bottom" secondItem="jNr-A1-KWt" secondAttribute="bottom" constant="755" id="VEx-db-JY8"/>
-                            <constraint firstItem="jNr-A1-KWt" firstAttribute="leading" secondItem="Wlh-jy-V9r" secondAttribute="trailing" constant="272" id="gOp-8a-cb9"/>
-                            <constraint firstItem="jNr-A1-KWt" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="33" id="jE2-bm-8zM"/>
-                            <constraint firstItem="Wlh-jy-V9r" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="26" id="kE7-oN-wQl"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="top" secondItem="eov-Lh-X4h" secondAttribute="top" constant="32" id="q33-49-Vzh"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="bottom" secondItem="za5-uP-9DW" secondAttribute="bottom" id="rUE-Ay-8hl"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="trailing" secondItem="za5-uP-9DW" secondAttribute="trailing" id="z4b-gJ-tUS"/>
-                            <constraint firstItem="qp7-fy-nc6" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="26" id="zYj-lD-ONA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="za5-uP-9DW"/>
                     </view>
                     <navigationItem key="navigationItem" id="sOD-KU-eMA"/>
                     <connections>
-                        <outlet property="button" destination="jNr-A1-KWt" id="848-rH-Lk8"/>
                         <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
                     </connections>
                 </viewController>
@@ -345,7 +309,7 @@
                                             <action selector="resetPasswordTapped:" destination="bnm-dN-ciz" eventType="touchUpInside" id="Fcw-We-0t3"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNi-Zx-uwg">
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNi-Zx-uwg">
                                         <rect key="frame" x="0.0" y="104" width="334" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

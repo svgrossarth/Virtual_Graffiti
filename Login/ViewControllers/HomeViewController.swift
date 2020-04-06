@@ -22,7 +22,6 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
     @IBOutlet weak var sceneView: ARSCNView!
     var pencilKitCanvas =  PKCanvas()
     
-    @IBOutlet weak var button: UIButton!
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
     var touchMovedCalled = false
@@ -215,7 +214,7 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
             sceneView.scene.rootNode.addChildNode(userRootNode!)
             load()
         }
-        print("the angle", angle)
+        //print("the angle", angle)
         
        // userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
         //locationManager.stopUpdatingHeading()
@@ -246,7 +245,12 @@ class HomeViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate
                 
                 let currentAngle = deg2rad(self.heading.trueHeading)
                 let angleOfRotation = currentAngle - node.angleToNorth
-                node.rotate(by: SCNQuaternion(0, 1, 0, angleOfRotation), aroundTarget: SCNVector3Make(0, 0, 0))
+                node.rotation = SCNVector4Make(0, 1, 0, Float(angleOfRotation))
+                //node.rotate(by: SCNQuaternion(0, 1, 0, angleOfRotation), aroundTarget: SCNVector3Make(0, 0, 0))
+                //print("current angle: ", currentAngle)
+                //print("node angleToNorth: ", node.angleToNorth)
+                //print("angle of rotation: ", angleOfRotation)
+                //print("REEE, ", node.simdPosition)
                 
                 self.sceneView.scene.rootNode.addChildNode(node)
             }
