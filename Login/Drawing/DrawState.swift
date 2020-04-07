@@ -31,6 +31,7 @@ class DrawState: State {
     var hasLocationBeenSaved =  false
     var heading : CLHeading = CLHeading()
     var headingSet : Bool = false
+    var distance : Float = 1
     
     
     func initialize(_sceneView: ARSCNView!) {
@@ -137,10 +138,10 @@ extension DrawState {
         var resizedVector = SCNVector3()
         if initialNearFarLine == nil {
             initialNearFarLine = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            resizedVector  = resizeVector(vector: initialNearFarLine!, scalingFactor: 0.3)
+            resizedVector  = resizeVector(vector: initialNearFarLine!, scalingFactor: distance)
         } else {
             lineBetweenNearFar = SCNVector3(x: pointIn3dFar.x - pointIn3dNear.x, y: pointIn3dFar.y - pointIn3dNear.y, z: pointIn3dFar.z - pointIn3dNear.z)
-            resizedVector  = resizeVector(vector: lineBetweenNearFar!, scalingFactor: 0.3)
+            resizedVector  = resizeVector(vector: lineBetweenNearFar!, scalingFactor: distance)
         }
         return SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
     }
@@ -205,7 +206,7 @@ extension DrawState: CLLocationManagerDelegate {
             sceneView.scene.rootNode.addChildNode(userRootNode!)
            // load()
         }
-        print("the angle", angle)
+        //print("the angle", angle)
         
        // userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
         //locationManager.stopUpdatingHeading()
