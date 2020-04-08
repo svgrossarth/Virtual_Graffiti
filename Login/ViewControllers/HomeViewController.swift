@@ -17,6 +17,8 @@ class HomeViewController: UIViewController {
     var drawState = DrawState()
     var editState = EditState()
     var state : State = State()
+    var refSphere = SCNNode()
+    var sphereCallbackCanceled = false
     
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var distanceValue: UILabel!
@@ -34,6 +36,11 @@ class HomeViewController: UIViewController {
         
         state = drawState
         state.enter()
+        sliderUISetup()
+
+    }
+    
+    func sliderUISetup () {
         slider.transform = CGAffineTransform(rotationAngle: .pi / -2)
         slider.minimumValue = 0.2
         slider.maximumValue = 2
@@ -42,6 +49,7 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(slider)
         self.view.bringSubviewToFront(distanceLable)
         self.view.bringSubviewToFront(distanceValue)
+        refSphere = createReferenceSphere()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -57,18 +65,47 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func sliderValueChange(_ sender: Any) {
+        sphereCallbackCanceled = true
         let defaultDistance : Float = 1
         if(slider.value > 1){
             drawState.distance = defaultDistance * powf(slider.value, 2)
-            print("multiplier ", powf(slider.value, 2))
         } else {
            drawState.distance = defaultDistance * slider.value
-            print("multiplier ", slider.value)
         }
         distanceValue.text = String(format: "%.2f", drawState.distance)
-        print(drawState.distance)
-        
-        
+        let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
+        refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
+        drawState.sceneView.scene.rootNode.addChildNode(refSphere)
+
+    }
+    
+
+    @IBAction func sliderTouchUpInside(_ sender: Any) {
+        removeSphere()
+    }
+    
+    @IBAction func sliderTouchUpOutside(_ sender: Any) {
+        removeSphere()
+    }
+    
+    func removeSphere(){
+        sphereCallbackCanceled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            if !self.sphereCallbackCanceled {
+                self.refSphere.removeFromParentNode()
+            }
+        }
+    }
+    
+    
+    
+    func createReferenceSphere() -> SCNNode {
+        let sphere = SCNSphere(radius: 0.1)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.white
+        sphere.materials = [material]
+        let node = SCNNode(geometry: sphere)
+        return node
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -32,6 +32,7 @@ class DrawState: State {
     var heading : CLHeading = CLHeading()
     var headingSet : Bool = false
     var distance : Float = 1
+    let sphereRadius : CGFloat = 0.01
     
     
     func initialize(_sceneView: ARSCNView!) {
@@ -77,7 +78,7 @@ class DrawState: State {
     
     
     func createSphere(position : SCNVector3) -> SCNNode {
-        let sphere = SCNSphere(radius: 0.005)
+        let sphere = SCNSphere(radius: sphereRadius)
         let material = SCNMaterial()
         material.diffuse.contents = PKCanvas().sendColor()
         sphere.materials = [material]
@@ -91,7 +92,7 @@ class DrawState: State {
 extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
-            let touchLocation = touchLocationIn3D(touch: singleTouch)
+            let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
             currentStroke = Stroke(firstPoint: touchLocation)
             userRootNode?.addChildNode(currentStroke!)
         } else {
@@ -103,7 +104,7 @@ extension DrawState {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchMovedCalled = true
         if let singleTouch = touches.first{
-            let touchLocation = touchLocationIn3D(touch: singleTouch)
+            let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
             guard let firstNearFarLine = initialNearFarLine else { return }
             guard let nearFar = lineBetweenNearFar else { return }
             currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
@@ -118,7 +119,7 @@ extension DrawState {
         //Database().saveDrawing(location: location, userRootNode: userRootNode!)
         if !touchMovedCalled {
             if let singleTouch = touches.first{
-                let touchLocation = touchLocationIn3D(touch: singleTouch)
+                let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 let sphereNode = createSphere(position: touchLocation)
                 userRootNode?.addChildNode(sphereNode)
             } else {
@@ -129,10 +130,9 @@ extension DrawState {
         touchMovedCalled = false
     }
     
-    func touchLocationIn3D (touch: UITouch) -> SCNVector3 {
-        let touchLocation = touch.location(in: sceneView)
-        let pointToUnprojectNear = SCNVector3(touchLocation.x, touchLocation.y, 0)
-        let pointToUnprojectFar = SCNVector3(touchLocation.x, touchLocation.y, 1)
+    func touchLocationIn3D (touchLocation2D: CGPoint) -> SCNVector3 {
+        let pointToUnprojectNear = SCNVector3(touchLocation2D.x, touchLocation2D.y, 0)
+        let pointToUnprojectFar = SCNVector3(touchLocation2D.x, touchLocation2D.y, 1)
         let pointIn3dNear = sceneView.unprojectPoint(pointToUnprojectNear)
         let pointIn3dFar = sceneView.unprojectPoint(pointToUnprojectFar)
         var resizedVector = SCNVector3()

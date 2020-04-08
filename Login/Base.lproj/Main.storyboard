@@ -255,7 +255,9 @@
                                     <constraint firstAttribute="width" constant="256" id="VYn-th-3d7"/>
                                 </constraints>
                                 <connections>
-                                    <action selector="sliderValueChange:" destination="RGp-mB-gpr" eventType="valueChanged" id="DDX-Qa-i8r"/>
+                                    <action selector="sliderTouchUpInside:" destination="RGp-mB-gpr" eventType="touchUpInside" id="j6v-m7-a2X"/>
+                                    <action selector="sliderTouchUpOutside:" destination="RGp-mB-gpr" eventType="touchUpOutside" id="1QH-Ic-fxW"/>
+                                    <action selector="sliderValueChange:" destination="RGp-mB-gpr" eventType="valueChanged" id="eWA-CZ-6gr"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5s-Kg-KQr">
