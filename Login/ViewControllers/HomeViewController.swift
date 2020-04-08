@@ -18,6 +18,7 @@ class HomeViewController: UIViewController {
     var editState = EditState()
     var state : State = State()
     
+    @IBOutlet weak var changeStateButton: UIButton!
     
     @IBOutlet weak var sceneView: ARSCNView!
     
@@ -32,6 +33,8 @@ class HomeViewController: UIViewController {
         
         state = drawState
         state.enter()
+        
+        view.bringSubviewToFront(changeStateButton)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -44,6 +47,12 @@ class HomeViewController: UIViewController {
         state.exit()
         state = nextState
         state.enter()
+        if state == drawState {
+            print("Entered Draw State")
+        }
+        else {
+            print("Entered Edit State")
+        }
     }
     
 
@@ -67,6 +76,17 @@ class HomeViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true;
     }
+    
+
+
+    @IBAction func changeStateTouchUpInside(_ sender: Any) {
+        if state == drawState {
+            changeState(nextState: editState)
+        }
+        else {
+            changeState(nextState: drawState)
+        }
+    }
 }
 
 // debug purposes
@@ -83,6 +103,18 @@ class State : UIView {
     }
     
     func exit() {
+        // Override
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Override
+    }
+     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Override
+    }
+     
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Override
     }
 }

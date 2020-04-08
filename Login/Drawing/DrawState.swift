@@ -44,7 +44,7 @@ class DrawState: State {
     }
     
     override func exit() {
-        sceneView.session.pause()
+        // sceneView.session.pause()
     }
     
     

@@ -248,19 +248,30 @@
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-tW-E8K">
                                 <rect key="frame" x="0.0" y="32" width="414" height="830"/>
+                                <gestureRecognizers/>
                             </arscnView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Il-sn-vF6">
+                                <rect key="frame" x="20" y="44" width="93" height="30"/>
+                                <state key="normal" title="Change State"/>
+                                <connections>
+                                    <action selector="changeStateTouchUpInside:" destination="RGp-mB-gpr" eventType="touchUpInside" id="gYu-d1-K1D"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" id="Pb4-aF-Sgh"/>
+                            <constraint firstItem="7Il-sn-vF6" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" id="mex-4c-4My"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="top" secondItem="eov-Lh-X4h" secondAttribute="top" constant="32" id="q33-49-Vzh"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="bottom" secondItem="za5-uP-9DW" secondAttribute="bottom" id="rUE-Ay-8hl"/>
+                            <constraint firstItem="7Il-sn-vF6" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="20" id="yd6-Bt-D7R"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="trailing" secondItem="za5-uP-9DW" secondAttribute="trailing" id="z4b-gJ-tUS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="za5-uP-9DW"/>
                     </view>
                     <navigationItem key="navigationItem" id="sOD-KU-eMA"/>
                     <connections>
+                        <outlet property="changeStateButton" destination="7Il-sn-vF6" id="V7H-vO-swY"/>
                         <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
                     </connections>
                 </viewController>
