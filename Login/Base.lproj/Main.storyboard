@@ -248,17 +248,7 @@
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-tW-E8K">
                                 <rect key="frame" x="0.0" y="32" width="414" height="830"/>
-                                <gestureRecognizers/>
                             </arscnView>
-<<<<<<< HEAD
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Il-sn-vF6">
-                                <rect key="frame" x="20" y="44" width="93" height="30"/>
-                                <state key="normal" title="Change State"/>
-                                <connections>
-                                    <action selector="changeStateTouchUpInside:" destination="RGp-mB-gpr" eventType="touchUpInside" id="gYu-d1-K1D"/>
-                                </connections>
-                            </button>
-=======
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="vRh-nN-10E">
                                 <rect key="frame" x="254" y="433" width="260" height="31"/>
                                 <constraints>
@@ -282,38 +272,36 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
->>>>>>> 650169156e2661bb67ef4eefc144fbfdcf7799ab
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUX-BI-E2L">
+                                <rect key="frame" x="20" y="64" width="93" height="30"/>
+                                <state key="normal" title="Change State"/>
+                                <connections>
+                                    <action selector="changeStateTouchUpInside:" destination="RGp-mB-gpr" eventType="touchUpInside" id="uq5-99-CEs"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="IUX-BI-E2L" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="20" id="2vE-zj-cep"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="AT0-kT-hHa" secondAttribute="trailing" constant="57" id="GAE-lw-grW"/>
                             <constraint firstItem="N5s-Kg-KQr" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="234" id="Iz6-gj-sFo"/>
                             <constraint firstItem="vRh-nN-10E" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="389" id="K9e-YH-Evz"/>
+                            <constraint firstItem="IUX-BI-E2L" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="20" id="Ox8-T4-dqA"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" id="Pb4-aF-Sgh"/>
-<<<<<<< HEAD
-                            <constraint firstItem="7Il-sn-vF6" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" id="mex-4c-4My"/>
-                            <constraint firstItem="IvR-tW-E8K" firstAttribute="top" secondItem="eov-Lh-X4h" secondAttribute="top" constant="32" id="q33-49-Vzh"/>
-                            <constraint firstItem="IvR-tW-E8K" firstAttribute="bottom" secondItem="za5-uP-9DW" secondAttribute="bottom" id="rUE-Ay-8hl"/>
-                            <constraint firstItem="7Il-sn-vF6" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="20" id="yd6-Bt-D7R"/>
-=======
                             <constraint firstItem="AT0-kT-hHa" firstAttribute="top" secondItem="N5s-Kg-KQr" secondAttribute="bottom" constant="139" id="bf8-ZH-6vh"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="N5s-Kg-KQr" secondAttribute="trailing" constant="11" id="fSA-nI-ENT"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="top" secondItem="eov-Lh-X4h" secondAttribute="top" constant="32" id="q33-49-Vzh"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="bottom" secondItem="za5-uP-9DW" secondAttribute="bottom" id="rUE-Ay-8hl"/>
                             <constraint firstAttribute="trailing" secondItem="vRh-nN-10E" secondAttribute="trailing" constant="-98" id="ywL-RC-lNC"/>
->>>>>>> 650169156e2661bb67ef4eefc144fbfdcf7799ab
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="trailing" secondItem="za5-uP-9DW" secondAttribute="trailing" id="z4b-gJ-tUS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="za5-uP-9DW"/>
                     </view>
                     <navigationItem key="navigationItem" id="sOD-KU-eMA"/>
                     <connections>
-<<<<<<< HEAD
-                        <outlet property="changeStateButton" destination="7Il-sn-vF6" id="V7H-vO-swY"/>
-=======
+                        <outlet property="changeStateButton" destination="IUX-BI-E2L" id="3To-Ef-jpZ"/>
                         <outlet property="distanceLable" destination="N5s-Kg-KQr" id="Skt-gE-a8G"/>
                         <outlet property="distanceValue" destination="AT0-kT-hHa" id="mn9-C5-sg3"/>
->>>>>>> 650169156e2661bb67ef4eefc144fbfdcf7799ab
                         <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
                         <outlet property="slider" destination="vRh-nN-10E" id="8aB-SK-n2O"/>
                     </connections>
