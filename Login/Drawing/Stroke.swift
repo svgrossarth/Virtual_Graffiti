@@ -11,7 +11,7 @@ import SceneKit
 
 
 class Stroke : SCNNode {
-    let scalingFactor : Float = 0.005
+    let thickness : Float = 0.01
     var strokeVertices = [SCNVector3]()
     var previousPoint = SCNVector3()
     var indices = [UInt32]()
@@ -62,8 +62,8 @@ class Stroke : SCNNode {
         let lineBetweenPoints = SCNVector3(x: x - prevX, y: y - prevY, z: z - prevZ)
         
         if strokeVertices.count == 0 {
-            let prevResizedNearFar = resizeVector(vector: initialNearFarLine, scalingFactor: scalingFactor)
-            let prevResizedNormal = resizeVector(vector: crossProduct(vec1: prevResizedNearFar, vec2: lineBetweenPoints), scalingFactor: scalingFactor)
+            let prevResizedNearFar = resizeVector(vector: initialNearFarLine, scalingFactor: thickness)
+            let prevResizedNormal = resizeVector(vector: crossProduct(vec1: prevResizedNearFar, vec2: lineBetweenPoints), scalingFactor: thickness)
             strokeVertices = [
                 SCNVector3(prevX - prevResizedNearFar.x + prevResizedNormal.x, prevY - prevResizedNearFar.y + prevResizedNormal.y, prevZ - prevResizedNearFar.z + prevResizedNormal.z),
                 
@@ -74,8 +74,8 @@ class Stroke : SCNNode {
                 SCNVector3(prevX - prevResizedNearFar.x - prevResizedNormal.x, prevY - prevResizedNearFar.y - prevResizedNormal.y, prevZ - prevResizedNearFar.z - prevResizedNormal.z)
             ]
         }
-        let resizedNearFar = resizeVector(vector: lineBetweenNearFar, scalingFactor: scalingFactor)
-        let resizedNormal = resizeVector(vector: crossProduct(vec1: resizedNearFar, vec2: lineBetweenPoints), scalingFactor: scalingFactor)
+        let resizedNearFar = resizeVector(vector: lineBetweenNearFar, scalingFactor: thickness)
+        let resizedNormal = resizeVector(vector: crossProduct(vec1: resizedNearFar, vec2: lineBetweenPoints), scalingFactor: thickness)
         strokeVertices += [
             SCNVector3(x - resizedNearFar.x + resizedNormal.x, y - resizedNearFar.y + resizedNormal.y, z - resizedNearFar.z + resizedNormal.z),
             
