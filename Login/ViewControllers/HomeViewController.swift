@@ -31,14 +31,14 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(editState)
-        editState.initialize()
         view.addSubview(drawState)
         drawState.initialize(_sceneView: sceneView)
         
         state = drawState
         state.enter()
         sliderUISetup()
+        view.addSubview(editState)
+        editState.initialize(slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere)
         
         view.bringSubviewToFront(changeStateButton)
     }
@@ -53,6 +53,7 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(distanceLable)
         self.view.bringSubviewToFront(distanceValue)
         refSphere = createReferenceSphere()
+        changeHiddenOfEditMode()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -62,6 +63,7 @@ class HomeViewController: UIViewController {
     
     
     func changeState(nextState : State) {
+        changeHiddenOfEditMode()
         state.exit()
         state = nextState
         state.enter()
@@ -73,40 +75,30 @@ class HomeViewController: UIViewController {
         }
     }
     
-    @IBAction func sliderValueChange(_ sender: Any) {
-        sphereCallbackCanceled = true
-        let defaultDistance : Float = 1
-        if(slider.value > 1){
-            drawState.distance = defaultDistance * powf(slider.value, 2)
+    func changeHiddenOfEditMode(){
+        if slider.isHidden {
+            slider.isHidden = false
+            distanceValue.isHidden = false
+            distanceLable.isHidden = false
         } else {
-           drawState.distance = defaultDistance * slider.value
+            slider.isHidden = true
+            distanceValue.isHidden = true
+            distanceLable.isHidden = true
         }
-        distanceValue.text = String(format: "%.2f", drawState.distance)
-        let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
-        refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
-        drawState.sceneView.scene.rootNode.addChildNode(refSphere)
-
+    }
+    
+    @IBAction func sliderValueChange(_ sender: Any) {
+        editState.sliderValueChange()
     }
     
 
     @IBAction func sliderTouchUpInside(_ sender: Any) {
-        removeSphere()
+        editState.removeSphere()
     }
     
     @IBAction func sliderTouchUpOutside(_ sender: Any) {
-        removeSphere()
+        editState.removeSphere()
     }
-    
-    func removeSphere(){
-        sphereCallbackCanceled = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            if !self.sphereCallbackCanceled {
-                self.refSphere.removeFromParentNode()
-            }
-        }
-    }
-    
-    
     
     func createReferenceSphere() -> SCNNode {
         let sphere = SCNSphere(radius: 0.1)
