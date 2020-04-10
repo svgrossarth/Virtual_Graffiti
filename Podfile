@@ -16,11 +16,11 @@ target 'Login' do
     # Pods for testing
   end
 
- # pod 'Firebase/Core'
- # pod 'Firebase/Analytics'
- # pod 'Firebase/Auth'
- # pod 'Firebase/Firestore'
- # pod 'GoogleSignIn'
- # pod 'FBSDKLoginKit'
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+  pod 'GoogleSignIn'
+  pod 'FBSDKLoginKit'
   pod 'ProgressHUD'
 end

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import FBSDKCoreKit
+import FBSDKCoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -52,15 +52,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /*
      Facebook Login [START]
      */
-//    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-//        let openURLContext = Array(URLContexts).first
-//        if openURLContext != nil {
-//            if let URL = openURLContext?.url, let annotation = openURLContext?.options.annotation {
-//                ApplicationDelegate.shared.application(UIApplication.shared, open: URL, sourceApplication: openURLContext?.options.sourceApplication, annotation: annotation)
-//            }
-//        }
-//        // Add any custom logic here.
-//    }
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        let openURLContext = Array(URLContexts).first
+        if openURLContext != nil {
+            if let URL = openURLContext?.url, let annotation = openURLContext?.options.annotation {
+                ApplicationDelegate.shared.application(UIApplication.shared, open: URL, sourceApplication: openURLContext?.options.sourceApplication, annotation: annotation)
+            }
+        }
+        // Add any custom logic here.
+    }
     /*
      Facebook Login [END]
      */
