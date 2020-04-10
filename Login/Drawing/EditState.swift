@@ -9,6 +9,7 @@
 import Foundation
 import PencilKit
 import SceneKit
+import ARKit
 
 
 class EditState: State {
@@ -19,14 +20,17 @@ class EditState: State {
     var distanceLabel = UILabel()
     var drawState = DrawState()
     var refSphere = SCNNode()
+    var eraserOn = false
+    weak var sceneView: ARSCNView!
     
     
-    func initialize(slider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode) {
+    func initialize(slider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView) {
         self.slider = slider
         self.distanceLabel = distanceLabel
         self.distanceValue = distanceValue
         self.drawState = drawState
         self.refSphere = refSphere
+        self.sceneView = sceneView
         updateCanvasOrientation(with: bounds)
         addPencilKit()
     }
@@ -34,13 +38,27 @@ class EditState: State {
     
     override func enter() {
         isHidden = false
-
+        if let window = UIApplication.shared.windows.last, let toolPicker = PKToolPicker.shared(for: window) {
+            //toolpicker shows up
+            toolPicker.setVisible(true, forFirstResponder: pencilKitCanvas.canvasView)
+            if let eraser = toolPicker.selectedTool as? PKEraserTool {
+                eraserOn = true
+            }
+        }
+        
     }
     
     
     override func exit() {
         isHidden = true
+        eraserOn = false
         self.refSphere.removeFromParentNode()
+        
+        isHidden = false
+        if let window = UIApplication.shared.windows.last, let toolPicker = PKToolPicker.shared(for: window) {
+           //toolpicker shows up
+            toolPicker.setVisible(false, forFirstResponder: pencilKitCanvas.canvasView)
+           }
     }
     
     func sliderValueChange() {
@@ -65,9 +83,36 @@ class EditState: State {
                 self.refSphere.removeFromParentNode()
             }
         }
-    }    
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        eraseNode(touches: touches)
+    }
+     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        eraseNode(touches: touches)
+    }
+    
+    func eraseNode(touches: Set<UITouch>){
+        if eraserOn {
+            if touches.count == 1 {
+                guard let touch = touches.first else {
+                    print ("can't get first touch")
+                    return
+                }
+                let touchPosition = touch.location(in: sceneView)
+                let hitTestResults = sceneView.hitTest(touchPosition)
+                for hitTestResult in hitTestResults{
+                    let node = hitTestResult.node
+                    node.removeFromParentNode()
+                }
+            }
+        }
+        
+    }
     
 }
+
 
 
 extension EditState: PencilKitInterface, PencilKitDelegate {
@@ -76,5 +121,8 @@ extension EditState: PencilKitInterface, PencilKitDelegate {
         backgroundColor = .clear
         pencilKitCanvas  = createPencilKitCanvas(frame: frame, delegate: self)
         addSubview(pencilKitCanvas)
+        
+        
     }
+    
 }

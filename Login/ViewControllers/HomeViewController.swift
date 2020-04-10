@@ -38,7 +38,7 @@ class HomeViewController: UIViewController {
         state.enter()
         sliderUISetup()
         view.addSubview(editState)
-        editState.initialize(slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere)
+        editState.initialize(slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView)
         
         view.bringSubviewToFront(changeStateButton)
     }

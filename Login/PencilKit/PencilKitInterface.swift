@@ -9,7 +9,6 @@
 import UIKit
 import PencilKit
 import ARKit
-import RealityKit
 
 protocol PencilKitDelegate: class {
     func snapshot(from canvas: PKCanvas) -> UIImage
