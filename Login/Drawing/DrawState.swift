@@ -18,6 +18,9 @@ class DrawState: State {
     let locationManager : CLLocationManager = CLLocationManager()
     var location : CLLocation = CLLocation()
     var currentTile : String = ""
+    // Startup Buffer because the initial locationmanager locations are not the most accurate
+    let startupBufferLimit = 3
+    var startupBuffer = 0
     
     var currentStroke : Stroke?
     var hasAngleBeenSaved = false
@@ -116,7 +119,6 @@ extension DrawState {
      
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //Database().saveDrawing(location: location, userRootNode: userRootNode!)
         if !touchMovedCalled {
             if let singleTouch = touches.first{
                 let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
@@ -128,6 +130,8 @@ extension DrawState {
         }
         initialNearFarLine = nil
         touchMovedCalled = false
+        
+        save()
     }
     
     func touchLocationIn3D (touchLocation2D: CGPoint) -> SCNVector3 {
@@ -175,6 +179,11 @@ extension DrawState: ARSessionDelegate {
 extension DrawState: CLLocationManagerDelegate {
     // Update location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if (startupBuffer < startupBufferLimit) {
+            startupBuffer += 1
+            return
+        }
+        
         if let loc = manager.location {
             location = loc
             if(!hasLocationBeenSaved){
@@ -184,7 +193,7 @@ extension DrawState: CLLocationManagerDelegate {
             
             if hasAngleBeenSaved {
                 if Database().getTile(location: loc) != currentTile {
-//                    load()
+                    load()
                 }
             }
         }
@@ -204,7 +213,7 @@ extension DrawState: CLLocationManagerDelegate {
             userRootNode = SecondTierRoot(location: self.location, angleToNorth: angle)
             userRootNode?.name = String(location.coordinate.latitude) + String(location.coordinate.longitude) + now
             sceneView.scene.rootNode.addChildNode(userRootNode!)
-           // load()
+            load()
         }
         //print("the angle", angle)
         
@@ -215,41 +224,53 @@ extension DrawState: CLLocationManagerDelegate {
 
 
 extension DrawState {
-    //    func save() {
-    //        Database().saveDrawing(location: location, userRootNode: userRootNode!)
-    //    }
-        
+    func save() {
+        if let rootNode = userRootNode {
+            Database().saveDrawing(location: location, userRootNode: rootNode)
+        }
+    }
     
-    //    func load() {
-    //        if !headingSet {
-    //            return
-    //        }
-    //
-    //        let db = Database()
-    //        currentTile = db.getTile(location: location)
-    //        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
-    //            for node in self.sceneView.scene.rootNode.childNodes {
-    //                node.removeFromParentNode()
-    //            }
-    //
-    //            for node in retrievedNodes {
-    //                let lat1 = Float(self.location.coordinate.latitude) * Float.pi / 180.0
-    //                let lat2 = Float(node.location.coordinate.latitude) * Float.pi / 180.0
-    //                let dLat = lat2 - lat1
-    //                let long1 = Float(self.location.coordinate.longitude) * Float.pi / 180.0
-    //                let long2 = Float(node.location.coordinate.longitude) * Float.pi / 180.0
-    //                let dLong = long2 - long1
-    //                node.simdPosition = SIMD3<Float>(dLat, 0, dLong)
-    //
-    //                let currentAngle = deg2rad(self.heading.trueHeading)
-    //                let angleOfRotation = currentAngle - node.angleToNorth
-    //                node.rotate(by: SCNQuaternion(0, 1, 0, angleOfRotation), aroundTarget: SCNVector3Make(0, 0, 0))
-    //
-    //                self.sceneView.scene.rootNode.addChildNode(node)
-    //            }
-    //        })
-    //
-    //    }
+
+    func load() {
+        if !headingSet {
+            return
+        }
+
+        let db = Database()
+        currentTile = db.getTile(location: location)
+        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
+//            for node in self.sceneView.scene.rootNode.childNodes {
+//                node.removeFromParentNode()
+//            }
+
+            for node in retrievedNodes {
+                let nodeLatitude = node.location.coordinate.latitude
+                let nodeLongitude = node.location.coordinate.longitude
+                let phoneLatitude = self.location.coordinate.latitude
+                let phoneLongitude = self.location.coordinate.longitude
+                var distanceWestToEastMeters = Float(self.location.distance(from: CLLocation.init(latitude: nodeLatitude, longitude: phoneLongitude)))
+                var distanceNorthToSouthMeters = Float(self.location.distance(from: CLLocation.init(latitude: phoneLatitude, longitude: nodeLongitude)))
+                
+                if (nodeLatitude < phoneLatitude) {
+                    distanceWestToEastMeters *= -1
+                }
+                if (nodeLongitude < phoneLongitude) {
+                    distanceNorthToSouthMeters *= -1
+                }
+                
+                node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
+                print("Latitude difference: \(distanceWestToEastMeters)")
+                print("Longitude difference: \(distanceNorthToSouthMeters)")
+
+                let currentAngle = deg2rad(self.heading.trueHeading)
+                let angleOfRotation = currentAngle - node.angleToNorth
+                node.rotation = SCNVector4Make(0, 1, 0, Float(angleOfRotation))
+
+                self.sceneView.scene.rootNode.addChildNode(node)
+            }
+        })
+
+    }
 }
 
 
