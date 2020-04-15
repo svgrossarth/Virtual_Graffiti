@@ -71,16 +71,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "86939319-9A90-495B-8C87-B5F8CE35B4DC"
-            shouldBeEnabled = "Yes"
+            uuid = "1AFB6E8D-2ECA-4F32-BD3A-94F96D08815D"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Login/PencilKit/PKCanvas.swift"
+            filePath = "Login/ViewControllers/HomeViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "init(coder:)"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "touchesBegan(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

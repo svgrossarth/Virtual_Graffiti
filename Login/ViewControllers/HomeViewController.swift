@@ -9,9 +9,8 @@
 import UIKit
 import SceneKit
 import ARKit
-import PencilKit
 import CoreLocation
-
+import SwiftUI
 
 class HomeViewController: UIViewController {
     var drawState = DrawState()
@@ -20,6 +19,15 @@ class HomeViewController: UIViewController {
     var refSphere = SCNNode()
     var sphereCallbackCanceled = false
     
+    @IBOutlet weak var colorStack: UIStackView!
+    @IBOutlet weak var redButton: UIButton!
+    @IBOutlet weak var orangeButton: UIButton!
+    @IBOutlet weak var yellowButton: UIButton!
+    @IBOutlet weak var greenButton: UIButton!
+    @IBOutlet weak var blueButton: UIButton!
+    
+    @IBOutlet weak var eraseButton: UIButton!
+    @IBOutlet weak var changeColorButton: UIButton!
     @IBOutlet weak var changeStateButton: UIButton!
     
     @IBOutlet weak var slider: UISlider!
@@ -38,7 +46,8 @@ class HomeViewController: UIViewController {
         state.enter()
         sliderUISetup()
         view.addSubview(editState)
-        editState.initialize(slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView)
+        editState.initialize(eraseButton: eraseButton, slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView)
+        editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
         
         view.bringSubviewToFront(changeStateButton)
     }
@@ -52,6 +61,9 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(slider)
         self.view.bringSubviewToFront(distanceLable)
         self.view.bringSubviewToFront(distanceValue)
+        self.view.bringSubviewToFront(changeColorButton)
+        self.view.bringSubviewToFront(eraseButton)
+        self.view.bringSubviewToFront(colorStack)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
@@ -75,15 +87,53 @@ class HomeViewController: UIViewController {
         }
     }
     
+    @IBAction func redButton(_ sender: Any) {
+        print("red button clicked")
+        drawState.drawingColor = .systemRed
+        changeColorButton.backgroundColor = .systemRed
+    }
+    @IBAction func orangeButton(_ sender: Any) {
+        print("orange button clicked")
+        drawState.drawingColor = .systemOrange
+        changeColorButton.backgroundColor = .systemOrange
+    }
+    @IBAction func yellowButton(_ sender: Any) {
+        print("yellow button clicked")
+        drawState.drawingColor = .systemYellow
+        changeColorButton.backgroundColor = .systemYellow
+    }
+    @IBAction func greenButton(_ sender: Any) {
+        print("green button clicked")
+        drawState.drawingColor = .systemGreen
+        changeColorButton.backgroundColor = .systemGreen
+    }
+    @IBAction func blueButton(_ sender: Any) {
+        print("blue button clicked")
+        drawState.drawingColor = .systemBlue
+        changeColorButton.backgroundColor = .systemBlue
+    }
+    
+    @IBAction func colorSelectorButton(_ sender: Any) {
+        editState.changeColor()
+    }
+    @IBAction func eraseButtonTouchUp(_ sender: Any) {
+        editState.eraseButtonTouchUp()
+    }
+    
     func changeHiddenOfEditMode(){
         if slider.isHidden {
             slider.isHidden = false
             distanceValue.isHidden = false
             distanceLable.isHidden = false
+            changeColorButton.isHidden = false
+            eraseButton.isHidden = false
         } else {
             slider.isHidden = true
             distanceValue.isHidden = true
             distanceLable.isHidden = true
+            changeColorButton.isHidden = true
+            eraseButton.isHidden = true
+            colorStack.isHidden = true
         }
     }
     

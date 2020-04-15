@@ -9,6 +9,7 @@
 import Foundation
 import SceneKit
 
+var drawingColor: UIColor = UIColor()
 
 class Stroke : SCNNode {
     let thickness : Float = 0.01
@@ -38,8 +39,9 @@ class Stroke : SCNNode {
         
     ]
     
-    init(firstPoint : SCNVector3) {
+    init(firstPoint : SCNVector3, color : UIColor) {
         self.previousPoint = firstPoint
+        drawingColor = color
         super.init()
     }
     
@@ -96,7 +98,7 @@ class Stroke : SCNNode {
             let customGeom = SCNGeometry(sources: [source], elements: [element])
             
             let material = SCNMaterial()
-            material.diffuse.contents = PKCanvas().sendColor()
+            material.diffuse.contents = drawingColor
             customGeom.materials = [material]
             
             //points[points.count - 1].material = material
@@ -118,7 +120,7 @@ class Stroke : SCNNode {
             let customGeom = SCNGeometry(sources: [source], elements: [element])
             
             let material = SCNMaterial()
-            material.diffuse.contents = PKCanvas().sendColor()
+            material.diffuse.contents = drawingColor
             customGeom.materials = [material]
 
             self.geometry = customGeom

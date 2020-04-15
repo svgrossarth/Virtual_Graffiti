@@ -36,7 +36,7 @@ class DrawState: State {
     var headingSet : Bool = false
     var distance : Float = 1
     let sphereRadius : CGFloat = 0.01
-    
+    var drawingColor: UIColor = .systemBlue
     
     func initialize(_sceneView: ARSCNView!) {
         _initializeLocationManager()
@@ -83,7 +83,7 @@ class DrawState: State {
     func createSphere(position : SCNVector3) -> SCNNode {
         let sphere = SCNSphere(radius: sphereRadius)
         let material = SCNMaterial()
-        material.diffuse.contents = PKCanvas().sendColor()
+        material.diffuse.contents = self.drawingColor
         sphere.materials = [material]
         let node = SCNNode(geometry: sphere)
         node.position = position
@@ -96,7 +96,7 @@ extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            currentStroke = Stroke(firstPoint: touchLocation)
+            currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor)
             userRootNode?.addChildNode(currentStroke!)
         } else {
             print("can't get touch")
@@ -119,6 +119,7 @@ extension DrawState {
      
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //Database().saveDrawing(location: location, userRootNode: userRootNode!)
         if !touchMovedCalled {
             if let singleTouch = touches.first{
                 let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
@@ -130,7 +131,6 @@ extension DrawState {
         }
         initialNearFarLine = nil
         touchMovedCalled = false
-        
         save()
     }
     

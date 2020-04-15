@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PencilKit
 import SceneKit
 import ARKit
 
@@ -15,6 +14,10 @@ import ARKit
 class EditState: State {
     var pencilKitCanvas =  PKCanvas()
     var sphereCallbackCanceled = false
+    var colorStack = UIStackView()
+    var colors: [UIButton] = []
+    var eraseButton = UIButton()
+    var changeColorButton = UIButton()
     var slider = UISlider()
     var distanceValue = UILabel()
     var distanceLabel = UILabel()
@@ -24,28 +27,25 @@ class EditState: State {
     weak var sceneView: ARSCNView!
     
     
-    func initialize(slider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView) {
+    func initialize(eraseButton: UIButton, slider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView) {
+        self.eraseButton = eraseButton
         self.slider = slider
         self.distanceLabel = distanceLabel
         self.distanceValue = distanceValue
         self.drawState = drawState
         self.refSphere = refSphere
         self.sceneView = sceneView
-        updateCanvasOrientation(with: bounds)
-        addPencilKit()
+    }
+    
+    func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
+        self.changeColorButton = changeColorButton
+        self.colorStack = colorStack
     }
     
     
     override func enter() {
         isHidden = false
-        if let window = UIApplication.shared.windows.last, let toolPicker = PKToolPicker.shared(for: window) {
-            //toolpicker shows up
-            toolPicker.setVisible(true, forFirstResponder: pencilKitCanvas.canvasView)
-            if let eraser = toolPicker.selectedTool as? PKEraserTool {
-                eraserOn = true
-            }
-        }
-        
+        eraserOn = true
     }
     
     
@@ -55,10 +55,22 @@ class EditState: State {
         self.refSphere.removeFromParentNode()
         
         isHidden = false
-        if let window = UIApplication.shared.windows.last, let toolPicker = PKToolPicker.shared(for: window) {
-           //toolpicker shows up
-            toolPicker.setVisible(false, forFirstResponder: pencilKitCanvas.canvasView)
-           }
+    }
+    
+    func changeColor() {
+        if colorStack.isHidden == true {
+            colorStack.isHidden = false
+        } else {
+            colorStack.isHidden = true
+        }
+    }
+    
+    func eraseButtonTouchUp() {
+        if eraserOn == true {
+            eraserOn = false
+        } else {
+            eraserOn = true
+        }
     }
     
     func sliderValueChange() {
@@ -108,21 +120,6 @@ class EditState: State {
                 }
             }
         }
-        
-    }
-    
-}
-
-
-
-extension EditState: PencilKitInterface, PencilKitDelegate {
-    // Create a canvas view and make it a subview of ARSCNView so that the ToolPicker shows up and lets us change the color
-    private func addPencilKit() {
-        backgroundColor = .clear
-        pencilKitCanvas  = createPencilKitCanvas(frame: frame, delegate: self)
-        addSubview(pencilKitCanvas)
-        
-        
     }
     
 }
