@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>217097925426-dol7g6u1lqbq3ffv7vhv5uubqfg92dt7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.217097925426-dol7g6u1lqbq3ffv7vhv5uubqfg92dt7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDF7r_It4MUBW93U8DiZk7O94RaBD9z9No</string>
+	<key>GCM_SENDER_ID</key>
+	<string>217097925426</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.Login</string>
+	<key>PROJECT_ID</key>
+	<string>virtual-graffiti-a637a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>virtual-graffiti-a637a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:217097925426:ios:1317eb356b635e3df61d2b</string>
+	<key>DATABASE_URL</key>
+	<string>https://virtual-graffiti-a637a.firebaseio.com</string>
+</dict>
+</plist>
