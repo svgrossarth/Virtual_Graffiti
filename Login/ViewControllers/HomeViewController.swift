@@ -6,6 +6,12 @@
 //  Copyright © 2020 Spencer Grossarth. All rights reserved.
 //
 
+//Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
+//Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
+//Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
 import UIKit
 import SceneKit
 import ARKit
@@ -18,6 +24,7 @@ class HomeViewController: UIViewController {
     var state : State = State()
     var refSphere = SCNNode()
     var sphereCallbackCanceled = false
+    var doubleTapHappened = false
     
     @IBOutlet weak var colorStack: UIStackView!
     @IBOutlet weak var redButton: UIButton!
@@ -28,7 +35,6 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var eraseButton: UIButton!
     @IBOutlet weak var changeColorButton: UIButton!
-    @IBOutlet weak var changeStateButton: UIButton!
     
     @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var distanceValue: UILabel!
@@ -36,27 +42,27 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var widthSlider: UISlider!
     @IBOutlet weak var widthLabel: UILabel!
     
+    @IBOutlet weak var undo: UIButton!
+    @IBOutlet weak var redo: UIButton!
     
     @IBOutlet weak var sceneView: ARSCNView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.addSubview(drawState)
         drawState.initialize(_sceneView: sceneView)
         
         state = drawState
         state.enter()
-        sliderUISetup()
+        uiSetup()
         view.addSubview(editState)
         editState.initialize(eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
-        
-        view.bringSubviewToFront(changeStateButton)
     }
     
-    func sliderUISetup () {
+    func uiSetup () {
         distanceSlider.transform = CGAffineTransform(rotationAngle: .pi / -2)
         distanceSlider.minimumValue = 0.2
         distanceSlider.maximumValue = 2
@@ -74,9 +80,12 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(colorStack)
         self.view.bringSubviewToFront(widthLabel)
         self.view.bringSubviewToFront(widthSlider)
+        self.view.bringSubviewToFront(undo)
+        self.view.bringSubviewToFront(redo)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -139,6 +148,8 @@ class HomeViewController: UIViewController {
             eraseButton.isHidden = false
             widthSlider.isHidden = false
             widthLabel.isHidden = false
+            undo.isHidden = false
+            redo.isHidden = false
         } else {
             distanceSlider.isHidden = true
             distanceValue.isHidden = true
@@ -148,8 +159,19 @@ class HomeViewController: UIViewController {
             colorStack.isHidden = true
             widthSlider.isHidden = true
             widthLabel.isHidden = true
+            undo.isHidden = true
+            redo.isHidden = true
         }
     }
+    
+    @IBAction func undoButton(_ sender: Any) {
+        editState.undoErase()
+    }
+    
+    @IBAction func redoButton(_ sender: Any) {
+        editState.redoErase()
+    }
+    
     
     @IBAction func distanceSliderValueChange(_ sender: Any) {
         editState.distanceSliderChange()
@@ -185,25 +207,39 @@ class HomeViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //state.touchesBegan(touches, with: event)
-        if !editState.eraserOn {
-            drawState.touchesBegan(touches, with: event)
-        } else {
-            editState.touchesBegan(touches, with: event)
+        if let touch = touches.first{
+            if touch.tapCount == 1 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    if !self.doubleTapHappened {
+                        print("tap count is 1")
+                        if !self.editState.eraserOn {
+                            self.drawState.touchesBegan(touches, with: event)
+                        } else {
+                            self.editState.touchesBegan(touches, with: event)
+                        }
+                    } else {
+                        print("tap count is 2")
+                        self.changeState()
+                    }
+                    self.doubleTapHappened = false
+                }
+            } else if touch.tapCount == 2 {
+                doubleTapHappened = true
+                print("touches began double tap")
+            }
         }
-
-
     }
-     
+//
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //state.touchesMoved(touches, with: event)
+        print("touches moved")
         if !editState.eraserOn {
             drawState.touchesMoved(touches, with: event)
         } else {
             editState.touchesMoved(touches, with: event)
         }
     }
-     
+//
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
    //     state.touchesEnded(touches, with: event)
         if !editState.eraserOn {
@@ -223,8 +259,7 @@ class HomeViewController: UIViewController {
     }
     
 
-
-    @IBAction func changeStateTouchUpInside(_ sender: Any) {
+    func changeState() {
         if state == drawState {
             changeState(nextState: editState)
         }
@@ -232,6 +267,7 @@ class HomeViewController: UIViewController {
             changeState(nextState: drawState)
         }
     }
+    
 }
 
 // debug purposes
@@ -263,3 +299,4 @@ class State : UIView {
         // Override
     }
 }
+

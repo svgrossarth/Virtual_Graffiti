@@ -27,7 +27,8 @@ class EditState: State {
     var refSphere = SCNNode()
     var eraserOn = false
     weak var sceneView: ARSCNView!
-    
+    var erasedStake = Stack<Stroke>()
+    var undoStake = Stack<Stroke>()
     
     func initialize(eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
         self.eraseButton = eraseButton
@@ -72,8 +73,10 @@ class EditState: State {
     func eraseButtonTouchUp() {
         if eraserOn == true {
             eraserOn = false
+            eraseButton.backgroundColor = #colorLiteral(red: 0.9576401114, green: 0.7083515525, blue: 0.8352113366, alpha: 1)
         } else {
             eraserOn = true
+            eraseButton.backgroundColor = #colorLiteral(red: 0.9938386083, green: 0.3334249258, blue: 0.6164360046, alpha: 1)
         }
     }
     
@@ -135,11 +138,30 @@ class EditState: State {
                 let touchPosition = touch.location(in: sceneView)
                 let hitTestResults = sceneView.hitTest(touchPosition)
                 for hitTestResult in hitTestResults{
-                    let node = hitTestResult.node
-                    node.removeFromParentNode()
+                    if let stroke = hitTestResult.node as? Stroke{
+                        stroke.removeFromParentNode()
+                        erasedStake.push(stroke)
+                    }
                 }
             }
         }
     }
+    
+    func undoErase(){
+        if let stroke = erasedStake.pop(){
+            undoStake.push(stroke)
+            drawState.sceneView.scene.rootNode.addChildNode(stroke)
+        }
+    }
+    
+    func redoErase(){
+        if let stroke = undoStake.pop(){
+            stroke.removeFromParentNode()
+            erasedStake.push(stroke)
+        }
+        
+    }
+    
+    
     
 }

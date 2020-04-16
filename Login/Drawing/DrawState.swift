@@ -27,7 +27,7 @@ class DrawState: State {
     
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
-    var touchMovedCalled = false
+    var touchMovedFirst = true
     var lineBetweenNearFar : SCNVector3?
     var initialNearFarLine : SCNVector3?
     var userRootNode : SecondTierRoot?
@@ -97,8 +97,8 @@ extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
-            userRootNode?.addChildNode(currentStroke!)
+            let sphereNode = createSphere(position: touchLocation)
+            userRootNode?.addChildNode(sphereNode)
         } else {
             print("can't get touch")
         }
@@ -106,13 +106,18 @@ extension DrawState {
      
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        touchMovedCalled = true
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            guard let firstNearFarLine = initialNearFarLine else { return }
-            guard let nearFar = lineBetweenNearFar else { return }
-            currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
-            currentStroke?.previousPoint = touchLocation
+            if touchMovedFirst {
+                touchMovedFirst =  false
+                currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
+                userRootNode?.addChildNode(currentStroke!)
+            } else {
+                guard let firstNearFarLine = initialNearFarLine else { return }
+                guard let nearFar = lineBetweenNearFar else { return }
+                currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
+                currentStroke?.previousPoint = touchLocation
+            }
         } else {
             print("can't get touch")
         }
@@ -121,17 +126,8 @@ extension DrawState {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         //Database().saveDrawing(location: location, userRootNode: userRootNode!)
-        if !touchMovedCalled {
-            if let singleTouch = touches.first{
-                let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-                let sphereNode = createSphere(position: touchLocation)
-                userRootNode?.addChildNode(sphereNode)
-            } else {
-                print("can't get touch")
-            }
-        }
+        touchMovedFirst = true
         initialNearFarLine = nil
-        touchMovedCalled = false
         save()
     }
     
@@ -260,8 +256,8 @@ extension DrawState {
                 }
                 
                 node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
-                print("Latitude difference: \(distanceWestToEastMeters)")
-                print("Longitude difference: \(distanceNorthToSouthMeters)")
+//                print("Latitude difference: \(distanceWestToEastMeters)")
+//                print("Longitude difference: \(distanceNorthToSouthMeters)")
 
                 let currentAngle = deg2rad(self.heading.trueHeading)
                 let angleOfRotation = currentAngle - node.angleToNorth
