@@ -35,6 +35,7 @@ class DrawState: State {
     var heading : CLHeading = CLHeading()
     var headingSet : Bool = false
     var distance : Float = 1
+    var width : Float = 0.01
     let sphereRadius : CGFloat = 0.01
     var drawingColor: UIColor = .systemBlue
     
@@ -71,7 +72,7 @@ class DrawState: State {
         addSubview(sceneView)
         sceneView.delegate = self
         sceneView.session.delegate = self
-        sceneView.showsStatistics = true
+       // sceneView.showsStatistics = true
         let scene = SCNScene()
         sceneView.scene = scene
         
@@ -96,7 +97,7 @@ extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor)
+            currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
             userRootNode?.addChildNode(currentStroke!)
         } else {
             print("can't get touch")

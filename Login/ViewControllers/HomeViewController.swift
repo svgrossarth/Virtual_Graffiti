@@ -30,9 +30,13 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var changeColorButton: UIButton!
     @IBOutlet weak var changeStateButton: UIButton!
     
-    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var distanceValue: UILabel!
     @IBOutlet weak var distanceLable: UILabel!
+    @IBOutlet weak var widthSlider: UISlider!
+    @IBOutlet weak var widthLabel: UILabel!
+    
+    
     @IBOutlet weak var sceneView: ARSCNView!
     
     
@@ -46,24 +50,30 @@ class HomeViewController: UIViewController {
         state.enter()
         sliderUISetup()
         view.addSubview(editState)
-        editState.initialize(eraseButton: eraseButton, slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView)
+        editState.initialize(eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
         
         view.bringSubviewToFront(changeStateButton)
     }
     
     func sliderUISetup () {
-        slider.transform = CGAffineTransform(rotationAngle: .pi / -2)
-        slider.minimumValue = 0.2
-        slider.maximumValue = 2
-        slider.value = 1
-        distanceValue.text = String(format: "%.2f", slider.value)
-        self.view.bringSubviewToFront(slider)
+        distanceSlider.transform = CGAffineTransform(rotationAngle: .pi / -2)
+        distanceSlider.minimumValue = 0.2
+        distanceSlider.maximumValue = 2
+        distanceSlider.value = 1
+        distanceValue.text = String(format: "%.2f", distanceSlider.value)
+        widthSlider.minimumValue = 0.2
+        widthSlider.maximumValue = 2
+        widthSlider.value = 1
+        widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        self.view.bringSubviewToFront(distanceSlider)
         self.view.bringSubviewToFront(distanceLable)
         self.view.bringSubviewToFront(distanceValue)
         self.view.bringSubviewToFront(changeColorButton)
         self.view.bringSubviewToFront(eraseButton)
         self.view.bringSubviewToFront(colorStack)
+        self.view.bringSubviewToFront(widthLabel)
+        self.view.bringSubviewToFront(widthSlider)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
@@ -121,34 +131,49 @@ class HomeViewController: UIViewController {
     }
     
     func changeHiddenOfEditMode(){
-        if slider.isHidden {
-            slider.isHidden = false
+        if distanceSlider.isHidden {
+            distanceSlider.isHidden = false
             distanceValue.isHidden = false
             distanceLable.isHidden = false
             changeColorButton.isHidden = false
             eraseButton.isHidden = false
+            widthSlider.isHidden = false
+            widthLabel.isHidden = false
         } else {
-            slider.isHidden = true
+            distanceSlider.isHidden = true
             distanceValue.isHidden = true
             distanceLable.isHidden = true
             changeColorButton.isHidden = true
             eraseButton.isHidden = true
             colorStack.isHidden = true
+            widthSlider.isHidden = true
+            widthLabel.isHidden = true
         }
     }
     
-    @IBAction func sliderValueChange(_ sender: Any) {
-        editState.sliderValueChange()
+    @IBAction func distanceSliderValueChange(_ sender: Any) {
+        editState.distanceSliderChange()
     }
     
 
-    @IBAction func sliderTouchUpInside(_ sender: Any) {
+    @IBAction func distanceSliderTouchUpInside(_ sender: Any) {
         editState.removeSphere()
     }
     
-    @IBAction func sliderTouchUpOutside(_ sender: Any) {
+    @IBAction func distanceSliderTouchUpOutside(_ sender: Any) {
         editState.removeSphere()
     }
+    
+    @IBAction func widthSliderValueChange(_ sender: Any) {
+        editState.widthSliderChange()
+    }
+    @IBAction func widthSliderTouchUpInside(_ sender: Any) {
+        editState.removeSphere()
+    }
+    @IBAction func widthSliderTouchUpOutside(_ sender: Any) {
+        editState.removeSphere()
+    }
+    
     
     func createReferenceSphere() -> SCNNode {
         let sphere = SCNSphere(radius: 0.1)
@@ -160,15 +185,32 @@ class HomeViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state.touchesBegan(touches, with: event)
+        //state.touchesBegan(touches, with: event)
+        if !editState.eraserOn {
+            drawState.touchesBegan(touches, with: event)
+        } else {
+            editState.touchesBegan(touches, with: event)
+        }
+
+
     }
      
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state.touchesMoved(touches, with: event)
+        //state.touchesMoved(touches, with: event)
+        if !editState.eraserOn {
+            drawState.touchesMoved(touches, with: event)
+        } else {
+            editState.touchesMoved(touches, with: event)
+        }
     }
      
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state.touchesEnded(touches, with: event)
+   //     state.touchesEnded(touches, with: event)
+        if !editState.eraserOn {
+            drawState.touchesEnded(touches, with: event)
+        } else {
+            editState.touchesEnded(touches, with: event)
+        }
     }
     
     //MARK: - iOS override properties

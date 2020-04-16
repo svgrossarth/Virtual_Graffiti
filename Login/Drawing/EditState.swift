@@ -18,23 +18,27 @@ class EditState: State {
     var colors: [UIButton] = []
     var eraseButton = UIButton()
     var changeColorButton = UIButton()
-    var slider = UISlider()
+    var distanceSlider = UISlider()
     var distanceValue = UILabel()
     var distanceLabel = UILabel()
+    var widthSlider = UISlider()
+    var widthLabel = UILabel()
     var drawState = DrawState()
     var refSphere = SCNNode()
     var eraserOn = false
     weak var sceneView: ARSCNView!
     
     
-    func initialize(eraseButton: UIButton, slider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView) {
+    func initialize(eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
         self.eraseButton = eraseButton
-        self.slider = slider
+        self.distanceSlider = distanceSlider
         self.distanceLabel = distanceLabel
         self.distanceValue = distanceValue
         self.drawState = drawState
         self.refSphere = refSphere
         self.sceneView = sceneView
+        self.widthSlider = widthSlider
+        self.widthLabel = widthLabel
     }
     
     func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
@@ -45,7 +49,7 @@ class EditState: State {
     
     override func enter() {
         isHidden = false
-        eraserOn = true
+       // eraserOn = true
     }
     
     
@@ -73,17 +77,33 @@ class EditState: State {
         }
     }
     
-    func sliderValueChange() {
+    func distanceSliderChange() {
         sphereCallbackCanceled = true
         let defaultDistance : Float = 1
-        if(slider.value > 1){
-            drawState.distance = defaultDistance * powf(slider.value, 2)
+        if(distanceSlider.value > 1){
+            drawState.distance = defaultDistance * powf(distanceSlider.value, 2)
         } else {
-           drawState.distance = defaultDistance * slider.value
+            drawState.distance = defaultDistance * distanceSlider.value
         }
         distanceValue.text = String(format: "%.2f", drawState.distance)
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
+        drawState.sceneView.scene.rootNode.addChildNode(refSphere)
+
+    }
+    
+    func widthSliderChange() {
+        sphereCallbackCanceled = true
+        let defaultWidth : Float = 0.01
+        if(widthSlider.value > 1){
+            drawState.width = defaultWidth * powf(widthSlider.value, 4)
+        } else {
+           drawState.width = defaultWidth * widthSlider.value
+        }
+        widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
+        refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
+        refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         drawState.sceneView.scene.rootNode.addChildNode(refSphere)
 
     }

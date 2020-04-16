@@ -12,7 +12,7 @@ import SceneKit
 var drawingColor: UIColor = UIColor()
 
 class Stroke : SCNNode {
-    let thickness : Float = 0.01
+    var thickness : Float = 0.01
     var strokeVertices = [SCNVector3]()
     var previousPoint = SCNVector3()
     var indices = [UInt32]()
@@ -39,9 +39,10 @@ class Stroke : SCNNode {
         
     ]
     
-    init(firstPoint : SCNVector3, color : UIColor) {
+    init(firstPoint : SCNVector3, color : UIColor, thickness : Float) {
         self.previousPoint = firstPoint
         drawingColor = color
+        self.thickness = thickness
         super.init()
     }
     
