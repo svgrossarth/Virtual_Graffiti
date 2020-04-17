@@ -11,7 +11,8 @@ import SceneKit
 import ARKit
 
 
-class EditState: State {
+class EditState: State{
+
     var pencilKitCanvas =  PKCanvas()
     var sphereCallbackCanceled = false
     var colorStack = UIStackView()
@@ -45,6 +46,8 @@ class EditState: State {
         self.sceneView = sceneView
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
+        self.sceneView.automaticallyUpdatesLighting = false
+        sceneView.scene.rootNode.addChildNode(emojiRootNode)
     }
     
     func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
@@ -113,6 +116,8 @@ class EditState: State {
         }
     }
 
+
+
     func setModel(){
         guard let emojiScene = SCNScene(named: pathName) else {
             print("model does not exist")
@@ -121,18 +126,16 @@ class EditState: State {
         ObjNode = emojiScene.rootNode.childNode(withName: emoji.ID, recursively: true)
     }
 
-    func emojiLighting(position: SCNVector3) ->SCNLight{
-//        let estimate: ARLightEstimate!
-//        estimate = self.sceneView.session.currentFrame?.lightEstimate
+    func emojiLighting() ->SCNLight{
+        let estimate: ARLightEstimate!
+        estimate = self.sceneView.session.currentFrame?.lightEstimate
         let light = SCNLight()
-        light.intensity = 1000
-//        light.castsShadow = true
+        light.intensity = estimate.ambientIntensity
         light.type = SCNLight.LightType.directional
-//        light.color = UIColor.white
+        light.color = UIColor.white
         return light
     }
 
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !EmojiOn {
             eraseNode(touches: touches)
@@ -144,11 +147,8 @@ class EditState: State {
                 if hits.count >= 0, let firstHit = hits.first {
                     print("Emoji touch happened at point: \(touchPoint)")
                     ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
-                    emojiRootNode.light = emojiLighting(position: emojiRootNode.position)
-                    emojiRootNode.categoryBitMask = 0
-                    self.sceneView.autoenablesDefaultLighting = false
+                    emojiRootNode.light = emojiLighting()
                     emojiRootNode.addChildNode(ObjNode)
-                    sceneView.scene.rootNode.addChildNode(emojiRootNode)
                 }
             }else {
                  print("Unable to identify touches on any plane. Ignoring interaction...")
@@ -163,7 +163,7 @@ class EditState: State {
     }
     
     func eraseNode(touches: Set<UITouch>){
-        if eraserOn && !EmojiOn {
+        if eraserOn {
             if touches.count == 1 {
                 guard let touch = touches.first else {
                     print ("can't get first touch")
@@ -178,5 +178,19 @@ class EditState: State {
             }
         }
     }
-    
+    func stateChangeEmoji(emoji: Emoji){
+          self.emoji = emoji
+          self.modelName = emoji.name + ".scn"
+          self.pathName = "emojis.scnassets/" + modelName
+          print("EditState:", emoji.name)
+      }
 }
+
+//extension EditState : ChangeEmojiDelegate{
+//    func changeEmoji(emoji: Emoji){
+//        self.emoji = emoji
+//        self.modelName = emoji.name + ".scn"
+//        self.pathName = "emojis.scnassets/" + modelName
+//        print("EditState:", emoji.name)
+//    }
+//}

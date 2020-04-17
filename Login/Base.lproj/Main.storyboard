@@ -355,10 +355,20 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mvA-ng-ZtE">
+                                <rect key="frame" x="87" y="741" width="71" height="30"/>
+                                <state key="normal" title="Choose">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeEmojiButtonPressed:" destination="RGp-mB-gpr" eventType="touchUpInside" id="T3X-Oo-I9j"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="IUX-BI-E2L" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="20" id="2vE-zj-cep"/>
+                            <constraint firstItem="puE-Ma-oOv" firstAttribute="top" secondItem="mvA-ng-ZtE" secondAttribute="bottom" constant="20" id="4pY-P4-DhW"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="w3j-hE-rGB" secondAttribute="trailing" constant="51" id="5oB-qS-18j"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="bottom" secondItem="6Ws-aO-AaH" secondAttribute="bottom" constant="41" id="D0I-sk-wIh"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="AT0-kT-hHa" secondAttribute="trailing" constant="57" id="GAE-lw-grW"/>
@@ -367,6 +377,7 @@
                             <constraint firstItem="za5-uP-9DW" firstAttribute="bottom" secondItem="6Ws-aO-AaH" secondAttribute="bottom" constant="41" id="NHp-bl-ZAy"/>
                             <constraint firstItem="IUX-BI-E2L" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="20" id="Ox8-T4-dqA"/>
                             <constraint firstItem="IvR-tW-E8K" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" id="Pb4-aF-Sgh"/>
+                            <constraint firstItem="mvA-ng-ZtE" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="87" id="TYy-Yt-lPY"/>
                             <constraint firstItem="ZgC-Gp-X6X" firstAttribute="top" secondItem="w3j-hE-rGB" secondAttribute="bottom" constant="20" id="Tqk-wY-5Q4"/>
                             <constraint firstItem="6Ws-aO-AaH" firstAttribute="leading" secondItem="puE-Ma-oOv" secondAttribute="trailing" constant="26" id="YMP-oN-tSP"/>
                             <constraint firstItem="6Ws-aO-AaH" firstAttribute="top" secondItem="w3j-hE-rGB" secondAttribute="bottom" constant="20" id="Z67-Zk-MNS"/>
@@ -393,6 +404,7 @@
                     <connections>
                         <outlet property="blueButton" destination="0mY-rM-wRD" id="vfq-tL-HNw"/>
                         <outlet property="changeColorButton" destination="ZgC-Gp-X6X" id="e7L-tA-rjg"/>
+                        <outlet property="changeEmojiButton" destination="mvA-ng-ZtE" id="hIF-wV-7vB"/>
                         <outlet property="changeStateButton" destination="IUX-BI-E2L" id="3To-Ef-jpZ"/>
                         <outlet property="colorStack" destination="w3j-hE-rGB" id="mzH-mk-zjg"/>
                         <outlet property="distanceLable" destination="N5s-Kg-KQr" id="Skt-gE-a8G"/>
@@ -478,6 +490,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6HA-Bp-dgZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2586.9565217391305" y="-319.41964285714283"/>
+        </scene>
+        <!--Emoji-->
+        <scene sceneID="Bgr-R0-Yvn">
+            <objects>
+                <tableViewController id="a6N-TN-ak3" customClass="EmojiContentTableViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="3RY-s3-QmH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="5l4-ud-K3m" userLabel="modelDetailCell" customClass="DetailTableViewCell" customModule="Login" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="100"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5l4-ud-K3m" id="dbe-ea-24a">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="a6N-TN-ak3" id="6jW-SA-MmN"/>
+                            <outlet property="delegate" destination="a6N-TN-ak3" id="UG1-lm-drd"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Emoji" id="2Pr-JU-EYX"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LCB-lY-YH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4386.9565217391309" y="389.67391304347831"/>
+        </scene>
+        <!--Emoji Navigation Controller-->
+        <scene sceneID="WEo-ja-Ypf">
+            <objects>
+                <navigationController id="LFH-bN-nw6" userLabel="Emoji Navigation Controller" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="7uK-MT-1CV"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ZrF-Md-xXX">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="a6N-TN-ak3" kind="relationship" relationship="rootViewController" id="s6w-IT-JW5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ys3-Wz-k8y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3470" y="390"/>
         </scene>
     </scenes>
 </document>

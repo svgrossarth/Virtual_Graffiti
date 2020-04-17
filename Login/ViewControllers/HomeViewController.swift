@@ -19,6 +19,7 @@ class HomeViewController: UIViewController {
     var refSphere = SCNNode()
     var sphereCallbackCanceled = false
     var EmojiOn : Bool = false
+     var emoji = Emoji(name: "bandage", ID: "Group50555");
     
     @IBOutlet weak var colorStack: UIStackView!
     @IBOutlet weak var redButton: UIButton!
@@ -37,6 +38,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var sceneView: ARSCNView!
 
     @IBOutlet weak var emojiButton: ModeButton!
+    @IBOutlet weak var changeEmojiButton: UIButton!
 
     
     override func viewDidLoad() {
@@ -68,14 +70,12 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(changeColorButton)
         self.view.bringSubviewToFront(eraseButton)
         self.view.bringSubviewToFront(emojiButton)
+        self.view.bringSubviewToFront(changeEmojiButton)
         self.view.bringSubviewToFront(colorStack)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
 
-
-
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         state.exit()
@@ -88,6 +88,7 @@ class HomeViewController: UIViewController {
         state.enter()
         if state == drawState {
             print("Entered Draw State")
+            EmojiOn = false
         }
         else {
             print("Entered Edit State")
@@ -131,6 +132,14 @@ class HomeViewController: UIViewController {
         editState.emojiButtonTouched()
        }
     
+    @IBAction func changeEmojiButtonPressed(_ sender: Any) {
+//           func showTableView(){
+                let controller = EmojiContentTableViewController()
+                controller.delegate = self
+                self.present(controller, animated: true, completion: nil)
+//            }
+    }
+
     func changeHiddenOfEditMode(){
         if slider.isHidden {
             slider.isHidden = false
@@ -139,6 +148,7 @@ class HomeViewController: UIViewController {
             changeColorButton.isHidden = false
             eraseButton.isHidden = false
             emojiButton.isHidden = false
+            changeEmojiButton.isHidden = false
         } else {
             slider.isHidden = true
             distanceValue.isHidden = true
@@ -147,6 +157,7 @@ class HomeViewController: UIViewController {
             eraseButton.isHidden = true
             emojiButton.isHidden = true
             colorStack.isHidden = true
+            changeEmojiButton.isHidden = true
         }
     }
     
@@ -237,5 +248,17 @@ class State : UIView {
 struct HomeViewController_Previews: PreviewProvider {
     static var previews: some View {
         /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}
+
+
+extension HomeViewController : ChangeEmojiDelegate{
+    func changeEmoji(emoji: Emoji){
+        self.dismiss(animated: true)
+        self.emoji = emoji
+//        self.modelName = emoji.name + ".scn"
+//        self.pathName = "emojis.scnassets/" + modelName
+        editState.stateChangeEmoji(emoji: emoji)
+        print("home:", emoji.name)
     }
 }
