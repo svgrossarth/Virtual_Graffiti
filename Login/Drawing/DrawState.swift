@@ -89,6 +89,15 @@ class DrawState: State {
         node.position = position
         return node
     }
+
+    func addLighting() -> SCNLight {
+        let light = SCNLight()
+        let estimate: ARLightEstimate!
+        estimate = self.sceneView.session.currentFrame?.lightEstimate
+        light.intensity = estimate.ambientIntensity
+        light.type = SCNLight.LightType.ambient
+        return light
+    }
 }
 
 
@@ -97,6 +106,7 @@ extension DrawState {
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
             currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor)
+            userRootNode?.light = addLighting()
             userRootNode?.addChildNode(currentStroke!)
         } else {
             print("can't get touch")
@@ -131,7 +141,7 @@ extension DrawState {
         }
         initialNearFarLine = nil
         touchMovedCalled = false
-        save()
+//        save()
     }
     
     func touchLocationIn3D (touchLocation2D: CGPoint) -> SCNVector3 {
@@ -228,6 +238,7 @@ extension DrawState {
         if let rootNode = userRootNode {
             Database().saveDrawing(location: location, userRootNode: rootNode)
         }
+        print("data saved")
     }
     
 
@@ -259,8 +270,8 @@ extension DrawState {
                 }
                 
                 node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
-                print("Latitude difference: \(distanceWestToEastMeters)")
-                print("Longitude difference: \(distanceNorthToSouthMeters)")
+//                print("Latitude difference: \(distanceWestToEastMeters)")
+//                print("Longitude difference: \(distanceNorthToSouthMeters)")
 
                 let currentAngle = deg2rad(self.heading.trueHeading)
                 let angleOfRotation = currentAngle - node.angleToNorth
