@@ -88,7 +88,6 @@ class HomeViewController: UIViewController {
         state.enter()
         if state == drawState {
             print("Entered Draw State")
-            EmojiOn = false
         }
         else {
             print("Entered Edit State")

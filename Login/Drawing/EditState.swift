@@ -45,8 +45,6 @@ class EditState: State {
         self.sceneView = sceneView
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
-        self.sceneView.automaticallyUpdatesLighting = false
-        sceneView.scene.rootNode.addChildNode(emojiRootNode)
     }
     
     func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
@@ -123,16 +121,18 @@ class EditState: State {
         ObjNode = emojiScene.rootNode.childNode(withName: emoji.ID, recursively: true)
     }
 
-    func emojiLighting() ->SCNLight{
-        let estimate: ARLightEstimate!
-        estimate = self.sceneView.session.currentFrame?.lightEstimate
+    func emojiLighting(position: SCNVector3) ->SCNLight{
+//        let estimate: ARLightEstimate!
+//        estimate = self.sceneView.session.currentFrame?.lightEstimate
         let light = SCNLight()
-        light.intensity = estimate.ambientIntensity
+        light.intensity = 1000
+//        light.castsShadow = true
         light.type = SCNLight.LightType.directional
-        light.color = UIColor.white
+//        light.color = UIColor.white
         return light
     }
 
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !EmojiOn {
             eraseNode(touches: touches)
@@ -144,8 +144,11 @@ class EditState: State {
                 if hits.count >= 0, let firstHit = hits.first {
                     print("Emoji touch happened at point: \(touchPoint)")
                     ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
-                    emojiRootNode.light = emojiLighting()
+                    emojiRootNode.light = emojiLighting(position: emojiRootNode.position)
+                    emojiRootNode.categoryBitMask = 0
+                    self.sceneView.autoenablesDefaultLighting = false
                     emojiRootNode.addChildNode(ObjNode)
+                    sceneView.scene.rootNode.addChildNode(emojiRootNode)
                 }
             }else {
                  print("Unable to identify touches on any plane. Ignoring interaction...")
@@ -160,7 +163,7 @@ class EditState: State {
     }
     
     func eraseNode(touches: Set<UITouch>){
-        if eraserOn {
+        if eraserOn && !EmojiOn {
             if touches.count == 1 {
                 guard let touch = touches.first else {
                     print ("can't get first touch")
