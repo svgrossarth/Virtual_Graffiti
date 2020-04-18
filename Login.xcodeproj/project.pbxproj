@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FCF9F062447EF2D0068C893 /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCF9F052447EF2D0068C893 /* ModeButton.swift */; };
-		0FCF9F08244828C40068C893 /* emojis.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FCF9F07244828C40068C893 /* emojis.scnassets */; };
-		0FCF9F0C2448D23C0068C893 /* EmojiContentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCF9F0B2448D23C0068C893 /* EmojiContentTableViewController.swift */; };
-		0FCF9F0F2448D2720068C893 /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCF9F0D2448D2720068C893 /* DetailTableViewCell.swift */; };
-		0FCF9F102448D2720068C893 /* DetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FCF9F0E2448D2720068C893 /* DetailTableViewCell.xib */; };
-		0FCF9F182448D3910068C893 /* Emoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCF9F172448D3910068C893 /* Emoji.swift */; };
+		0FA411DE244A82EC00C5FA8E /* EmojiContentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA411DD244A82EC00C5FA8E /* EmojiContentTableViewController.swift */; };
+		0FA41246244A94CB00C5FA8E /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */; };
+		0FA41247244A94CB00C5FA8E /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41242244A94CB00C5FA8E /* ModeButton.swift */; };
+		0FA41248244A94CB00C5FA8E /* DetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */; };
+		0FA41249244A94CC00C5FA8E /* Emoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41244244A94CB00C5FA8E /* Emoji.swift */; };
+		0FA4124A244A94CC00C5FA8E /* emojis.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FA41245244A94CB00C5FA8E /* emojis.scnassets */; };
 		7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3B423DE581C00DDC27C /* AppDelegate.swift */; };
 		7746C3B723DE581C00DDC27C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3B623DE581C00DDC27C /* SceneDelegate.swift */; };
 		7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3B823DE581C00DDC27C /* ViewController.swift */; };
@@ -36,6 +36,7 @@
 		C0086EC22412B113001C4A22 /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC12412B113001C4A22 /* Stroke.swift */; };
 		C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */; };
 		C0086EC62412B492001C4A22 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC52412B492001C4A22 /* Math.swift */; };
+		C09D24E6244824BB00FFA752 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D24E5244824BA00FFA752 /* Stack.swift */; };
 		C20C1C4396CB2FC557A027F2 /* Pods_Login.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 329A5137A7D43F29383203FB /* Pods_Login.framework */; };
 		CE4CA7B0240E23B6005BEDC8 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CA7AF240E23B6005BEDC8 /* Database.swift */; };
 		CE7C17E0243A3D39005CE88A /* DrawState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7C17DF243A3D39005CE88A /* DrawState.swift */; };
@@ -60,12 +61,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0FCF9F052447EF2D0068C893 /* ModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
-		0FCF9F07244828C40068C893 /* emojis.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; name = emojis.scnassets; path = Login/Emoji/emojis.scnassets; sourceTree = SOURCE_ROOT; };
-		0FCF9F0B2448D23C0068C893 /* EmojiContentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiContentTableViewController.swift; sourceTree = "<group>"; };
-		0FCF9F0D2448D2720068C893 /* DetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
-		0FCF9F0E2448D2720068C893 /* DetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailTableViewCell.xib; sourceTree = "<group>"; };
-		0FCF9F172448D3910068C893 /* Emoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emoji.swift; sourceTree = "<group>"; };
+		0FA411DD244A82EC00C5FA8E /* EmojiContentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiContentTableViewController.swift; sourceTree = "<group>"; };
+		0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
+		0FA41242244A94CB00C5FA8E /* ModeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
+		0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailTableViewCell.xib; sourceTree = "<group>"; };
+		0FA41244244A94CB00C5FA8E /* Emoji.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emoji.swift; sourceTree = "<group>"; };
+		0FA41245244A94CB00C5FA8E /* emojis.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = emojis.scnassets; sourceTree = "<group>"; };
 		1BF7307A4120D91EA46D1864 /* Pods-Login.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Login.debug.xcconfig"; path = "Target Support Files/Pods-Login/Pods-Login.debug.xcconfig"; sourceTree = "<group>"; };
 		329A5137A7D43F29383203FB /* Pods_Login.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Login.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CD6D16C1BFA3478256D3990 /* Pods-Login-LoginUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Login-LoginUITests.debug.xcconfig"; path = "Target Support Files/Pods-Login-LoginUITests/Pods-Login-LoginUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -92,7 +93,7 @@
 		77DD9B5224078DA6005AF15C /* PKCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCanvas.swift; sourceTree = "<group>"; };
 		77E74DC523E222C100C6E65C /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		77E74DC723E222CF00C6E65C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		77E74DC923E222E700C6E65C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; usesTabs = 0; };
+		77E74DC923E222E700C6E65C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		77E74DCC23E240F000C6E65C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		77E804CD23EB6AE300432DCD /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		7C1A970FF1753B5DF0286F26 /* Pods-Login.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Login.release.xcconfig"; path = "Target Support Files/Pods-Login/Pods-Login.release.xcconfig"; sourceTree = "<group>"; };
@@ -101,6 +102,7 @@
 		C0086EC12412B113001C4A22 /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
 		C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTierRoot.swift; sourceTree = "<group>"; };
 		C0086EC52412B492001C4A22 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		C09D24E5244824BA00FFA752 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		CE4CA7AF240E23B6005BEDC8 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		CE7C17DF243A3D39005CE88A /* DrawState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DrawState.swift; path = Login/Drawing/DrawState.swift; sourceTree = SOURCE_ROOT; };
 		CE7C17E3243A4552005CE88A /* EditState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditState.swift; sourceTree = "<group>"; };
@@ -137,14 +139,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0FCF9F042447EED40068C893 /* Emoji */ = {
+		0FA41240244A94CB00C5FA8E /* Emoji */ = {
 			isa = PBXGroup;
 			children = (
-				0FCF9F07244828C40068C893 /* emojis.scnassets */,
-				0FCF9F052447EF2D0068C893 /* ModeButton.swift */,
-				0FCF9F0D2448D2720068C893 /* DetailTableViewCell.swift */,
-				0FCF9F0E2448D2720068C893 /* DetailTableViewCell.xib */,
-				0FCF9F172448D3910068C893 /* Emoji.swift */,
+				0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */,
+				0FA41242244A94CB00C5FA8E /* ModeButton.swift */,
+				0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */,
+				0FA41244244A94CB00C5FA8E /* Emoji.swift */,
+				0FA41245244A94CB00C5FA8E /* emojis.scnassets */,
 			);
 			path = Emoji;
 			sourceTree = "<group>";
@@ -187,10 +189,10 @@
 		7746C3B323DE581C00DDC27C /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				0FA41240244A94CB00C5FA8E /* Emoji */,
 				77DD9B5024078D7A005AF15C /* PencilKit */,
 				C0086EC02412B0FE001C4A22 /* Drawing */,
 				77E74DCB23E240BF00C6E65C /* Helpers */,
-				0FCF9F042447EED40068C893 /* Emoji */,
 				77E74DC423E2217100C6E65C /* ViewControllers */,
 				7746C3B423DE581C00DDC27C /* AppDelegate.swift */,
 				7746C3B623DE581C00DDC27C /* SceneDelegate.swift */,
@@ -235,8 +237,8 @@
 			isa = PBXGroup;
 			children = (
 				7746C3B823DE581C00DDC27C /* ViewController.swift */,
-				0FCF9F0B2448D23C0068C893 /* EmojiContentTableViewController.swift */,
 				77E74DC523E222C100C6E65C /* SignUpViewController.swift */,
+				0FA411DD244A82EC00C5FA8E /* EmojiContentTableViewController.swift */,
 				77E74DC723E222CF00C6E65C /* LoginViewController.swift */,
 				77E74DC923E222E700C6E65C /* HomeViewController.swift */,
 				77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */,
@@ -248,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				77E74DCC23E240F000C6E65C /* Constants.swift */,
+				C09D24E5244824BA00FFA752 /* Stack.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -397,10 +400,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */,
-				0FCF9F08244828C40068C893 /* emojis.scnassets in Resources */,
+				0FA41248244A94CB00C5FA8E /* DetailTableViewCell.xib in Resources */,
+				0FA4124A244A94CC00C5FA8E /* emojis.scnassets in Resources */,
 				7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */,
 				7746C3BE23DE581D00DDC27C /* Assets.xcassets in Resources */,
-				0FCF9F102448D2720068C893 /* DetailTableViewCell.xib in Resources */,
 				7746C3BC23DE581C00DDC27C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,26 +566,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FA41249244A94CC00C5FA8E /* Emoji.swift in Sources */,
 				C0086EC22412B113001C4A22 /* Stroke.swift in Sources */,
 				77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */,
-				0FCF9F0C2448D23C0068C893 /* EmojiContentTableViewController.swift in Sources */,
 				7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */,
 				7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */,
 				77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */,
 				77E74DC823E222CF00C6E65C /* LoginViewController.swift in Sources */,
-				0FCF9F062447EF2D0068C893 /* ModeButton.swift in Sources */,
 				CE7C17E4243A4552005CE88A /* EditState.swift in Sources */,
 				77E74DCD23E240F000C6E65C /* Constants.swift in Sources */,
 				CE4CA7B0240E23B6005BEDC8 /* Database.swift in Sources */,
+				0FA41247244A94CB00C5FA8E /* ModeButton.swift in Sources */,
 				7746C3B723DE581C00DDC27C /* SceneDelegate.swift in Sources */,
+				C09D24E6244824BB00FFA752 /* Stack.swift in Sources */,
 				77E804CE23EB6AE300432DCD /* Experience.rcproject in Sources */,
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
 				C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */,
+				0FA411DE244A82EC00C5FA8E /* EmojiContentTableViewController.swift in Sources */,
 				CE7C17E0243A3D39005CE88A /* DrawState.swift in Sources */,
 				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
 				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
-				0FCF9F182448D3910068C893 /* Emoji.swift in Sources */,
-				0FCF9F0F2448D2720068C893 /* DetailTableViewCell.swift in Sources */,
+				0FA41246244A94CB00C5FA8E /* DetailTableViewCell.swift in Sources */,
 				C0086EC62412B492001C4A22 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

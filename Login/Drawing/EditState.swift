@@ -11,8 +11,7 @@ import SceneKit
 import ARKit
 
 
-class EditState: State{
-
+class EditState: State {
     var pencilKitCanvas =  PKCanvas()
     var sphereCallbackCanceled = false
     var colorStack = UIStackView()
@@ -20,9 +19,11 @@ class EditState: State{
     var eraseButton = UIButton()
     var changeColorButton = UIButton()
     var emojiButton = ModeButton()
-    var slider = UISlider()
+    var distanceSlider = UISlider()
     var distanceValue = UILabel()
     var distanceLabel = UILabel()
+    var widthSlider = UISlider()
+    var widthLabel = UILabel()
     var drawState = DrawState()
     var refSphere = SCNNode()
     var ObjNode : SCNNode!
@@ -33,17 +34,20 @@ class EditState: State{
     var eraserOn = false
     var EmojiOn = false
     weak var sceneView: ARSCNView!
+    var erasedStake = Stack<Stroke>()
+    var undoStake = Stack<Stroke>()
     
-    
-    func initialize(emojiButton: ModeButton, eraseButton: UIButton, slider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView) {
+    func initialize(emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
         self.emojiButton = emojiButton
         self.eraseButton = eraseButton
-        self.slider = slider
+        self.distanceSlider = distanceSlider
         self.distanceLabel = distanceLabel
         self.distanceValue = distanceValue
         self.drawState = drawState
         self.refSphere = refSphere
         self.sceneView = sceneView
+        self.widthSlider = widthSlider
+        self.widthLabel = widthLabel
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
         self.sceneView.automaticallyUpdatesLighting = false
@@ -55,11 +59,13 @@ class EditState: State{
         self.colorStack = colorStack
     }
     
+    
     override func enter() {
         isHidden = false
-        eraserOn = true
+       // eraserOn = true
     }
-
+    
+    
     override func exit() {
         isHidden = true
         eraserOn = false
@@ -79,30 +85,40 @@ class EditState: State{
     func eraseButtonTouchUp() {
         if eraserOn == true {
             eraserOn = false
+            eraseButton.backgroundColor = #colorLiteral(red: 0.9576401114, green: 0.7083515525, blue: 0.8352113366, alpha: 1)
         } else {
             eraserOn = true
+            eraseButton.backgroundColor = #colorLiteral(red: 0.9938386083, green: 0.3334249258, blue: 0.6164360046, alpha: 1)
         }
     }
-
-    func emojiButtonTouched(){
-        if(EmojiOn){
-            EmojiOn = false;
-        }else{
-            EmojiOn = true;
-        }
-    }
-
-    func sliderValueChange() {
+    
+    func distanceSliderChange() {
         sphereCallbackCanceled = true
         let defaultDistance : Float = 1
-        if(slider.value > 1){
-            drawState.distance = defaultDistance * powf(slider.value, 2)
+        if(distanceSlider.value > 1){
+            drawState.distance = defaultDistance * powf(distanceSlider.value, 2)
         } else {
-           drawState.distance = defaultDistance * slider.value
+            drawState.distance = defaultDistance * distanceSlider.value
         }
         distanceValue.text = String(format: "%.2f", drawState.distance)
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
+        drawState.sceneView.scene.rootNode.addChildNode(refSphere)
+
+    }
+    
+    func widthSliderChange() {
+        sphereCallbackCanceled = true
+        let defaultWidth : Float = 0.01
+        if(widthSlider.value > 1){
+            drawState.width = defaultWidth * powf(widthSlider.value, 4)
+        } else {
+           drawState.width = defaultWidth * widthSlider.value
+        }
+        widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
+        refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
+        refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         drawState.sceneView.scene.rootNode.addChildNode(refSphere)
 
     }
@@ -116,7 +132,14 @@ class EditState: State{
         }
     }
 
-
+    func emojiButtonTouched(){
+        if(EmojiOn){
+            EmojiOn = false;
+        }else{
+            EmojiOn = true;
+        }
+        print(EmojiOn)
+    }
 
     func setModel(){
         guard let emojiScene = SCNScene(named: pathName) else {
@@ -136,30 +159,35 @@ class EditState: State{
         return light
     }
 
+    func stateChangeEmoji(emoji: Emoji){
+        self.emoji = emoji
+        self.modelName = emoji.name + ".scn"
+        self.pathName = "emojis.scnassets/" + modelName
+        print("EditState:", emoji.name)
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !EmojiOn {
-            eraseNode(touches: touches)
-        }else{
-            if let touch = touches.first {
-                let touchPoint = touch.location(in: sceneView)
-                self.setModel()
-                let hits = sceneView.hitTest(touchPoint, types: .estimatedHorizontalPlane)
-                if hits.count >= 0, let firstHit = hits.first {
-                    print("Emoji touch happened at point: \(touchPoint)")
-                    ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
-                    emojiRootNode.light = emojiLighting()
-                    emojiRootNode.addChildNode(ObjNode)
-                }
-            }else {
-                 print("Unable to identify touches on any plane. Ignoring interaction...")
-            }
-        }
+                   eraseNode(touches: touches)
+               }else{
+                   if let touch = touches.first {
+                       let touchPoint = touch.location(in: sceneView)
+                       self.setModel()
+                       let hits = sceneView.hitTest(touchPoint, types: .estimatedHorizontalPlane)
+                       if hits.count >= 0, let firstHit = hits.first {
+                           print("Emoji touch happened at point: \(touchPoint)")
+                           ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
+                           emojiRootNode.light = emojiLighting()
+                           emojiRootNode.addChildNode(ObjNode)
+                       }
+                   }else {
+                        print("Unable to identify touches on any plane. Ignoring interaction...")
+                   }
+               }
     }
      
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !EmojiOn {
-            eraseNode(touches: touches)
-        }
+        eraseNode(touches: touches)
     }
     
     func eraseNode(touches: Set<UITouch>){
@@ -172,25 +200,30 @@ class EditState: State{
                 let touchPosition = touch.location(in: sceneView)
                 let hitTestResults = sceneView.hitTest(touchPosition)
                 for hitTestResult in hitTestResults{
-                    let node = hitTestResult.node
-                    node.removeFromParentNode()
+                    if let stroke = hitTestResult.node as? Stroke{
+                        stroke.removeFromParentNode()
+                        erasedStake.push(stroke)
+                    }
                 }
             }
         }
     }
-    func stateChangeEmoji(emoji: Emoji){
-          self.emoji = emoji
-          self.modelName = emoji.name + ".scn"
-          self.pathName = "emojis.scnassets/" + modelName
-          print("EditState:", emoji.name)
-      }
+    
+    func undoErase(){
+        if let stroke = erasedStake.pop(){
+            undoStake.push(stroke)
+            drawState.sceneView.scene.rootNode.addChildNode(stroke)
+        }
+    }
+    
+    func redoErase(){
+        if let stroke = undoStake.pop(){
+            stroke.removeFromParentNode()
+            erasedStake.push(stroke)
+        }
+        
+    }
+    
+    
+    
 }
-
-//extension EditState : ChangeEmojiDelegate{
-//    func changeEmoji(emoji: Emoji){
-//        self.emoji = emoji
-//        self.modelName = emoji.name + ".scn"
-//        self.pathName = "emojis.scnassets/" + modelName
-//        print("EditState:", emoji.name)
-//    }
-//}
