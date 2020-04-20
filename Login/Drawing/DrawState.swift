@@ -98,8 +98,8 @@ extension DrawState {
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
             let sphereNode = createSphere(position: touchLocation)
-            userRootNode!.light = addLighting()
             userRootNode?.addChildNode(sphereNode)
+            userRootNode?.light = addLighting()
         } else {
             print("can't get touch")
         }

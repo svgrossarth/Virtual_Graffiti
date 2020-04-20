@@ -11,11 +11,15 @@ import Foundation
 class Emoji {
     let name : String
     let ID :  String
-//    let Image_2D : String
+    var numSelected : Int
 
     init(name: String, ID: String) {
         self.name = name
         self.ID = ID
-//        self.Image_2D = name
+        numSelected = 1
+    }
+
+    func incrementNumSelected()  {
+        numSelected += 1
     }
 }

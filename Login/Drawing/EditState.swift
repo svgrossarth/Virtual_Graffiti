@@ -70,7 +70,7 @@ class EditState: State {
         isHidden = true
         eraserOn = false
         self.refSphere.removeFromParentNode()
-        
+        emojiButtonTouched()
         isHidden = false
     }
     
@@ -88,6 +88,9 @@ class EditState: State {
             eraseButton.backgroundColor = #colorLiteral(red: 0.9576401114, green: 0.7083515525, blue: 0.8352113366, alpha: 1)
         } else {
             eraserOn = true
+            if EmojiOn{
+                emojiButtonTouched() //if eraser is on, deactivate emoji
+            }
             eraseButton.backgroundColor = #colorLiteral(red: 0.9938386083, green: 0.3334249258, blue: 0.6164360046, alpha: 1)
         }
     }
@@ -135,10 +138,14 @@ class EditState: State {
     func emojiButtonTouched(){
         if(EmojiOn){
             EmojiOn = false;
+            emojiButton.activateButton(bool: false)
         }else{
             EmojiOn = true;
+            emojiButton.activateButton(bool: true)
+            if eraserOn {
+                eraseButtonTouchUp()// if emoji is on, deactivate eraser
+            }
         }
-        print(EmojiOn)
     }
 
     func setModel(){
@@ -167,27 +174,29 @@ class EditState: State {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !EmojiOn {
-                   eraseNode(touches: touches)
-               }else{
-                   if let touch = touches.first {
-                       let touchPoint = touch.location(in: sceneView)
-                       self.setModel()
-                       let hits = sceneView.hitTest(touchPoint, types: .estimatedHorizontalPlane)
-                       if hits.count >= 0, let firstHit = hits.first {
-                           print("Emoji touch happened at point: \(touchPoint)")
-                           ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
-                           emojiRootNode.light = emojiLighting()
-                           emojiRootNode.addChildNode(ObjNode)
-                       }
-                   }else {
-                        print("Unable to identify touches on any plane. Ignoring interaction...")
-                   }
-               }
+        if EmojiOn {
+            if let touch = touches.first {
+                let touchPoint = touch.location(in: sceneView)
+                self.setModel()
+                let hits = sceneView.hitTest(touchPoint, types: .estimatedHorizontalPlane)
+                if hits.count >= 0, let firstHit = hits.first {
+                    print("Emoji touch happened at point: \(touchPoint)")
+                    ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
+                    emojiRootNode.light = emojiLighting()
+                    emojiRootNode.addChildNode(ObjNode)
+                }
+            }else {
+                 print("Unable to identify touches on any plane. Ignoring interaction...")
+            }
+        }else if !EmojiOn{
+            eraseNode(touches: touches)
+        }
     }
      
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        eraseNode(touches: touches)
+        if eraserOn{
+            eraseNode(touches: touches)
+        }
     }
     
     func eraseNode(touches: Set<UITouch>){

@@ -155,7 +155,7 @@ class HomeViewController: UIViewController {
 
     @IBAction func emojiButtonPressed(_ sender: Any) {
         print("emojiButtonPressed")
-         editState.emojiButtonTouched()
+        editState.emojiButtonTouched()
     }
 
 
@@ -237,7 +237,7 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     if !self.doubleTapHappened {
                         print("tap count is 1")
-                        if !self.editState.eraserOn {
+                        if !self.editState.eraserOn && !self.editState.EmojiOn {
                             self.drawState.touchesBegan(touches, with: event)
                         } else {
                             self.editState.touchesBegan(touches, with: event)
@@ -258,7 +258,7 @@ class HomeViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //state.touchesMoved(touches, with: event)
         print("touches moved")
-        if !editState.eraserOn {
+        if !editState.eraserOn && !editState.EmojiOn {
             drawState.touchesMoved(touches, with: event)
         } else {
             editState.touchesMoved(touches, with: event)
