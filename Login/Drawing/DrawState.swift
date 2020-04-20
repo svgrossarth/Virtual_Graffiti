@@ -14,7 +14,6 @@ import CoreLocation
 
 class DrawState: State {
     var sceneView = SceneLocationView()
-    var initialized : Bool = false
     
     var currentTile : String = ""
     
@@ -33,6 +32,7 @@ class DrawState: State {
     func initialize(_sceneView: SceneLocationView!) {
         _initializeSceneView(_sceneView: _sceneView)
         initializeUserRootNode()
+        load()
     }
     
     
@@ -50,8 +50,6 @@ class DrawState: State {
         userRootNode = SecondTierRoot(location: location)
         userRootNode?.name = "(\(location.coordinate.latitude), \(location.coordinate.longitude)), \(now)"
         sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode!)
-
-        load()
     }
     
     
@@ -179,22 +177,26 @@ extension DrawState {
 
     func load() {
         let db = Database()
-        
-        guard let location = sceneView.sceneLocationManager.currentLocation else { return }
-        
+
+        guard let location = sceneView.sceneLocationManager.currentLocation
+            else { // No location, try again in a second
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: load)
+                return
+        }
+
         currentTile = db.getTile(location: location)
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
-//            for node in self.sceneView.scene.rootNode.childNodes {
-//                node.removeFromParentNode()
-//            }
+            // Reset scene
+            self.sceneView.removeAllNodes()
 
-            for node in retrievedNodes {
-//                let currentAngle = deg2rad(self.heading.trueHeading)
-//                let angleOfRotation = currentAngle - node.angleToNorth
-//                node.rotation = SCNVector4Make(0, 1, 0, Float(angleOfRotation))
-
-                self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: node)
-            }
+            // Add nodes to view. Done asynchronously a VERY short time after the command to remove all nodes because removeAllNodes() will also remove the new nodes
+            // 1 Millisecond delay still causes a flicker
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1), execute: {
+                self.initializeUserRootNode()
+                for node in retrievedNodes {
+                    self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: node)
+                }
+            })
         })
     }
 }

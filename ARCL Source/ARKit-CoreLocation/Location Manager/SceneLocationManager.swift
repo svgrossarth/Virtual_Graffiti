@@ -80,7 +80,7 @@ public final class SceneLocationManager {
         removeOldLocationEstimates()
 
         sceneLocationDelegate?.confirmLocationOfDistantLocationNodes()
-        //sceneLocationDelegate?.updatePositionAndScaleOfLocationNodes()
+//        sceneLocationDelegate?.updatePositionAndScaleOfLocationNodes() // Normally uncommented, but doing so would cause the drawings to flicker all around the scene
     }
 
     ///Adds a scene location estimate based on current time, camera position and location from location manager
