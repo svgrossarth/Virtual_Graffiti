@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var distanceValue: UILabel!
     @IBOutlet weak var distanceLable: UILabel!
-    @IBOutlet weak var sceneView: ARSCNView!
+    @IBOutlet weak var sceneView: SceneLocationView!
     
     
     override func viewDidLoad() {

@@ -38,14 +38,14 @@ class Database {
        // TODO: Save drawing!
        var dataToSave: [String: Any] = [:]
        do{
-           let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
-           let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
-           let nodeAngle = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.angleToNorth, requiringSecureCoding: false)
+           let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as LocationNode, requiringSecureCoding: false)
+           let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location!, requiringSecureCoding: false)
+           //let nodeAngle = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.angleToNorth, requiringSecureCoding: false)
 
 
            dataToSave[DICT_KEY_NODE] = nodeData
            dataToSave[DICT_KEY_LOCATION] = nodeLocation
-           dataToSave[DICT_KEY_ANGLE] = nodeAngle
+           //dataToSave[DICT_KEY_ANGLE] = nodeAngle
 
            docRef.setData(dataToSave) { (error) in
                if let error = error {
@@ -105,15 +105,15 @@ class Database {
                                print("can't convert to data")
                                return
                            }
-                           guard let nodeAngle = dictionary[self.DICT_KEY_ANGLE] as? Data else{
-                               print("can't convert to data")
-                               return
-                           }
+//                           guard let nodeAngle = dictionary[self.DICT_KEY_ANGLE] as? Data else{
+//                               print("can't convert to data")
+//                               return
+//                           }
                            let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
                            let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
-                           let newAngle = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeAngle) as! Double
+                           //let newAngle = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeAngle) as! Double
                            newNode.location = newLocation
-                           newNode.angleToNorth = newAngle
+                           //newNode.angleToNorth = newAngle
                            nodes.append(newNode)
                        } catch {
                            print("Could not pull down node")

@@ -10,25 +10,21 @@ import Foundation
 import SceneKit
 import CoreLocation
 
-class SecondTierRoot : SCNNode{
-    var location : CLLocation
-    var angleToNorth : Double = 0
+class SecondTierRoot : LocationNode {
+    //var angleToNorth : Double = 0
     
     enum Keys: String {
       case location = "Location"
       case node = "node"
     }
     
-    init(location : CLLocation, angleToNorth : Double) {
-        self.location = location
-        self.angleToNorth = angleToNorth
-        super.init()
+    init(location : CLLocation) {
+        super.init(location: location)
+        //self.angleToNorth = angleToNorth
     }
     
     required init?(coder: NSCoder) {
-
-         //self.location = CLLocation()
-        self.location = CLLocation()
+        //self.location = CLLocation()
         //let node = coder.decodeObject(forKey: Keys.node.rawValue) as! SCNNode
         super.init(coder: coder)
 
