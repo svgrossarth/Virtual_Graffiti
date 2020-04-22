@@ -6,6 +6,12 @@
 //  Copyright © 2020 Spencer Grossarth. All rights reserved.
 //
 
+//Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
+//Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
+//Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
 import UIKit
 import SceneKit
 import ARKit
@@ -18,6 +24,9 @@ class HomeViewController: UIViewController {
     var state : State = State()
     var refSphere = SCNNode()
     var sphereCallbackCanceled = false
+    var doubleTapHappened = false
+    var EmojiOn : Bool = false
+    var emoji = Emoji(name: "bandage", ID: "Group50555");
     
     @IBOutlet weak var colorStack: UIStackView!
     @IBOutlet weak var redButton: UIButton!
@@ -28,45 +37,62 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var eraseButton: UIButton!
     @IBOutlet weak var changeColorButton: UIButton!
-    @IBOutlet weak var changeStateButton: UIButton!
     
-    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var distanceValue: UILabel!
     @IBOutlet weak var distanceLable: UILabel!
     @IBOutlet weak var sceneView: SceneLocationView!
+    @IBOutlet weak var widthSlider: UISlider!
+    @IBOutlet weak var widthLabel: UILabel!
+    
+
+    @IBOutlet weak var undo: UIButton!
+    @IBOutlet weak var redo: UIButton!
+
+    @IBOutlet weak var changeEmojiButton: UIButton!
+    @IBOutlet weak var emojiButton: ModeButton!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.addSubview(drawState)
         drawState.initialize(_sceneView: sceneView)
         
         state = drawState
         state.enter()
-        sliderUISetup()
+        uiSetup()
         view.addSubview(editState)
-        editState.initialize(eraseButton: eraseButton, slider: slider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView)
+        editState.initialize(emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
-        
-        view.bringSubviewToFront(changeStateButton)
     }
     
-    func sliderUISetup () {
-        slider.transform = CGAffineTransform(rotationAngle: .pi / -2)
-        slider.minimumValue = 0.2
-        slider.maximumValue = 2
-        slider.value = 1
-        distanceValue.text = String(format: "%.2f", slider.value)
-        self.view.bringSubviewToFront(slider)
+    func uiSetup () {
+        distanceSlider.transform = CGAffineTransform(rotationAngle: .pi / -2)
+        distanceSlider.minimumValue = 0.2
+        distanceSlider.maximumValue = 2
+        distanceSlider.value = 1
+        distanceValue.text = String(format: "%.2f", distanceSlider.value)
+        widthSlider.minimumValue = 0.2
+        widthSlider.maximumValue = 2
+        widthSlider.value = 1
+        widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        self.view.bringSubviewToFront(distanceSlider)
         self.view.bringSubviewToFront(distanceLable)
         self.view.bringSubviewToFront(distanceValue)
         self.view.bringSubviewToFront(changeColorButton)
         self.view.bringSubviewToFront(eraseButton)
         self.view.bringSubviewToFront(colorStack)
+        self.view.bringSubviewToFront(widthLabel)
+        self.view.bringSubviewToFront(widthSlider)
+        self.view.bringSubviewToFront(undo)
+        self.view.bringSubviewToFront(redo)
+        self.view.bringSubviewToFront(emojiButton)
+        self.view.bringSubviewToFront(changeEmojiButton)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -81,6 +107,7 @@ class HomeViewController: UIViewController {
         state.enter()
         if state == drawState {
             print("Entered Draw State")
+            EmojiOn = false
         }
         else {
             print("Entered Edit State")
@@ -119,36 +146,81 @@ class HomeViewController: UIViewController {
     @IBAction func eraseButtonTouchUp(_ sender: Any) {
         editState.eraseButtonTouchUp()
     }
+
+    @IBAction func changeEmojiButtonPressed(_ sender: Any) {
+        let controller = EmojiContentTableViewController()
+        controller.delegate = self
+        self.present(controller, animated: true, completion: nil)
+    }
+
+    @IBAction func emojiButtonPressed(_ sender: Any) {
+        print("emojiButtonPressed")
+        editState.emojiButtonTouched()
+    }
+
+
     
     func changeHiddenOfEditMode(){
-        if slider.isHidden {
-            slider.isHidden = false
+        if distanceSlider.isHidden {
+            distanceSlider.isHidden = false
             distanceValue.isHidden = false
             distanceLable.isHidden = false
             changeColorButton.isHidden = false
             eraseButton.isHidden = false
+            widthSlider.isHidden = false
+            widthLabel.isHidden = false
+            undo.isHidden = false
+            redo.isHidden = false
+            emojiButton.isHidden = false
+            changeEmojiButton.isHidden = false
         } else {
-            slider.isHidden = true
+            distanceSlider.isHidden = true
             distanceValue.isHidden = true
             distanceLable.isHidden = true
             changeColorButton.isHidden = true
             eraseButton.isHidden = true
             colorStack.isHidden = true
+            widthSlider.isHidden = true
+            widthLabel.isHidden = true
+            undo.isHidden = true
+            redo.isHidden = true
+            emojiButton.isHidden = true
+            changeEmojiButton.isHidden = true
         }
     }
     
-    @IBAction func sliderValueChange(_ sender: Any) {
-        editState.sliderValueChange()
+    @IBAction func undoButton(_ sender: Any) {
+        editState.undoErase()
     }
     
+    @IBAction func redoButton(_ sender: Any) {
+        editState.redoErase()
+    }
 
-    @IBAction func sliderTouchUpInside(_ sender: Any) {
+    @IBAction func distanceSliderValueChange(_ sender: Any) {
+        editState.distanceSliderChange()
+    }
+
+    @IBAction func distanceSliderTouchUpInside(_ sender: Any) {
         editState.removeSphere()
     }
     
-    @IBAction func sliderTouchUpOutside(_ sender: Any) {
+    @IBAction func distanceSliderTouchUpOutside(_ sender: Any) {
         editState.removeSphere()
     }
+    
+    @IBAction func widthSliderValueChange(_ sender: Any) {
+        editState.widthSliderChange()
+    }
+
+    @IBAction func widthSliderTouchUpInside(_ sender: Any) {
+        editState.removeSphere()
+    }
+
+    @IBAction func widthSliderTouchUpOutside(_ sender: Any) {
+        editState.removeSphere()
+    }
+    
     
     func createReferenceSphere() -> SCNNode {
         let sphere = SCNSphere(radius: 0.1)
@@ -160,15 +232,46 @@ class HomeViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state.touchesBegan(touches, with: event)
+        if let touch = touches.first{
+            if touch.tapCount == 1 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    if !self.doubleTapHappened {
+                        print("tap count is 1")
+                        if !self.editState.eraserOn && !self.editState.EmojiOn {
+                            self.drawState.touchesBegan(touches, with: event)
+                        } else {
+                            self.editState.touchesBegan(touches, with: event)
+                        }
+                    } else {
+                        print("tap count is 2")
+                        self.changeState()
+                    }
+                    self.doubleTapHappened = false
+                }
+            } else if touch.tapCount == 2 {
+                doubleTapHappened = true
+                print("touches began double tap")
+            }
+        }
     }
-     
+//
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state.touchesMoved(touches, with: event)
+        //state.touchesMoved(touches, with: event)
+        print("touches moved")
+        if !editState.eraserOn && !editState.EmojiOn {
+            drawState.touchesMoved(touches, with: event)
+        } else {
+            editState.touchesMoved(touches, with: event)
+        }
     }
-     
+//
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state.touchesEnded(touches, with: event)
+   //     state.touchesEnded(touches, with: event)
+        if !editState.eraserOn {
+            drawState.touchesEnded(touches, with: event)
+        } else {
+            editState.touchesEnded(touches, with: event)
+        }
     }
     
     //MARK: - iOS override properties
@@ -181,8 +284,7 @@ class HomeViewController: UIViewController {
     }
     
 
-
-    @IBAction func changeStateTouchUpInside(_ sender: Any) {
+    func changeState() {
         if state == drawState {
             changeState(nextState: editState)
         }
@@ -190,6 +292,7 @@ class HomeViewController: UIViewController {
             changeState(nextState: drawState)
         }
     }
+    
 }
 
 // debug purposes
@@ -219,5 +322,16 @@ class State : UIView {
      
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Override
+    }
+}
+
+extension HomeViewController : ChangeEmojiDelegate{
+    func changeEmoji(emoji: Emoji){
+        self.dismiss(animated: true)
+        self.emoji = emoji
+//        self.modelName = emoji.name + ".scn"
+//        self.pathName = "emojis.scnassets/" + modelName
+        editState.stateChangeEmoji(emoji: emoji)
+        print("home:", emoji.name)
     }
 }

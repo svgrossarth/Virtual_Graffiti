@@ -21,11 +21,12 @@ class DrawState: State {
     
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
-    var touchMovedCalled = false
+    var touchMovedFirst = true
     var lineBetweenNearFar : SCNVector3?
     var initialNearFarLine : SCNVector3?
     var userRootNode : SecondTierRoot?
     var distance : Float = 1
+    var width : Float = 0.01
     let sphereRadius : CGFloat = 0.01
     var drawingColor: UIColor = .systemBlue
     
@@ -64,7 +65,8 @@ class DrawState: State {
     
     func _initializeSceneView(_sceneView: SceneLocationView!) {
         sceneView = _sceneView
-        sceneView.showsStatistics = true
+        addSubview(sceneView)
+       // sceneView.showsStatistics = true
         let scene = SCNScene()
         sceneView.scene = scene
         sceneView.run()
@@ -87,22 +89,33 @@ extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let rootNode = userRootNode, let singleTouch = touches.first {
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor)
-            rootNode.addChildNode(currentStroke!)
+            let sphereNode = createSphere(position: touchLocation)
+            rootNode.addChildNode(sphereNode)
+            rootNode.light = addLighting()
         } else {
             print("can't get touch")
         }
     }
-     
+     func addLighting() ->SCNLight{
+            let light = SCNLight()
+            light.type = SCNLight.LightType.ambient
+            light.color = UIColor.white
+            return light
+        }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        touchMovedCalled = true
         if let singleTouch = touches.first{
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            guard let firstNearFarLine = initialNearFarLine else { return }
-            guard let nearFar = lineBetweenNearFar else { return }
-            currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
-            currentStroke?.previousPoint = touchLocation
+            if touchMovedFirst {
+                touchMovedFirst =  false
+                currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
+                userRootNode?.addChildNode(currentStroke!)
+            } else {
+                guard let firstNearFarLine = initialNearFarLine else { return }
+                guard let nearFar = lineBetweenNearFar else { return }
+                currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
+                currentStroke?.previousPoint = touchLocation
+            }
         } else {
             print("can't get touch")
         }
@@ -110,19 +123,9 @@ extension DrawState {
      
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //Database().saveDrawing(location: location, userRootNode: userRootNode!)
-        if !touchMovedCalled {
-            if let rootNode = userRootNode, let singleTouch = touches.first{
-                let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-                let sphereNode = createSphere(position: touchLocation)
-                rootNode.addChildNode(sphereNode)
-            } else {
-                print("can't get touch")
-            }
-        }
+        touchMovedFirst = true
         initialNearFarLine = nil
-        touchMovedCalled = false
-        save()
+//        save()
     }
     
     func touchLocationIn3D (touchLocation2D: CGPoint) -> SCNVector3 {
@@ -141,30 +144,6 @@ extension DrawState {
         return SCNVector3(pointIn3dNear.x + resizedVector.x, pointIn3dNear.y + resizedVector.y, pointIn3dNear.z + resizedVector.z)
     }
 }
-
-//
-//extension DrawState: ARSCNViewDelegate {
-//
-//}
-//
-//
-//extension DrawState: ARSessionDelegate {
-//    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-//         cameraTrans = frame.camera.transform * simd_float4(x: 1, y: 1, z: 1, w: 0)
-//    }
-//
-//    func session(_ session: ARSession, didFailWithError error: Error) {
-//        // Present an error message to the user
-//    }
-//
-//    func sessionWasInterrupted(_ session: ARSession) {
-//        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-//    }
-//
-//    func sessionInterruptionEnded(_ session: ARSession) {
-//        // Reset tracking and/or remove existing anchors if consistent tracking is required
-//    }
-//}
 
 
 extension DrawState {

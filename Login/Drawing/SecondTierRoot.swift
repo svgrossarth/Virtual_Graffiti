@@ -29,4 +29,5 @@ class SecondTierRoot : LocationNode {
         super.init(coder: coder)
 
         //.fatalError("init(coder:) has not been implemented")
-    }}
+    }
+}

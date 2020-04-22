@@ -76,11 +76,11 @@ extension PKCanvas: PKToolPickerObserver {
 
     func toolPickerSelectedToolDidChange(_ toolPicker: PKToolPicker) {
         print("toolPickerSelectedToolDidChange")
-        if let tool = toolPicker.selectedTool as? PKInkingTool{
-            let inverseColorRGB = tool.color.rgb()
-            let inverseColor = UIColor(red: CGFloat(inverseColorRGB[0]), green: CGFloat(inverseColorRGB[1]), blue: CGFloat(inverseColorRGB[2]), alpha: CGFloat(inverseColorRGB[3]))
-            makeColor.ChangeColor(newColor: inverseColor)
-        }
+//        if let tool = toolPicker.selectedTool as? PKInkingTool{
+//            let inverseColorRGB = tool.color.rgb()
+//            let inverseColor = UIColor(red: CGFloat(inverseColorRGB[0]), green: CGFloat(inverseColorRGB[1]), blue: CGFloat(inverseColorRGB[2]), alpha: CGFloat(inverseColorRGB[3]))
+//            makeColor.ChangeColor(newColor: inverseColor)
+//        }
         if let tool = toolPicker.selectedTool as? PKEraserTool {
             if let editState = self.pencilKitDelegate as? EditState {
                 editState.eraserOn = true
@@ -125,50 +125,3 @@ class MakeColor{
     }
 
 }
-
-extension UIColor {
-
-    func rgb() -> [CGFloat] {
-        var fRed : CGFloat = 0
-        var fGreen : CGFloat = 0
-        var fBlue : CGFloat = 0
-        var fAlpha: CGFloat = 0
-        if self.getRed(&fRed, green: &fGreen, blue: &fBlue, alpha: &fAlpha) {
-            
-            let iRed = (Int(fRed * 255.0))
-            let iGreen = (Int(fGreen * 255.0))
-            let iBlue = (Int(fBlue * 255.0))
-            _ = Int(fAlpha * 255.0)
-            
-            print("red ", iRed)
-            print("blue ", iGreen)
-            print("green ", iBlue)
-            
-            if iRed == iGreen && iGreen == iBlue {
-                print("they are equal")
-                let r = (255 - (CGFloat(fRed * 255.0)))/255
-                let g = (255 - (CGFloat(fGreen * 255.0)))/255
-                let b = (255 - (CGFloat(fBlue * 255.0)))/255
-                let a = CGFloat(fAlpha * 255.0)/255
-                
-                let rgb = [r, g, b, a]
-                return rgb
-            } else {
-                let r = (CGFloat(fRed * 255.0))/255
-                let g = (CGFloat(fGreen * 255.0))/255
-                let b = (CGFloat(fBlue * 255.0))/255
-                let a = CGFloat(fAlpha * 255.0)/255
-                
-                let rgb = [r, g, b, a]
-                return rgb
-            }
-
-            //  (Bits 24-31 are alpha, 16-23 are red, 8-15 are green, 0-7 are blue).
-
-        } else {
-            // Could not extract RGBA components:
-            return []
-        }
-    }
-}
-

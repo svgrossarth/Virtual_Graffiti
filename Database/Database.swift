@@ -52,7 +52,7 @@ class Database {
                    print("Error saving drawing: \(error.localizedDescription)")
                }
                else {
-                   print("Data has been saved at \(docPath)")
+                   //print("Data has been saved at \(docPath)")
                }
            }
        } catch{

@@ -83,7 +83,7 @@ void sum(float *val0, float *val1);
   return [[NSString stringWithFormat:@"%@ | %@, %@", appName, screenName, text] lowercaseString];
 }
 
-+ (float *)getDenseFeatures:(NSDictionary *)viewHierarchy
++ (nullable float *)getDenseFeatures:(NSDictionary *)viewHierarchy
 {
   if (!_rules) {
     return nil;
@@ -296,10 +296,15 @@ void sum(float *val0, float *val1) {
   NSString *hint = [node[VIEW_HIERARCHY_HINT_KEY] lowercaseString];
 
   if (text.length > 0) {
-    [buttonTextString appendString: text];
+    [buttonTextString appendFormat:@"%@ ", text];
   }
   if (hint.length > 0) {
-    [buttonHintString appendString: hint];
+    [buttonHintString appendFormat:@"%@ ", hint];
+  }
+
+  NSMutableArray<NSMutableDictionary<NSString *, id> *> *childviews = node[VIEW_HIERARCHY_CHILD_VIEWS_KEY];
+  for (NSMutableDictionary<NSString *, id> *child in childviews) {
+    [self update:child text:buttonTextString hint:buttonHintString];
   }
 }
 
