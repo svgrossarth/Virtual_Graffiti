@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FA411DE244A82EC00C5FA8E /* EmojiContentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA411DD244A82EC00C5FA8E /* EmojiContentTableViewController.swift */; };
+		0F0E0E89244E95F900AC6004 /* EmojiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E88244E95F900AC6004 /* EmojiViewController.swift */; };
+		0F0E0E8B244E98E300AC6004 /* RecentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E8A244E98E300AC6004 /* RecentCollectionViewCell.swift */; };
+		0F0E0E8D244E993200AC6004 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */; };
+		0F0E0E932450F50300AC6004 /* RecentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E922450F50300AC6004 /* RecentHeaderView.swift */; };
+		0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */; };
 		0FA41246244A94CB00C5FA8E /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */; };
 		0FA41247244A94CB00C5FA8E /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41242244A94CB00C5FA8E /* ModeButton.swift */; };
 		0FA41248244A94CB00C5FA8E /* DetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */; };
@@ -61,7 +65,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0FA411DD244A82EC00C5FA8E /* EmojiContentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiContentTableViewController.swift; sourceTree = "<group>"; };
+		0F0E0E88244E95F900AC6004 /* EmojiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiViewController.swift; sourceTree = "<group>"; };
+		0F0E0E8A244E98E300AC6004 /* RecentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecentCollectionViewCell.swift; path = Login/Emoji/RecentCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
+		0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		0F0E0E922450F50300AC6004 /* RecentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecentHeaderView.swift; path = Login/RecentHeaderView.swift; sourceTree = SOURCE_ROOT; };
+		0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeaderView.swift; sourceTree = "<group>"; };
 		0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
 		0FA41242244A94CB00C5FA8E /* ModeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
 		0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailTableViewCell.xib; sourceTree = "<group>"; };
@@ -142,8 +150,12 @@
 		0FA41240244A94CB00C5FA8E /* Emoji */ = {
 			isa = PBXGroup;
 			children = (
+				0F0E0E922450F50300AC6004 /* RecentHeaderView.swift */,
+				0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */,
 				0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */,
 				0FA41242244A94CB00C5FA8E /* ModeButton.swift */,
+				0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */,
+				0F0E0E8A244E98E300AC6004 /* RecentCollectionViewCell.swift */,
 				0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */,
 				0FA41244244A94CB00C5FA8E /* Emoji.swift */,
 				0FA41245244A94CB00C5FA8E /* emojis.scnassets */,
@@ -238,10 +250,10 @@
 			children = (
 				7746C3B823DE581C00DDC27C /* ViewController.swift */,
 				77E74DC523E222C100C6E65C /* SignUpViewController.swift */,
-				0FA411DD244A82EC00C5FA8E /* EmojiContentTableViewController.swift */,
 				77E74DC723E222CF00C6E65C /* LoginViewController.swift */,
 				77E74DC923E222E700C6E65C /* HomeViewController.swift */,
 				77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */,
+				0F0E0E88244E95F900AC6004 /* EmojiViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -568,6 +580,7 @@
 			files = (
 				0FA41249244A94CC00C5FA8E /* Emoji.swift in Sources */,
 				C0086EC22412B113001C4A22 /* Stroke.swift in Sources */,
+				0F0E0E8D244E993200AC6004 /* MenuCollectionViewCell.swift in Sources */,
 				77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */,
 				7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */,
 				7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */,
@@ -580,12 +593,15 @@
 				7746C3B723DE581C00DDC27C /* SceneDelegate.swift in Sources */,
 				C09D24E6244824BB00FFA752 /* Stack.swift in Sources */,
 				77E804CE23EB6AE300432DCD /* Experience.rcproject in Sources */,
+				0F0E0E8B244E98E300AC6004 /* RecentCollectionViewCell.swift in Sources */,
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
 				C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */,
-				0FA411DE244A82EC00C5FA8E /* EmojiContentTableViewController.swift in Sources */,
 				CE7C17E0243A3D39005CE88A /* DrawState.swift in Sources */,
+				0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */,
 				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
+				0F0E0E89244E95F900AC6004 /* EmojiViewController.swift in Sources */,
 				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
+				0F0E0E932450F50300AC6004 /* RecentHeaderView.swift in Sources */,
 				0FA41246244A94CB00C5FA8E /* DetailTableViewCell.swift in Sources */,
 				C0086EC62412B492001C4A22 /* Math.swift in Sources */,
 			);

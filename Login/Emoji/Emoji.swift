@@ -8,18 +8,16 @@
 
 import Foundation
 
-class Emoji {
+class Emoji:Equatable {
+    static func == (lhs: Emoji, rhs: Emoji) -> Bool {
+        return lhs.name == rhs.name && lhs.ID == rhs.ID
+    }
+
     let name : String
     let ID :  String
-    var numSelected : Int
 
     init(name: String, ID: String) {
         self.name = name
         self.ID = ID
-        numSelected = 1
-    }
-
-    func incrementNumSelected()  {
-        numSelected += 1
     }
 }

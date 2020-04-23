@@ -36,6 +36,7 @@ class EditState: State {
     weak var sceneView: ARSCNView!
     var erasedStake = Stack<Stroke>()
     var undoStake = Stack<Stroke>()
+    var recentUsedEmoji = [Emoji]()
     
     func initialize(emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
         self.emojiButton = emojiButton
@@ -62,6 +63,7 @@ class EditState: State {
     
     override func enter() {
         isHidden = false
+        LoadRecentEmoji()
        // eraserOn = true
     }
     
@@ -72,6 +74,7 @@ class EditState: State {
         self.refSphere.removeFromParentNode()
         emojiButtonTouched()
         isHidden = false
+        saveRecentEmoji()
     }
     
     func changeColor() {
@@ -135,6 +138,7 @@ class EditState: State {
         }
     }
 
+    //MARK: Emoji Functions
     func emojiButtonTouched(){
         if(EmojiOn){
             EmojiOn = false;
@@ -146,6 +150,14 @@ class EditState: State {
                 eraseButtonTouchUp()// if emoji is on, deactivate eraser
             }
         }
+    }
+
+    func saveRecentEmoji(){
+        //TODO:
+    }
+
+    func LoadRecentEmoji(){
+        //TODO:
     }
 
     func setModel(){
@@ -172,6 +184,20 @@ class EditState: State {
         self.pathName = "emojis.scnassets/" + modelName
         print("EditState:", emoji.name)
     }
+
+    func getEmojiList() -> [Emoji]{
+        return recentUsedEmoji
+    }
+
+    func updataEmojiList(){
+        if recentUsedEmoji.contains(emoji) {
+             recentUsedEmoji.remove(at: recentUsedEmoji.firstIndex(of: emoji)!)
+        }else if recentUsedEmoji.count == 5{
+            recentUsedEmoji.popLast()
+        }
+        recentUsedEmoji.insert(emoji, at: 0)
+        print(recentUsedEmoji.count)
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if EmojiOn {
@@ -184,6 +210,7 @@ class EditState: State {
                     ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
                     emojiRootNode.light = emojiLighting()
                     emojiRootNode.addChildNode(ObjNode)
+                    updataEmojiList()
                 }
             }else {
                  print("Unable to identify touches on any plane. Ignoring interaction...")

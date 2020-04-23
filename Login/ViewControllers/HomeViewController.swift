@@ -108,6 +108,7 @@ class HomeViewController: UIViewController {
         if state == drawState {
             print("Entered Draw State")
             EmojiOn = false
+            emojiButton.activateButton(bool: false)
         }
         else {
             print("Entered Edit State")
@@ -147,10 +148,20 @@ class HomeViewController: UIViewController {
         editState.eraseButtonTouchUp()
     }
 
-    @IBAction func changeEmojiButtonPressed(_ sender: Any) {
-        let controller = EmojiContentTableViewController()
-        controller.delegate = self
-        self.present(controller, animated: true, completion: nil)
+//    @IBAction func changeEmojiButtonPressed(_ sender: Any) {
+//        let controller = EmojiViewController()
+//        controller.delegate = self
+////        self.dismiss(animated: true, completion:{
+//            print("present")
+//            self.present(controller, animated: true, completion: nil)
+////        })
+//    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+           if let newVC = segue.destination as? EmojiViewController {
+               emoji = newVC.selectedEmoji
+               newVC.delegate = self
+           }
     }
 
     @IBAction func emojiButtonPressed(_ sender: Any) {
@@ -329,9 +340,10 @@ extension HomeViewController : ChangeEmojiDelegate{
     func changeEmoji(emoji: Emoji){
         self.dismiss(animated: true)
         self.emoji = emoji
-//        self.modelName = emoji.name + ".scn"
-//        self.pathName = "emojis.scnassets/" + modelName
         editState.stateChangeEmoji(emoji: emoji)
         print("home:", emoji.name)
+    }
+    func getUpdatedList() ->[Emoji] {
+        return editState.getEmojiList()
     }
 }

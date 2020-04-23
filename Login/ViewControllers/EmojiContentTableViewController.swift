@@ -10,15 +10,15 @@
 import UIKit
 import SceneKit
 
-protocol ChangeEmojiDelegate {
-    func changeEmoji(emoji: Emoji)
-}
+//protocol ChangeEmojiDelegate {
+//    func changeEmoji(emoji: Emoji)
+//}
 
 class EmojiContentTableViewController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating{
 
 
 
-    var delegate : ChangeEmojiDelegate?
+//    var delegate : ChangeEmojiDelegate?
 
     var Models = [Emoji]()
     var filteredModelName:[Emoji] = []
@@ -80,7 +80,7 @@ class EmojiContentTableViewController: UITableViewController, UISearchBarDelegat
      override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedEmoji = Models[indexPath.row]
         print("table selected:", selectedEmoji.name)
-        delegate?.changeEmoji(emoji: selectedEmoji)
+//        delegate?.changeEmoji(emoji: selectedEmoji)
         self.dismiss(animated: true, completion: nil)
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
