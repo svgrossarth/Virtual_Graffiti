@@ -18,10 +18,6 @@
 
 #if defined(__APPLE__)
 
-#if TARGET_OS_IOS || TARGET_OS_TV
-#import <UIKit/UIKit.h>
-#endif
-
 #include <SystemConfiguration/SystemConfiguration.h>
 #include <dispatch/dispatch.h>
 #include <netinet/in.h>
@@ -87,7 +83,7 @@ class ConnectivityMonitorApple : public ConnectivityMonitor {
       return;
     }
 
-    SCNetworkReachabilityFlags flags{};
+    SCNetworkReachabilityFlags flags;
     if (SCNetworkReachabilityGetFlags(reachability_, &flags)) {
       SetInitialStatus(ToNetworkStatus(flags));
     }
@@ -111,23 +107,9 @@ class ConnectivityMonitorApple : public ConnectivityMonitor {
       LOG_DEBUG("Couldn't set reachability queue");
       return;
     }
-
-#if TARGET_OS_IOS || TARGET_OS_TV
-    this->observer_ = [[NSNotificationCenter defaultCenter]
-        addObserverForName:UIApplicationWillEnterForegroundNotification
-                    object:nil
-                     queue:[NSOperationQueue mainQueue]
-                usingBlock:^(NSNotification* note) {
-                  this->OnEnteredForeground();
-                }];
-#endif
   }
 
   ~ConnectivityMonitorApple() {
-#if TARGET_OS_IOS || TARGET_OS_TV
-    [[NSNotificationCenter defaultCenter] removeObserver:this->observer_];
-#endif
-
     if (reachability_) {
       bool success =
           SCNetworkReachabilitySetDispatchQueue(reachability_, nullptr);
@@ -139,27 +121,6 @@ class ConnectivityMonitorApple : public ConnectivityMonitor {
     }
   }
 
-#if TARGET_OS_IOS || TARGET_OS_TV
-  void OnEnteredForeground() {
-    SCNetworkReachabilityFlags flags{};
-    if (!SCNetworkReachabilityGetFlags(reachability_, &flags)) return;
-
-    queue()->Enqueue([this, flags] {
-      auto status = ToNetworkStatus(flags);
-      if (status != NetworkStatus::Unavailable) {
-        // There may have been network changes while Firestore was in the
-        // background for which we did not get OnReachabilityChangedCallback
-        // notifications. If entering the foreground and we have a connection,
-        // reset the connection to ensure that RPCs don't have to wait for TCP
-        // timeouts.
-        this->InvokeCallbacks(status);
-      } else {
-        this->MaybeInvokeCallbacks(status);
-      }
-    });
-  }
-#endif
-
   void OnReachabilityChanged(SCNetworkReachabilityFlags flags) {
     queue()->Enqueue(
         [this, flags] { MaybeInvokeCallbacks(ToNetworkStatus(flags)); });
@@ -167,9 +128,6 @@ class ConnectivityMonitorApple : public ConnectivityMonitor {
 
  private:
   SCNetworkReachabilityRef reachability_ = nil;
-#if TARGET_OS_IOS || TARGET_OS_TV
-  id<NSObject> observer_ = nil;
-#endif
 };
 
 namespace {

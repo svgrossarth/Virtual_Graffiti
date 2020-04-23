@@ -33,12 +33,8 @@ void ConnectivityMonitor::MaybeInvokeCallbacks(NetworkStatus new_status) {
   if (new_status == status_) {
     return;
   }
-
-  InvokeCallbacks(new_status);
-}
-
-void ConnectivityMonitor::InvokeCallbacks(NetworkStatus new_status) {
   status_ = new_status;
+
   for (auto& callback : callbacks_) {
     callback(status_.value());
   }

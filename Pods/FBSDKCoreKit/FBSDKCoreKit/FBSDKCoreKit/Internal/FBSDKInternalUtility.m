@@ -144,7 +144,6 @@ typedef NS_ENUM(NSUInteger, FBSDKInternalUtilityVersionShift)
   }
 
   NSString *host =
-  ([hostPrefix isEqualToString:@"graph."] || [hostPrefix isEqualToString:@"graph-video."]) &&
   [[FBSDKAccessToken currentAccessToken].graphDomain isEqualToString:@"gaming"]
   ? @"fb.gg"
   : @"facebook.com";
@@ -491,34 +490,33 @@ static NSMapTable *_transientObjects;
 
 + (UIWindow *)findWindow
 {
-  UIWindow *topWindow = [UIApplication sharedApplication].keyWindow;
-  if (topWindow == nil || topWindow.windowLevel < UIWindowLevelNormal) {
-    for (UIWindow *window in [UIApplication sharedApplication].windows) {
-      if (window.windowLevel >= topWindow.windowLevel && !window.isHidden) {
-        topWindow = window;
+  UIWindow *window = [UIApplication sharedApplication].keyWindow;
+  if (window == nil || window.windowLevel != UIWindowLevelNormal) {
+    for (window in [UIApplication sharedApplication].windows) {
+      if (window.windowLevel == UIWindowLevelNormal) {
+        break;
       }
     }
-  }
-
-  if (topWindow != nil) {
-    return topWindow;
   }
 
   // Find active key window from UIScene
   if (@available(iOS 13.0, tvOS 13, *)) {
     NSSet *scenes = [[UIApplication sharedApplication] valueForKey:@"connectedScenes"];
     for (id scene in scenes) {
+      if (window) {
+        break;
+      }
+
       id activationState = [scene valueForKeyPath:@"activationState"];
       BOOL isActive = activationState != nil && [activationState integerValue] == 0;
       if (isActive) {
         Class WindowScene = NSClassFromString(@"UIWindowScene");
         if ([scene isKindOfClass:WindowScene]) {
           NSArray<UIWindow *> *windows = [scene valueForKeyPath:@"windows"];
-          for (UIWindow *window in windows) {
-            if (window.isKeyWindow) {
-              return window;
-            } else if (window.windowLevel >= topWindow.windowLevel && !window.isHidden) {
-              topWindow = window;
+          for (UIWindow *w in windows) {
+            if (w.isKeyWindow) {
+              window = w;
+              break;
             }
           }
         }
@@ -526,11 +524,11 @@ static NSMapTable *_transientObjects;
     }
   }
 
-  if (topWindow == nil) {
+  if (window == nil) {
     [FBSDKLogger singleShotLogEntry:FBSDKLoggingBehaviorDeveloperErrors
-                     formatString:@"Unable to find a valid UIWindow", nil];
+                       formatString:@"Unable to find a valid UIWindow", nil];
   }
-  return topWindow;
+  return window;
 }
 
 + (UIViewController *)topMostViewController

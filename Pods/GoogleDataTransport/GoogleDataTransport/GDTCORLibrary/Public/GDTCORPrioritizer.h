@@ -16,9 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import <GoogleDataTransport/GDTCOREvent.h>
 #import <GoogleDataTransport/GDTCORLifecycle.h>
 #import <GoogleDataTransport/GDTCORUploadPackage.h>
+
+@class GDTCORStoredEvent;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -57,7 +58,7 @@ typedef NS_OPTIONS(NSInteger, GDTCORUploadConditions) {
  *
  * @param event The event to prioritize.
  */
-- (void)prioritizeEvent:(GDTCOREvent *)event;
+- (void)prioritizeEvent:(GDTCORStoredEvent *)event;
 
 /** Returns a set of events to upload given a set of conditions.
  *
@@ -68,11 +69,6 @@ typedef NS_OPTIONS(NSInteger, GDTCORUploadConditions) {
  */
 - (GDTCORUploadPackage *)uploadPackageWithTarget:(GDTCORTarget)target
                                       conditions:(GDTCORUploadConditions)conditions;
-
-@optional
-
-/** Saves the state of the prioritizer. */
-- (void)saveState;
 
 @end
 

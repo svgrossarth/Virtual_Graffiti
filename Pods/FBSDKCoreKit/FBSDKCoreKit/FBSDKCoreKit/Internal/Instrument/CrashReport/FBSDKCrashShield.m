@@ -57,15 +57,12 @@ static NSDictionary<NSString *, NSArray<NSString *> *> *_featureMapping;
           @"FBSDKFeatureExtractor",
           @"FBSDKEventInferencer",
       ],
-      @"IntelligentIntegrity" : @[
-          @"FBSDKIntegrityManager",
-          @"FBSDKIntegrityInferencer",
+      @"PIIFiltering" : @[
+          @"FBSDKAddressFilterManager",
+          @"FBSDKAddressInferencer",
       ],
       @"EventDeactivation" : @[
           @"FBSDKEventDeactivationManager",
-      ],
-      @"Monitoring" : @[
-          @"FBSDKMonitor",
       ],
     };
   }

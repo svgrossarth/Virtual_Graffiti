@@ -1,8 +1,8 @@
 // Copyright 2019 Google Inc. All Rights Reserved.
 
-#include "Firestore/core/src/firebase/firestore/remote/grpc_root_certificates_generated.h"
-
 #include <cstdlib>
+
+#include "Firestore/core/src/firebase/firestore/remote/grpc_root_certificates_generated.h"
 
 namespace firebase {
 namespace firestore {

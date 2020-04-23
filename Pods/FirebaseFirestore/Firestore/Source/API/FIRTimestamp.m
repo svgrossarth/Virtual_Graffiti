@@ -116,7 +116,6 @@ static const int kNanosPerSecond = 1000000000;
 
 /** Implements NSCopying without actually copying because timestamps are immutable. */
 - (id)copyWithZone:(NSZone *_Nullable)zone {
-  (void)zone;
   return self;
 }
 

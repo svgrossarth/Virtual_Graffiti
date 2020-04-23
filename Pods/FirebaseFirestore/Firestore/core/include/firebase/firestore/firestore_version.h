@@ -17,6 +17,8 @@
 #ifndef FIRESTORE_CORE_INCLUDE_FIREBASE_FIRESTORE_FIRESTORE_VERSION_H_
 #define FIRESTORE_CORE_INCLUDE_FIREBASE_FIRESTORE_FIRESTORE_VERSION_H_
 
+/** Version for Firestore. */
+
 namespace firebase {
 namespace firestore {
 

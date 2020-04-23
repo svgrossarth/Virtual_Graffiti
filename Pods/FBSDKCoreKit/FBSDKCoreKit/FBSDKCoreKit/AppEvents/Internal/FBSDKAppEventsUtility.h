@@ -50,6 +50,7 @@ NS_SWIFT_NAME(AppEventsUtility)
 @property (class, nonatomic, assign, readonly) BOOL isDebugBuild;
 
 + (NSMutableDictionary *)activityParametersDictionaryForEvent:(NSString *)eventCategory
+                                           implicitEventsOnly:(BOOL)implicitEventsOnly
                                     shouldAccessAdvertisingID:(BOOL)shouldAccessAdvertisingID;
 
 + (void)ensureOnMainThread:(NSString *)methodName className:(NSString *)className;

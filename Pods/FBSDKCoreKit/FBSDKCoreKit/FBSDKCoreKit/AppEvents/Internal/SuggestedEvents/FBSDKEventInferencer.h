@@ -26,9 +26,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FBSDKEventInferencer : NSObject
 
-+ (void)loadWeightsForKey:(NSString *)useCase;
++ (void)loadWeights;
 + (NSDictionary<NSString *, NSString *> *)predict:(NSString *)buttonText
-                                         viewTree:(NSMutableDictionary<NSString *, id> *)viewTree;
+                                         viewTree:(NSMutableDictionary<NSString *, id> *)viewTree
+                                          withLog:(BOOL)isPrint;
 
 @end
 

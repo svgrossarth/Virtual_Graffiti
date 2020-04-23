@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "FBSDKCoreKitImport.h"
 #import "FBSDKDeviceLoginCodeInfo.h"
 #import "FBSDKDeviceLoginManager.h"
 #import "FBSDKDeviceLoginManagerResult.h"

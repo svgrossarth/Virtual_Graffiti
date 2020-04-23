@@ -41,7 +41,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var distanceValue: UILabel!
     @IBOutlet weak var distanceLable: UILabel!
-    @IBOutlet weak var sceneView: SceneLocationView!
     @IBOutlet weak var widthSlider: UISlider!
     @IBOutlet weak var widthLabel: UILabel!
     
@@ -51,6 +50,7 @@ class HomeViewController: UIViewController {
 
     @IBOutlet weak var changeEmojiButton: UIButton!
     @IBOutlet weak var emojiButton: ModeButton!
+    @IBOutlet weak var sceneView: ARSCNView!
     
     
     override func viewDidLoad() {

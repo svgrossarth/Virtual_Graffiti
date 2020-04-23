@@ -316,10 +316,7 @@ static NSString *_lastTreeHash;
 
   NSArray *windows = [UIApplication sharedApplication].windows;
   for (UIWindow *window in windows) {
-    NSDictionary *tree = [FBSDKViewHierarchy recursiveCaptureTreeWithCurrentNode:window
-                                                                      targetNode:nil
-                                                                   objAddressSet:nil
-                                                                            hash:YES];
+    NSDictionary *tree = [FBSDKCodelessIndexer recursiveCaptureTree:window];
     if (tree) {
       if (window.isKeyWindow) {
         [trees insertObject:tree atIndex:0];
@@ -350,6 +347,28 @@ static NSString *_lastTreeHash;
   }
 
   return tree;
+}
+
++ (NSDictionary<NSString *, id> *)recursiveCaptureTree:(NSObject *)obj
+{
+  if (!obj) {
+    return nil;
+  }
+
+  NSMutableDictionary *result = [FBSDKViewHierarchy getDetailAttributesOf:obj];
+
+  NSArray *children = [FBSDKViewHierarchy getChildren:obj];
+  NSMutableArray *childrenTrees = [NSMutableArray array];
+  for (NSObject *child in children) {
+    NSDictionary *objTree = [self recursiveCaptureTree:child];
+    [childrenTrees addObject:objTree];
+  }
+
+  if (childrenTrees.count > 0) {
+    [result setValue:[childrenTrees copy] forKey:VIEW_HIERARCHY_CHILD_VIEWS_KEY];
+  }
+
+  return [result copy];
 }
 
 + (UIImage *)screenshot {

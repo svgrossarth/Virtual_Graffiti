@@ -63,7 +63,7 @@ size_t CollectionReference::Hash() const {
   return util::Hash(firestore().get(), query());
 }
 
-const std::string& CollectionReference::collection_id() const {
+std::string CollectionReference::collection_id() const {
   return query().path().last_segment();
 }
 

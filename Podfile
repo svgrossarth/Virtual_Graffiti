@@ -23,5 +23,4 @@ target 'Login' do
   pod 'GoogleSignIn'
   pod 'FBSDKLoginKit'
   pod 'ProgressHUD'
-
 end
