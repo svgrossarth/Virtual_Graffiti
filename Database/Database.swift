@@ -21,12 +21,14 @@ class Database {
     let DICT_KEY_NODE = "node"
     let DICT_KEY_LOCATION = "location"
     let DICT_KEY_ANGLE = "angle"
+    var listeners : [ListenerRegistration] = [ListenerRegistration]()
 
    // retval: Local save success
    func saveDrawing(location : CLLocation, userRootNode : SecondTierRoot) -> Void {
        // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
        // Longitude gets bigger at the equator and smaller at poles
-       let tile = getTile(location: location)
+       let tile = userRootNode.tileName
+       print("Saving a node at this tile " + tile)
        let collectionPath = "tiles/\(tile)/nodes"
        guard let nodeName = userRootNode.name else {
            print("Node doesn't have name")
@@ -79,54 +81,68 @@ class Database {
    }
 
 
-   func _drawPoints(location : CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
-       // Get points
-       let latitude : CLLocationDegrees = location.coordinate.latitude
-       let longitude : CLLocationDegrees = location.coordinate.longitude
-       // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
-       // Longitude gets bigger at the equator and smaller at poles
-       let tile = doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
-       let collectionPath = "tiles/\(tile)/nodes"
-       db.collection(collectionPath).getDocuments() { (querySnapshot, err) in
-           if let err = err {
-               print("Error with query snapshot: \(err.localizedDescription)")
-               return
-           } else {
-               if let snapshot = querySnapshot {
-                   var nodes : [SecondTierRoot] = []
-                   for response in snapshot.documents {
-                       do {
-                           let dictionary = response.data()
-                           guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data else{
-                               print("can't convert to data")
-                               return
-                           }
-                           guard let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data else{
-                               print("can't convert to data")
-                               return
-                           }
-                           guard let nodeAngle = dictionary[self.DICT_KEY_ANGLE] as? Data else{
-                               print("can't convert to data")
-                               return
-                           }
-                           let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
-                           let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
-                           let newAngle = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeAngle) as! Double
-                           newNode.location = newLocation
-                           newNode.angleToNorth = newAngle
-                           nodes.append(newNode)
-                       } catch {
-                           print("Could not pull down node")
-                       }
+    func _drawPoints(location : CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {
+        // Get points
+        let latitude : CLLocationDegrees = location.coordinate.latitude
+        let longitude : CLLocationDegrees = location.coordinate.longitude
+        // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
+        // Longitude gets bigger at the equator and smaller at poles
+        let tile = doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
+        //print("all tiles near by ", tile)
+        let collectionPath = "tiles/\(tile)/nodes"
+        db.collection(collectionPath).getDocuments() { (querySnapshot, err) in
+            self.dbCallback(querySnapshot: querySnapshot, err: err, drawFunction: drawFunction)
+        }
+        let listener = db.collection(collectionPath).addSnapshotListener{ (querySnapshot, err) in
+            self.dbCallback(querySnapshot: querySnapshot, err: err, drawFunction: drawFunction)
+            
+        }
+        listeners.append(listener)
+    }
+    
+    
+    func dbCallback(querySnapshot : QuerySnapshot?, err : Error?, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void){
+        if let err = err {
+                print("Error with query snapshot: \(err.localizedDescription)")
+                return
+            } else {
+                if let snapshot = querySnapshot {
+                    var nodes : [SecondTierRoot] = []
+                    for response in snapshot.documents {
+                        do {
+                            let dictionary = response.data()
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data else{
+                                print("can't convert to data")
+                                return
+                            }
+                            guard let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data else{
+                                print("can't convert to data")
+                                return
+                            }
+                            guard let nodeAngle = dictionary[self.DICT_KEY_ANGLE] as? Data else{
+                                print("can't convert to data")
+                                return
+                            }
+                            let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
+                            let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
+                            let newAngle = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeAngle) as! Double
+                            newNode.location = newLocation
+                            newNode.angleToNorth = newAngle
+                            nodes.append(newNode)
+                            print("Got one node")
+                        } catch {
+                            print("Could not pull down node")
+                        }
 
-                   }
-                   drawFunction(nodes)
-               } else{
-                   print("No snapshot in query snapshot")
-               }
-           }
-       }
-   }
+                    }
+                    drawFunction(nodes)
+                } else{
+                    print("No snapshot in query snapshot")
+                }
+            }
+        
+        
+    }
     
     func getTile(location : CLLocation) -> String {
         let latitude : CLLocationDegrees = location.coordinate.latitude

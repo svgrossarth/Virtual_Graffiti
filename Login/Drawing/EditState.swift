@@ -34,8 +34,8 @@ class EditState: State {
     var eraserOn = false
     var EmojiOn = false
     weak var sceneView: ARSCNView!
-    var erasedStake = Stack<Stroke>()
-    var undoStake = Stack<Stroke>()
+    var erasedStake = Stack<SCNNode>()
+    var undoStake = Stack<SCNNode>()
     var recentUsedEmoji = [Emoji]()
     
     func initialize(emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
@@ -201,19 +201,15 @@ class EditState: State {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if EmojiOn {
-            if let touch = touches.first {
-                let touchPoint = touch.location(in: sceneView)
+            if let singleTouch = touches.first{
+                let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 self.setModel()
-                let hits = sceneView.hitTest(touchPoint, types: .estimatedHorizontalPlane)
-                if hits.count >= 0, let firstHit = hits.first {
-                    print("Emoji touch happened at point: \(touchPoint)")
-                    ObjNode.position = SCNVector3Make(firstHit.worldTransform.columns.3.x, firstHit.worldTransform.columns.3.y, firstHit.worldTransform.columns.3.z)
-                    emojiRootNode.light = emojiLighting()
-                    emojiRootNode.addChildNode(ObjNode)
-                    updataEmojiList()
-                }
-            }else {
-                 print("Unable to identify touches on any plane. Ignoring interaction...")
+                ObjNode.position = touchLocation
+                emojiRootNode.light = emojiLighting()
+                emojiRootNode.addChildNode(ObjNode)
+                updataEmojiList()
+            } else {
+                print("can't get touch")
             }
         }else if !EmojiOn{
             eraseNode(touches: touches)
@@ -236,9 +232,9 @@ class EditState: State {
                 let touchPosition = touch.location(in: sceneView)
                 let hitTestResults = sceneView.hitTest(touchPosition)
                 for hitTestResult in hitTestResults{
-                    if let stroke = hitTestResult.node as? Stroke{
-                        stroke.removeFromParentNode()
-                        erasedStake.push(stroke)
+                    if let _ = hitTestResult.node.geometry{
+                        hitTestResult.node.removeFromParentNode()
+                        erasedStake.push(hitTestResult.node)
                     }
                 }
             }
