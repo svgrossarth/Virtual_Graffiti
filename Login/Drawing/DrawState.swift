@@ -38,7 +38,7 @@ class DrawState: State {
     
     
     func initializeUserRootNode() {
-        guard let location = sceneView.sceneLocationManager.currentLocation
+        guard let location = sceneLocationManager.currentLocation
             else { // No location, try again in a second
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: initializeUserRootNode)
                 return
@@ -148,7 +148,7 @@ extension DrawState {
 
 extension DrawState {
     func save() {
-        if let location = sceneView.sceneLocationManager.currentLocation, let rootNode = userRootNode {
+        if let location = sceneLocationManager.currentLocation, let rootNode = userRootNode {
             Database().saveDrawing(location: location, userRootNode: rootNode)
         }
     }
@@ -157,7 +157,7 @@ extension DrawState {
     func load() {
         let db = Database()
 
-        guard let location = sceneView.sceneLocationManager.currentLocation
+        guard let location = sceneLocationManager.currentLocation
             else { // No location, try again in a second
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: load)
                 return

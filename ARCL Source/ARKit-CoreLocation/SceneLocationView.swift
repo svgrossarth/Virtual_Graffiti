@@ -20,6 +20,8 @@ import MapKit
 /// internally by ARCL. The delegate functions declared in `ARSCNViewDelegate`, `ARSessionObserver`, and  `ARSCNView` are
 /// shadowed by `ARSCNViewDelegate` and invoked on the `SceneLocationView`'s `arDelegate`. If you need to receive
 /// any of these callbacks, implement them on your `arDelegate`.
+let sceneLocationManager = SceneLocationManager()
+
 open class SceneLocationView: ARSCNView {
     /// The limit to the scene, in terms of what data is considered reasonably accurate.
     /// Measured in meters.
@@ -43,7 +45,7 @@ open class SceneLocationView: ARSCNView {
     public weak var locationNodeTouchDelegate: LNTouchDelegate?
     public weak var sceneTrackingDelegate: SceneTrackingDelegate?
 
-    public let sceneLocationManager = SceneLocationManager()
+    //public let sceneLocationManager = SceneLocationManager()
 
     /// Addresses [Issue #196](https://github.com/ProjectDent/ARKit-CoreLocation/issues/196) -
     /// Delegate issue when assigned to self (no location nodes render).   If the user

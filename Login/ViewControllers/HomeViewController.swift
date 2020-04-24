@@ -55,12 +55,13 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.addSubview(drawState)
         drawState.initialize(_sceneView: sceneView)
         
         state = drawState
         state.enter()
+        
         uiSetup()
         view.addSubview(editState)
         editState.initialize(emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
