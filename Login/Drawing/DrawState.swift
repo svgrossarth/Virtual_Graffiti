@@ -38,6 +38,7 @@ class DrawState: State {
     var width : Float = 0.01
     let sphereRadius : CGFloat = 0.01
     var drawingColor: UIColor = .systemBlue
+    var isSingleTap = false
     
     func initialize(_sceneView: ARSCNView!) {
         _initializeLocationManager()
@@ -95,10 +96,8 @@ class DrawState: State {
 
 extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isSingleTap = true
         if let singleTouch = touches.first{
-            let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-            let sphereNode = createSphere(position: touchLocation)
-            userRootNode.addChildNode(sphereNode)
             userRootNode.light = addLighting()
         } else {
             print("can't get touch")
@@ -132,6 +131,16 @@ extension DrawState {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         //Database().saveDrawing(location: location, userRootNode: userRootNode!)
+        if touchMovedFirst && isSingleTap {
+            if let singleTouch = touches.first{
+                let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
+                let sphereNode = createSphere(position: touchLocation)
+                userRootNode.addChildNode(sphereNode)
+            } else {
+                print("can't get touch")
+            }
+        }
+        isSingleTap = false
         touchMovedFirst = true
         initialNearFarLine = nil
         save()
@@ -214,9 +223,7 @@ extension DrawState: CLLocationManagerDelegate {
         let angle = deg2rad(heading.trueHeading)
         if !hasAngleBeenSaved {
             hasAngleBeenSaved = true
-            
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+
             userRootNode.location = self.location
             userRootNode.angleToNorth = angle
             userRootNode.tileName = Database().getTile(location: self.location)
@@ -237,7 +244,7 @@ extension DrawState {
         Database().saveDrawing(location: location, userRootNode: userRootNode)
     }
     
-
+    
     func load() {
         if !headingSet {
             return
@@ -246,41 +253,55 @@ extension DrawState {
         currentTile = db.getTile(location: location)
         print("load has been called and herer is the tile", currentTile)
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
-//            for node in self.sceneView.scene.rootNode.childNodes {
-//                node.removeFromParentNode()
-//            }
-
+            //            for node in self.sceneView.scene.rootNode.childNodes {
+            //                node.removeFromParentNode()
+            //            }
+            
             for node in retrievedNodes {
-                guard let nodeLocation = node.location else {
-                    print("can't get node location")
-                    return
+                let nodeExists = self.checkIfNodeExists(newNode: node)
+                if !nodeExists {
+                    print("Node of Name will be added to scene ", node.name)
+                    guard let nodeLocation = node.location else {
+                        print("can't get node location")
+                        return
+                    }
+                    let nodeLatitude = nodeLocation.coordinate.latitude
+                    let nodeLongitude = nodeLocation.coordinate.longitude
+                    let phoneLatitude = self.location.coordinate.latitude
+                    let phoneLongitude = self.location.coordinate.longitude
+                    var distanceWestToEastMeters = Float(self.location.distance(from: CLLocation.init(latitude: nodeLatitude, longitude: phoneLongitude)))
+                    var distanceNorthToSouthMeters = Float(self.location.distance(from: CLLocation.init(latitude: phoneLatitude, longitude: nodeLongitude)))
+                    
+                    if (nodeLatitude < phoneLatitude) {
+                        distanceWestToEastMeters *= -1
+                    }
+                    if (nodeLongitude < phoneLongitude) {
+                        distanceNorthToSouthMeters *= -1
+                    }
+                    
+                    node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
+                    //                print("Latitude difference: \(distanceWestToEastMeters)")
+                    //                print("Longitude difference: \(distanceNorthToSouthMeters)")
+                    
+                    let currentAngle = deg2rad(self.heading.trueHeading)
+                    let angleOfRotation = currentAngle - node.angleToNorth
+                    node.rotation = SCNVector4Make(0, 1, 0, Float(angleOfRotation))
+                    
+                    self.sceneView.scene.rootNode.addChildNode(node)
                 }
-                let nodeLatitude = nodeLocation.coordinate.latitude
-                let nodeLongitude = nodeLocation.coordinate.longitude
-                let phoneLatitude = self.location.coordinate.latitude
-                let phoneLongitude = self.location.coordinate.longitude
-                var distanceWestToEastMeters = Float(self.location.distance(from: CLLocation.init(latitude: nodeLatitude, longitude: phoneLongitude)))
-                var distanceNorthToSouthMeters = Float(self.location.distance(from: CLLocation.init(latitude: phoneLatitude, longitude: nodeLongitude)))
                 
-                if (nodeLatitude < phoneLatitude) {
-                    distanceWestToEastMeters *= -1
-                }
-                if (nodeLongitude < phoneLongitude) {
-                    distanceNorthToSouthMeters *= -1
-                }
-                
-                node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
-//                print("Latitude difference: \(distanceWestToEastMeters)")
-//                print("Longitude difference: \(distanceNorthToSouthMeters)")
-
-                let currentAngle = deg2rad(self.heading.trueHeading)
-                let angleOfRotation = currentAngle - node.angleToNorth
-                node.rotation = SCNVector4Make(0, 1, 0, Float(angleOfRotation))
-
-                self.sceneView.scene.rootNode.addChildNode(node)
             }
         })
-
+    }
+    
+    func checkIfNodeExists(newNode : SecondTierRoot) -> Bool {
+        let listOfCurrentNodes = sceneView.scene.rootNode.childNodes
+        for childNode in listOfCurrentNodes {
+            if childNode.name == newNode.name{
+                return true
+            }
+        }
+        return false
     }
 }
 

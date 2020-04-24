@@ -129,7 +129,7 @@ class Database {
                             newNode.location = newLocation
                             newNode.angleToNorth = newAngle
                             nodes.append(newNode)
-                            print("Got one node")
+                            print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {
                             print("Could not pull down node")
                         }
