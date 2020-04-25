@@ -18,4 +18,8 @@ func resizeVector(vector: SCNVector3, scalingFactor: Float) -> SCNVector3{
     return SCNVector3((vector.x/length) * scalingFactor, (vector.y/length) * scalingFactor, (vector.z/length) * scalingFactor)
 }
 
+func distanceBetweenPoints(vec1: SCNVector3, vec2: SCNVector3) -> Float {
+    return sqrt(powf((vec1.x - vec2.x), 2) + powf((vec1.y - vec2.y), 2) + powf((vec1.z - vec2.z), 2))
+}
+
 

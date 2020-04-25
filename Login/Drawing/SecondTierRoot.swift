@@ -11,17 +11,16 @@ import SceneKit
 import CoreLocation
 
 class SecondTierRoot : SCNNode{
-    var location : CLLocation
+    var location : CLLocation?
     var angleToNorth : Double = 0
+    var tileName = ""
     
     enum Keys: String {
       case location = "Location"
       case node = "node"
     }
     
-    init(location : CLLocation, angleToNorth : Double) {
-        self.location = location
-        self.angleToNorth = angleToNorth
+    override init() {
         super.init()
     }
     

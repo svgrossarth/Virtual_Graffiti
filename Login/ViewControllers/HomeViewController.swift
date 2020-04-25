@@ -266,7 +266,6 @@ class HomeViewController: UIViewController {
 //
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //state.touchesMoved(touches, with: event)
-        print("touches moved")
         if !editState.eraserOn && !editState.EmojiOn {
             drawState.touchesMoved(touches, with: event)
         } else {
