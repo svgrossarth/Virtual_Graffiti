@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Zfi-3z-Zbk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RGp-mB-gpr">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
@@ -580,6 +580,12 @@
                                     <outlet property="delegate" destination="Zfi-3z-Zbk" id="fRc-ZN-EJf"/>
                                 </connections>
                             </collectionView>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="grK-g2-fwH">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="barTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="0UJ-dP-rEB"/>
@@ -588,6 +594,7 @@
                     <connections>
                         <outlet property="MenuCollection" destination="Hk9-on-N8d" id="No0-Lh-sK1"/>
                         <outlet property="RecentCollection" destination="VhO-FK-HZh" id="VLM-tN-xqK"/>
+                        <outlet property="searchbar" destination="grK-g2-fwH" id="HaC-lF-bU1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ktt-5c-eNN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -661,38 +668,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6HA-Bp-dgZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2586.9565217391305" y="-319.41964285714283"/>
-        </scene>
-        <!--Emoji-->
-        <scene sceneID="aaN-1f-xQE">
-            <objects>
-                <tableViewController id="1it-sp-ZoN" customClass="EmojiContentTableViewController" customModule="Login" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="edh-pu-rwP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="51y-3r-Ztv" userLabel="modelDetailCell" customClass="DetailTableViewCell" customModule="Login" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="100"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="51y-3r-Ztv" id="TBx-2A-Xe0">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="1it-sp-ZoN" id="WQZ-Im-kkH"/>
-                            <outlet property="delegate" destination="1it-sp-ZoN" id="Iax-iN-JaP"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Emoji" id="qG0-85-uvm"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LE4-Kb-F8E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4386.9565217391309" y="389.67391304347831"/>
         </scene>
     </scenes>
     <resources>

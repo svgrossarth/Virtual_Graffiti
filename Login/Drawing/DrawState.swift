@@ -196,7 +196,7 @@ extension DrawState: CLLocationManagerDelegate {
             
             if hasAngleBeenSaved {
                 if Database().getTile(location: loc) != currentTile {
-                    load()
+//                    load()
                 }
             }
         }

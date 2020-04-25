@@ -12,9 +12,7 @@
 		0F0E0E8D244E993200AC6004 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */; };
 		0F0E0E932450F50300AC6004 /* RecentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E922450F50300AC6004 /* RecentHeaderView.swift */; };
 		0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */; };
-		0FA41246244A94CB00C5FA8E /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */; };
 		0FA41247244A94CB00C5FA8E /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41242244A94CB00C5FA8E /* ModeButton.swift */; };
-		0FA41248244A94CB00C5FA8E /* DetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */; };
 		0FA41249244A94CC00C5FA8E /* Emoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA41244244A94CB00C5FA8E /* Emoji.swift */; };
 		0FA4124A244A94CC00C5FA8E /* emojis.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FA41245244A94CB00C5FA8E /* emojis.scnassets */; };
 		7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3B423DE581C00DDC27C /* AppDelegate.swift */; };
@@ -70,9 +68,7 @@
 		0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		0F0E0E922450F50300AC6004 /* RecentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecentHeaderView.swift; path = Login/RecentHeaderView.swift; sourceTree = SOURCE_ROOT; };
 		0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeaderView.swift; sourceTree = "<group>"; };
-		0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
 		0FA41242244A94CB00C5FA8E /* ModeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
-		0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailTableViewCell.xib; sourceTree = "<group>"; };
 		0FA41244244A94CB00C5FA8E /* Emoji.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emoji.swift; sourceTree = "<group>"; };
 		0FA41245244A94CB00C5FA8E /* emojis.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = emojis.scnassets; sourceTree = "<group>"; };
 		1BF7307A4120D91EA46D1864 /* Pods-Login.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Login.debug.xcconfig"; path = "Target Support Files/Pods-Login/Pods-Login.debug.xcconfig"; sourceTree = "<group>"; };
@@ -152,11 +148,9 @@
 			children = (
 				0F0E0E922450F50300AC6004 /* RecentHeaderView.swift */,
 				0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */,
-				0FA41241244A94CB00C5FA8E /* DetailTableViewCell.swift */,
 				0FA41242244A94CB00C5FA8E /* ModeButton.swift */,
 				0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */,
 				0F0E0E8A244E98E300AC6004 /* RecentCollectionViewCell.swift */,
-				0FA41243244A94CB00C5FA8E /* DetailTableViewCell.xib */,
 				0FA41244244A94CB00C5FA8E /* Emoji.swift */,
 				0FA41245244A94CB00C5FA8E /* emojis.scnassets */,
 			);
@@ -412,7 +406,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */,
-				0FA41248244A94CB00C5FA8E /* DetailTableViewCell.xib in Resources */,
 				0FA4124A244A94CC00C5FA8E /* emojis.scnassets in Resources */,
 				7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */,
 				7746C3BE23DE581D00DDC27C /* Assets.xcassets in Resources */,
@@ -602,7 +595,6 @@
 				0F0E0E89244E95F900AC6004 /* EmojiViewController.swift in Sources */,
 				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
 				0F0E0E932450F50300AC6004 /* RecentHeaderView.swift in Sources */,
-				0FA41246244A94CB00C5FA8E /* DetailTableViewCell.swift in Sources */,
 				C0086EC62412B492001C4A22 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -777,15 +769,17 @@
 			baseConfigurationReference = 1BF7307A4120D91EA46D1864 /* Pods-Login.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2XTPH96H59;
+				DEVELOPMENT_TEAM = RUWWPGHFP9;
 				INFOPLIST_FILE = Login/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.ecs-193.virtual-graffiti";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.ARsample1111111111111;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -796,15 +790,17 @@
 			baseConfigurationReference = 7C1A970FF1753B5DF0286F26 /* Pods-Login.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2XTPH96H59;
+				DEVELOPMENT_TEAM = RUWWPGHFP9;
 				INFOPLIST_FILE = Login/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.ecs-193.virtual-graffiti";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.ARsample1111111111111;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

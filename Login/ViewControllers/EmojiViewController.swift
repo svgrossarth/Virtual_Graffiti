@@ -13,23 +13,24 @@ protocol ChangeEmojiDelegate {
     func getUpdatedList()->[Emoji]
 }
 
-class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchResultsUpdating {
+class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate {
 
     var delegate : ChangeEmojiDelegate?
 
     var Models = [Emoji]()
     var recentModels = [Emoji]()
-    var filteredModelName:[Emoji] = []
+    var filteredModels:[Emoji] = []
     var selectedEmoji = Emoji(name: "bandage", ID: "Group50555")
-    let searchController = UISearchController(searchResultsController: nil)
     private var selectedModelIndex = 0
 
     @IBOutlet weak var RecentCollection: UICollectionView!
     @IBOutlet weak var MenuCollection: UICollectionView!
+    @IBOutlet weak var searchbar: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSearchBar()
+        MenuCollection.keyboardDismissMode = .onDrag
+        searchbar.delegate = self
         setupEmojiModels()
         setupRecentModels()
 
@@ -61,28 +62,21 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
         Models.append(Emoji(name:"tired", ID:"Group3677"))
         Models.append(Emoji(name:"very happy", ID:"Group19895"))
         Models.append(Emoji(name:"yum", ID:"Group46695"))
-    }
-
-    func setupSearchBar(){
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = true
-        searchController.searchBar.placeholder = "Search Emojis"
-        searchController.searchBar.barTintColor = .darkGray
-        self.view.addSubview(searchController.searchBar)
-        definesPresentationContext = true
+        filteredModels = Models
     }
 
     func setupRecentModels(){
         recentModels.append(Emoji(name:"bandage", ID:"Group50555" ))
-        Models.append(Emoji(name:"tired", ID:"Group3677"))
-        Models.append(Emoji(name:"very happy", ID:"Group19895"))
+        recentModels.append(Emoji(name:"tired", ID:"Group3677"))
+        recentModels.append(Emoji(name:"very happy", ID:"Group19895"))
     }
 
+    //MARK: - collectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == MenuCollection {
-            return Models.count
+            return filteredModels.count
         }
-//        recentModels = delegate?.getUpdatedList() as! [Emoji]
+        recentModels = delegate?.getUpdatedList() as! [Emoji]
         if recentModels.count == 0 {
             //reset to pre-populated ones
             setupRecentModels()
@@ -95,13 +89,11 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == MenuCollection {
-
                 let menuCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Menu Cell", for: indexPath) as! MenuCollectionViewCell
-                let modelName = Models[indexPath.item].name
+                let modelName = filteredModels[indexPath.item].name
                 if let image = UIImage(named: "\(modelName)") {
                     menuCell.ModelImage.image = image
                 }
-
             return menuCell
         }
         let recentCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Recent Cell", for: indexPath) as! RecentCollectionViewCell
@@ -140,21 +132,16 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
 //    }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        Models[indexPath.item].incrementNumSelected()
-        selectedEmoji = Models[indexPath.item]
+        if collectionView == RecentCollection{
+            selectedEmoji = recentModels[indexPath.item]
+        }
+        if collectionView == MenuCollection{
+            selectedEmoji = filteredModels[indexPath.item]
+        }
         delegate?.changeEmoji(emoji: selectedEmoji)
         self.dismiss(animated: true, completion: nil)
     }
-    
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     //MARK: - UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
@@ -163,12 +150,15 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
     }
 
 
-    //MARK: search
-    func updateSearchResults(for searchController: UISearchController) {
-        let searchBar = searchController.searchBar
-                //    print("search bar touched:", searchBar.selectedScopeButtonIndex, "  ", searchController.searchBar.text)
-                //    let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
-        //        filterContentForSearchText(searchController.searchBar.text!)
+    //MARK: - search
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard !searchText.isEmpty else {
+            filteredModels = Models
+            MenuCollection.reloadData()
+            print(recentModels.count)
+            return
+        }
+        filteredModels = Models.filter({ emo -> Bool in emo.name.lowercased().contains(searchText.lowercased())})
+        MenuCollection.reloadData()
     }
-
 }

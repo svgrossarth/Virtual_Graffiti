@@ -71,8 +71,10 @@ class EditState: State {
     override func exit() {
         isHidden = true
         eraserOn = false
+        eraseButton.backgroundColor = #colorLiteral(red: 0.9576401114, green: 0.7083515525, blue: 0.8352113366, alpha: 1)
         self.refSphere.removeFromParentNode()
-        emojiButtonTouched()
+        emojiButton.activateButton(bool: false)
+        EmojiOn = false
         isHidden = false
         saveRecentEmoji()
     }
@@ -92,7 +94,8 @@ class EditState: State {
         } else {
             eraserOn = true
             if EmojiOn{
-                emojiButtonTouched() //if eraser is on, deactivate emoji
+                EmojiOn = false
+                emojiButton.activateButton(bool: false) //if eraser is on, deactivate emoji
             }
             eraseButton.backgroundColor = #colorLiteral(red: 0.9938386083, green: 0.3334249258, blue: 0.6164360046, alpha: 1)
         }
@@ -172,7 +175,7 @@ class EditState: State {
         let estimate: ARLightEstimate!
         estimate = self.sceneView.session.currentFrame?.lightEstimate
         let light = SCNLight()
-        light.intensity = estimate.ambientIntensity
+        light.intensity = estimate.ambientIntensity*0.5
         light.type = SCNLight.LightType.directional
         light.color = UIColor.white
         return light
