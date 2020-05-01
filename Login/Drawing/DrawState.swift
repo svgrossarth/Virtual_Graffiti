@@ -361,8 +361,6 @@ extension DrawState: CLLocationManagerDelegate {
 
 extension DrawState {
     func save() {
-        Database().saveDrawing(location: location, userRootNode: userRootNode)
-
         Database().saveDrawing(userRootNode: userRootNode)
         if let localQRNode = self.qrNode {
             Database().saveQRNode(qrNode: localQRNode)
