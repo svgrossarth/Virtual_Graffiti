@@ -46,6 +46,7 @@ class DrawState: State {
     var QRValue : String = ""
     var QRNodePosition = SCNVector3()
     var qrNode: QRNode? = nil
+    var currentFrame : ARFrame?
     
     lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
@@ -84,7 +85,14 @@ class DrawState: State {
                 sphere.materials = [material]
                 self.qrNode = QRNode(QRValue: self.QRValue, name: UUID().uuidString)
                 self.qrNode!.geometry = sphere
-                self.qrNode!.position = self.touchLocationIn3D(touchLocation2D: center)
+                if let hitResult = self.currentFrame?.hitTest(center, types: .featurePoint).first {
+                    //https://stackoverflow.com/questions/48980834/position-of-node-in-scene
+                    let pointTransform = SCNMatrix4(hitResult.worldTransform) //turns the point into a point on the world grid
+                    let pointVector = SCNVector3Make(pointTransform.m41, pointTransform.m42, pointTransform.m43) //the X, Y, and Z of the clicked cordinate
+                    self.qrNode!.position = pointVector
+                }
+                
+                
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
                 self.sceneView.scene.rootNode.addChildNode(self.qrNode!)
@@ -305,7 +313,9 @@ extension DrawState: ARSessionDelegate {
 
                 do
                 {
+                    self.currentFrame = frame
                     try handler.perform([self.detectBarcodeRequest])
+                    
                 } catch
                 {
                     //self.showAlert(withTitle: "Error Decoding Barcode", message: error.localizedDescription)
