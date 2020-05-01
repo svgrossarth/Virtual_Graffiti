@@ -12,7 +12,6 @@ import PencilKit
 var makeColor = MakeColor(selectedColor: .blue)
 
 class PKCanvas: UIView {
-
     var canvasView: PKCanvasView!
     weak var pencilKitDelegate: PencilKitDelegate?
 
@@ -31,9 +30,9 @@ class PKCanvas: UIView {
         addSubview(canvasView)
 
 
-     if let window = UIApplication.shared.windows.first, let toolPicker = PKToolPicker.shared(for: window) {
+     if let window = UIApplication.shared.windows.last, let toolPicker = PKToolPicker.shared(for: window) {
         //toolpicker shows up
-           toolPicker.setVisible(true, forFirstResponder: canvasView)
+           toolPicker.setVisible(false, forFirstResponder: canvasView)
            toolPicker.addObserver(canvasView)
            toolPicker.addObserver(self)
 
@@ -55,6 +54,7 @@ class PKCanvas: UIView {
        //2.assign updated frame to self view
        self.frame = frame
     }
+    
     func sendColor() -> UIColor {
         return makeColor.getColor()
     }
@@ -76,8 +76,23 @@ extension PKCanvas: PKToolPickerObserver {
 
     func toolPickerSelectedToolDidChange(_ toolPicker: PKToolPicker) {
         print("toolPickerSelectedToolDidChange")
-        let tool = toolPicker.selectedTool as? PKInkingTool
-        makeColor.ChangeColor(newColor: tool!.color)
+//        if let tool = toolPicker.selectedTool as? PKInkingTool{
+//            let inverseColorRGB = tool.color.rgb()
+//            let inverseColor = UIColor(red: CGFloat(inverseColorRGB[0]), green: CGFloat(inverseColorRGB[1]), blue: CGFloat(inverseColorRGB[2]), alpha: CGFloat(inverseColorRGB[3]))
+//            makeColor.ChangeColor(newColor: inverseColor)
+//        }
+        if let tool = toolPicker.selectedTool as? PKEraserTool {
+            if let editState = self.pencilKitDelegate as? EditState {
+                editState.eraserOn = true
+            }
+        } else {
+            if let editState = self.pencilKitDelegate as? EditState {
+                editState.eraserOn = false
+            }
+        }
+
+        //print("Color gotten", tool!.color)
+        //print("correct color: ", inverseColor)
     }
 
     func toolPickerIsRulerActiveDidChange(_ toolPicker: PKToolPicker) {
@@ -101,9 +116,11 @@ class MakeColor{
         self.color = selectedColor
     }
     func ChangeColor(newColor: UIColor){
+          print("setting newColor to:", newColor)
           self.color = newColor
       }
     func getColor() -> UIColor {
+        print("in the class: getColor()", self.color)
         return self.color
     }
 

@@ -68,6 +68,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Virtual Graffiti requires access to your phone’s camera.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Where are you?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location?</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
