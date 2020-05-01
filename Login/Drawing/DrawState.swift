@@ -65,30 +65,28 @@ class DrawState: State {
         DispatchQueue.main.async {
             if let bestResult = request.results?.first as? VNBarcodeObservation,
                 let payload = bestResult.payloadStringValue {
-
                 self.QRValue = payload
-                print("payload: ", payload)
                 
                 var rect = bestResult.boundingBox
-                print("rect: ", rect)
+                
                 // flips coordinates
                 rect = rect.applying(CGAffineTransform(scaleX: 1, y: -1))
                 rect = rect.applying(CGAffineTransform(translationX: 0, y: 1))
                 
                 // Get center
                 let center = CGPoint(x: rect.midX, y: rect.midY)
-                print("center: ", center)
                 
                 let sphere = SCNSphere(radius: self.sphereRadius)
                 let material = SCNMaterial()
                 material.diffuse.contents = self.drawingColor
                 sphere.materials = [material]
+                
                 self.qrNode = QRNode(QRValue: self.QRValue, name: UUID().uuidString)
                 self.qrNode!.geometry = sphere
                 if let hitResult = self.currentFrame?.hitTest(center, types: .featurePoint).first {
                     //https://stackoverflow.com/questions/48980834/position-of-node-in-scene
                     let pointTransform = SCNMatrix4(hitResult.worldTransform) //turns the point into a point on the world grid
-                    let pointVector = SCNVector3Make(pointTransform.m41, pointTransform.m42, pointTransform.m43) //the X, Y, and Z of the clicked cordinate
+                    let pointVector = SCNVector3Make(pointTransform.m41, pointTransform.m42, pointTransform.m43) //the X, Y, and Z of the clicked coordinate
                     self.qrNode!.position = pointVector
                 }
                 
@@ -96,12 +94,10 @@ class DrawState: State {
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
                 self.sceneView.scene.rootNode.addChildNode(self.qrNode!)
-                //self.QRNodePosition = self.qrNode!.position
                 self.userRootNode.worldPosition = SCNVector3(0,0,0)
                 Database().saveQRNode(qrNode: self.qrNode!)
                 Database().loadQRNode(qrNode: self.qrNode!, placeQRNodes: self.placeQRNodes)
             } else {
-                //self.showAlert(withTitle: "Unable to extract results", message: "Cannot extract barcode information from data.")
                 //print("Cannot extract barcode information from data.")
             }
         }
@@ -249,24 +245,6 @@ extension DrawState {
         touchMovedFirst = true
         initialNearFarLine = nil
         save()
-    }
-    
-    // MARK: New Code
-    
-    func getNodeDistance(nodePosition: SCNVector3) -> SCNVector3 {
-        return SCNVector3(
-            nodePosition.x - QRNodePosition.x,
-            nodePosition.y - QRNodePosition.y,
-            nodePosition.z - QRNodePosition.z
-        )
-    }
-    
-    func nodePositionRelativeToQR(nodeDistance: SCNVector3) -> SCNVector3 {
-        return SCNVector3(
-            nodeDistance.x + QRNodePosition.x,
-            nodeDistance.y + QRNodePosition.y,
-            nodeDistance.z + QRNodePosition.z
-        )
     }
     
     func touchLocationIn3D (touchLocation2D: CGPoint) -> SCNVector3 {
