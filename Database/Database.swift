@@ -77,12 +77,48 @@ class Database {
                      print("Error saving drawing: \(error.localizedDescription)")
                  }
                  else {
-                     //print("Data has been saved at \(docPath)")
+                     print("QRNode has been saved at \(qrPath)")
                  }
              }
          } catch{
              print("Can't convert node to data")
          }
+    }
+    
+    func loadQRNode(qrNode : QRNode, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void){
+        let qrPath = "QRNodes/\(qrNode.QRValue)/nodes"
+        db.collection(qrPath).getDocuments() { (querySnapshot, err) in
+            self.qrCallBack(querySnapshot: querySnapshot, err: err, placeQRNodes: placeQRNodes)
+        }
+    }
+    
+    func qrCallBack(querySnapshot : QuerySnapshot?, err : Error?, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void){
+        if let err = err {
+                print("Error with query snapshot: \(err.localizedDescription)")
+                return
+            } else {
+                if let snapshot = querySnapshot {
+                    var nodes : [QRNode] = []
+                    for response in snapshot.documents {
+                        do {
+                            let dictionary = response.data()
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data else{
+                                print("can't convert to data")
+                                return
+                            }
+                            let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! QRNode
+                            nodes.append(newNode)
+                            print("Got one QR node and its name is", newNode.name!, " with payload ", newNode.QRValue)
+                        } catch {
+                            print("Could not pull down node")
+                        }
+
+                    }
+                    placeQRNodes(nodes)
+                } else{
+                    print("No snapshot in query snapshot")
+                }
+            }
     }
 
    func retrieveDrawing(location: CLLocation, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void) {

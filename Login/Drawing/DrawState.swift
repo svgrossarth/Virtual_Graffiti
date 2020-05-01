@@ -91,9 +91,44 @@ class DrawState: State {
                 //self.QRNodePosition = self.qrNode!.position
                 self.userRootNode.worldPosition = SCNVector3(0,0,0)
                 Database().saveQRNode(qrNode: self.qrNode!)
+                Database().loadQRNode(qrNode: self.qrNode!, placeQRNodes: self.placeQRNodes)
             } else {
                 //self.showAlert(withTitle: "Unable to extract results", message: "Cannot extract barcode information from data.")
-                print("Cannot extract barcode information from data.")
+                //print("Cannot extract barcode information from data.")
+            }
+        }
+    }
+    
+    func placeQRNodes(qrNodes : [QRNode]){
+        for qrNode in qrNodes{
+            self.sceneView.scene.rootNode.addChildNode(qrNode)
+            if let localQRNode = self.qrNode {
+                qrNode.position = localQRNode.position
+                print("Place qr node")
+                checkForDupUserRootNode(qrNode : qrNode)
+            }
+        }
+    }
+    
+    func checkForDupUserRootNode(qrNode : QRNode){
+        guard let qrNodeUserRoot = qrNode.childNodes.first else {
+            print("can't get qr nodes user root node")
+            return
+        }
+        for node in self.sceneView.scene.rootNode.childNodes {
+            if let userRootNode = node as? SecondTierRoot{
+                guard let userRootName = userRootNode.name else {
+                    print("can't get userRootName")
+                    return
+                }
+                guard let qrUserRootName = qrNodeUserRoot.name else {
+                    print("can't get qrUserRootName")
+                    return
+                }
+                if userRootName == qrUserRootName {
+                    print("found duplicated userRootNode and removing, name of node is ", userRootName)
+                    userRootNode.removeFromParentNode()
+                }
             }
         }
     }
@@ -188,7 +223,6 @@ extension DrawState {
      
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //Database().saveDrawing(location: location, userRootNode: userRootNode!)
         if touchMovedFirst && isSingleTap {
             if let singleTouch = touches.first{
                 let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
@@ -256,7 +290,7 @@ extension DrawState: ARSessionDelegate {
         let distance = distanceBetweenPoints(vec1: SCNVector3(cameraTrans.x, cameraTrans.y, cameraTrans.z),
                                              vec2: SCNVector3(0, 0, 0))
         if distance > 20 {
-            //load()
+            load()
         }
         
         frameCount += 1
@@ -310,11 +344,6 @@ extension DrawState: CLLocationManagerDelegate {
                 locationManager.startUpdatingHeading()
             }
             
-            if hasAngleBeenSaved {
-                if Database().getTile(location: loc) != currentTile {
-                    //load()
-                }
-            }
         }
     }
     
@@ -331,7 +360,7 @@ extension DrawState: CLLocationManagerDelegate {
             userRootNode.tileName = Database().getTile(location: self.location)
             userRootNode.name = UUID().uuidString
             sceneView.scene.rootNode.addChildNode(userRootNode)
-            //load()
+            load()
         }
         //print("the angle", angle)
         
@@ -345,6 +374,10 @@ extension DrawState {
     func save() {
         print("location is ", location)
         Database().saveDrawing(userRootNode: userRootNode)
+        if let localQRNode = self.qrNode {
+            Database().saveQRNode(qrNode: localQRNode)
+        }
+        
     }
     
     
@@ -381,11 +414,9 @@ extension DrawState {
                     if (nodeLongitude < phoneLongitude) {
                         distanceNorthToSouthMeters *= -1
                     }
-                    if self.QRValue != "" {
-                        node.position = self.nodePositionRelativeToQR(nodeDistance: node.QRRelativeDistance)
-                    } else {
-                        node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
-                    }
+
+                    node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
+                    
                     //                print("Latitude difference: \(distanceWestToEastMeters)")
                     //                print("Longitude difference: \(distanceNorthToSouthMeters)")
                     
