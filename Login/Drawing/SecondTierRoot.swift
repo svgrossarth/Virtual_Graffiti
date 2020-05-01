@@ -14,6 +14,8 @@ class SecondTierRoot : SCNNode{
     var location : CLLocation?
     var angleToNorth : Double = 0
     var tileName = ""
+    var QRValue = ""
+    var QRRelativeDistance = SCNVector3()
     
     enum Keys: String {
       case location = "Location"

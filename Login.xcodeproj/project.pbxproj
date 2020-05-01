@@ -23,6 +23,7 @@
 		7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7746C3BF23DE581D00DDC27C /* LaunchScreen.storyboard */; };
 		7746C3CC23DE581E00DDC27C /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3CB23DE581E00DDC27C /* LoginTests.swift */; };
 		7746C3D723DE581E00DDC27C /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3D623DE581E00DDC27C /* LoginUITests.swift */; };
+		77811513245B95AB00985F42 /* QRNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77811512245B95AB00985F42 /* QRNode.swift */; };
 		7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info.plist */; };
 		77D57EF423EE23D400A665A3 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770663F823EB860600E98F63 /* AppAuth.framework */; };
 		77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */; };
@@ -91,6 +92,7 @@
 		7746C3D223DE581E00DDC27C /* LoginUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoginUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7746C3D623DE581E00DDC27C /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		7746C3D823DE581E00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		77811512245B95AB00985F42 /* QRNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRNode.swift; sourceTree = "<group>"; };
 		7791645923DECE6600BDDDCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilKitInterface.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */,
 				C0086EC52412B492001C4A22 /* Math.swift */,
 				CE7C17E3243A4552005CE88A /* EditState.swift */,
+				77811512245B95AB00985F42 /* QRNode.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 				0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */,
 				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
 				0F0E0E89244E95F900AC6004 /* EmojiViewController.swift in Sources */,
+				77811513245B95AB00985F42 /* QRNode.swift in Sources */,
 				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
 				0F0E0E932450F50300AC6004 /* RecentHeaderView.swift in Sources */,
 				C0086EC62412B492001C4A22 /* Math.swift in Sources */,
