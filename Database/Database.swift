@@ -24,7 +24,7 @@ class Database {
     var listeners : [ListenerRegistration] = [ListenerRegistration]()
 
     // retval: Local save success
-    func saveDrawing(userRootNode : SecondTierRoot, qrNode: QRNode?) -> Void {
+    func saveDrawing(userRootNode : SecondTierRoot) -> Void {
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
         let tile = userRootNode.tileName
@@ -60,21 +60,17 @@ class Database {
         } catch{
             print("Can't convert node to data")
         }
-        
-        if qrNode != nil {
-            saveQRNode(qrNode: qrNode!)
-        }
     }
     
     func saveQRNode(qrNode: QRNode) {
-        let qrPath = "QRNodes"
+        let qrPath = "QRNodes/\(qrNode.QRValue)/nodes/\(qrNode.name!)"
         let qrRef = db.document(qrPath)
         
         var qrData: [String: Any] = [:]
          do{
-             let node = try NSKeyedArchiver.archivedData(withRootObject: qrNode as SCNNode, requiringSecureCoding: false)
+             let nodeData = try NSKeyedArchiver.archivedData(withRootObject: qrNode, requiringSecureCoding: false)
             
-            qrData[qrNode.name!] = node
+            qrData[DICT_KEY_NODE] = nodeData
 
              qrRef.setData(qrData) { (error) in
                  if let error = error {

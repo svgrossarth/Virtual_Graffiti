@@ -88,8 +88,9 @@ class DrawState: State {
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
                 self.sceneView.scene.rootNode.addChildNode(self.qrNode!)
-                self.QRNodePosition = self.qrNode!.position
+                //self.QRNodePosition = self.qrNode!.position
                 self.userRootNode.worldPosition = SCNVector3(0,0,0)
+                Database().saveQRNode(qrNode: self.qrNode!)
             } else {
                 //self.showAlert(withTitle: "Unable to extract results", message: "Cannot extract barcode information from data.")
                 print("Cannot extract barcode information from data.")
@@ -343,7 +344,7 @@ extension DrawState: CLLocationManagerDelegate {
 extension DrawState {
     func save() {
         print("location is ", location)
-        Database().saveDrawing(userRootNode: userRootNode, qrNode: qrNode)
+        Database().saveDrawing(userRootNode: userRootNode)
     }
     
     
