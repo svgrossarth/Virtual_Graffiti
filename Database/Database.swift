@@ -15,12 +15,11 @@ import SceneKit
 class Database {
     let degreeDecimalPlaces : Int = 4
 
-   let db = Firestore.firestore()
-   var colRef : CollectionReference!
-   var docRef : DocumentReference!
+    let db = Firestore.firestore()
+    var colRef : CollectionReference!
+    var docRef : DocumentReference!
     let DICT_KEY_NODE = "node"
     let DICT_KEY_LOCATION = "location"
-    let DICT_KEY_ANGLE = "angle"
     var listeners : [ListenerRegistration] = [ListenerRegistration]()
 
    // retval: Local save success
@@ -42,12 +41,10 @@ class Database {
        do{
            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
            let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
-           let nodeAngle = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.angleToNorth, requiringSecureCoding: false)
 
 
            dataToSave[DICT_KEY_NODE] = nodeData
            dataToSave[DICT_KEY_LOCATION] = nodeLocation
-           dataToSave[DICT_KEY_ANGLE] = nodeAngle
 
            docRef.setData(dataToSave) { (error) in
                if let error = error {
@@ -111,23 +108,13 @@ class Database {
                     for response in snapshot.documents {
                         do {
                             let dictionary = response.data()
-                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data else{
-                                print("can't convert to data")
-                                return
-                            }
-                            guard let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data else{
-                                print("can't convert to data")
-                                return
-                            }
-                            guard let nodeAngle = dictionary[self.DICT_KEY_ANGLE] as? Data else{
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data, let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
                             let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
                             let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
-                            let newAngle = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeAngle) as! Double
                             newNode.location = newLocation
-                            newNode.angleToNorth = newAngle
                             nodes.append(newNode)
                             print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {
@@ -136,12 +123,10 @@ class Database {
 
                     }
                     drawFunction(nodes)
-                } else{
+                } else {
                     print("No snapshot in query snapshot")
                 }
             }
-        
-        
     }
     
     func getTile(location : CLLocation) -> String {

@@ -43,6 +43,25 @@
 		CE4CA7B0240E23B6005BEDC8 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CA7AF240E23B6005BEDC8 /* Database.swift */; };
 		CE7C17E0243A3D39005CE88A /* DrawState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7C17DF243A3D39005CE88A /* DrawState.swift */; };
 		CE7C17E4243A4552005CE88A /* EditState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7C17E3243A4552005CE88A /* EditState.swift */; };
+		CE87C3A1245BD64C00524D4B /* AttributedType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C38B245BD64B00524D4B /* AttributedType.swift */; };
+		CE87C3A2245BD64C00524D4B /* ScalingScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C38D245BD64B00524D4B /* ScalingScheme.swift */; };
+		CE87C3A3245BD64C00524D4B /* LocationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C38E245BD64B00524D4B /* LocationNode.swift */; };
+		CE87C3A4245BD64C00524D4B /* PolylineNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C38F245BD64B00524D4B /* PolylineNode.swift */; };
+		CE87C3A5245BD64C00524D4B /* LocationAnnotationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C390245BD64B00524D4B /* LocationAnnotationNode.swift */; };
+		CE87C3A6245BD64C00524D4B /* SceneLocationView+ARSCNViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C391245BD64B00524D4B /* SceneLocationView+ARSCNViewDelegate.swift */; };
+		CE87C3A7245BD64C00524D4B /* SceneLocationEstimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C393245BD64B00524D4B /* SceneLocationEstimate.swift */; };
+		CE87C3A8245BD64C00524D4B /* SceneLocationEstimate+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C394245BD64B00524D4B /* SceneLocationEstimate+Extensions.swift */; };
+		CE87C3A9245BD64C00524D4B /* SceneLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C395245BD64B00524D4B /* SceneLocationManager.swift */; };
+		CE87C3AA245BD64C00524D4B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C396245BD64B00524D4B /* LocationManager.swift */; };
+		CE87C3AB245BD64C00524D4B /* SCNVector3+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C398245BD64B00524D4B /* SCNVector3+Extensions.swift */; };
+		CE87C3AC245BD64C00524D4B /* FloatingPoint+Radians.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C399245BD64B00524D4B /* FloatingPoint+Radians.swift */; };
+		CE87C3AD245BD64C00524D4B /* BaseTypes+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39A245BD64B00524D4B /* BaseTypes+Extensions.swift */; };
+		CE87C3AE245BD64C00524D4B /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39B245BD64B00524D4B /* CGPoint+Extensions.swift */; };
+		CE87C3AF245BD64C00524D4B /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39C245BD64B00524D4B /* CLLocation+Extensions.swift */; };
+		CE87C3B0245BD64C00524D4B /* SCNNode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39D245BD64B00524D4B /* SCNNode+Extensions.swift */; };
+		CE87C3B1245BD64C00524D4B /* ARKit_CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */; };
+		CE87C3B2245BD64C00524D4B /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39F245BD64B00524D4B /* SceneLocationView.swift */; };
+		CE87C3B3245BD64C00524D4B /* SceneLocationViewEstimateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +129,25 @@
 		CE4CA7AF240E23B6005BEDC8 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		CE7C17DF243A3D39005CE88A /* DrawState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DrawState.swift; path = Login/Drawing/DrawState.swift; sourceTree = SOURCE_ROOT; };
 		CE7C17E3243A4552005CE88A /* EditState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditState.swift; sourceTree = "<group>"; };
+		CE87C38B245BD64B00524D4B /* AttributedType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedType.swift; sourceTree = "<group>"; };
+		CE87C38D245BD64B00524D4B /* ScalingScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScalingScheme.swift; sourceTree = "<group>"; };
+		CE87C38E245BD64B00524D4B /* LocationNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationNode.swift; sourceTree = "<group>"; };
+		CE87C38F245BD64B00524D4B /* PolylineNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolylineNode.swift; sourceTree = "<group>"; };
+		CE87C390245BD64B00524D4B /* LocationAnnotationNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationAnnotationNode.swift; sourceTree = "<group>"; };
+		CE87C391245BD64B00524D4B /* SceneLocationView+ARSCNViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SceneLocationView+ARSCNViewDelegate.swift"; sourceTree = "<group>"; };
+		CE87C393245BD64B00524D4B /* SceneLocationEstimate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationEstimate.swift; sourceTree = "<group>"; };
+		CE87C394245BD64B00524D4B /* SceneLocationEstimate+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SceneLocationEstimate+Extensions.swift"; sourceTree = "<group>"; };
+		CE87C395245BD64B00524D4B /* SceneLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationManager.swift; sourceTree = "<group>"; };
+		CE87C396245BD64B00524D4B /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		CE87C398245BD64B00524D4B /* SCNVector3+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+Extensions.swift"; sourceTree = "<group>"; };
+		CE87C399245BD64B00524D4B /* FloatingPoint+Radians.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+Radians.swift"; sourceTree = "<group>"; };
+		CE87C39A245BD64B00524D4B /* BaseTypes+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BaseTypes+Extensions.swift"; sourceTree = "<group>"; };
+		CE87C39B245BD64B00524D4B /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
+		CE87C39C245BD64B00524D4B /* CLLocation+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extensions.swift"; sourceTree = "<group>"; };
+		CE87C39D245BD64B00524D4B /* SCNNode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extensions.swift"; sourceTree = "<group>"; };
+		CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit_CoreLocation.swift; sourceTree = "<group>"; };
+		CE87C39F245BD64B00524D4B /* SceneLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
+		CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationViewEstimateDelegate.swift; sourceTree = "<group>"; };
 		D12B60A23CE2829BFF713547 /* Pods-LoginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoginTests.debug.xcconfig"; path = "Target Support Files/Pods-LoginTests/Pods-LoginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7AB918D93536D5B88048109 /* Pods-LoginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoginTests.release.xcconfig"; path = "Target Support Files/Pods-LoginTests/Pods-LoginTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -172,6 +210,7 @@
 		7746C3A823DE581C00DDC27C = {
 			isa = PBXGroup;
 			children = (
+				CE87C389245BD64B00524D4B /* ARKit-CoreLocation */,
 				CE4CA7AE240E238B005BEDC8 /* Database */,
 				7746C3B323DE581C00DDC27C /* Login */,
 				7746C3CA23DE581E00DDC27C /* LoginTests */,
@@ -292,6 +331,64 @@
 				CE4CA7AF240E23B6005BEDC8 /* Database.swift */,
 			);
 			path = Database;
+			sourceTree = "<group>";
+		};
+		CE87C389245BD64B00524D4B /* ARKit-CoreLocation */ = {
+			isa = PBXGroup;
+			children = (
+				CE87C38A245BD64B00524D4B /* Util */,
+				CE87C38C245BD64B00524D4B /* Nodes */,
+				CE87C391245BD64B00524D4B /* SceneLocationView+ARSCNViewDelegate.swift */,
+				CE87C392245BD64B00524D4B /* Location Manager */,
+				CE87C397245BD64B00524D4B /* Extensions */,
+				CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */,
+				CE87C39F245BD64B00524D4B /* SceneLocationView.swift */,
+				CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */,
+			);
+			path = "ARKit-CoreLocation";
+			sourceTree = "<group>";
+		};
+		CE87C38A245BD64B00524D4B /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				CE87C38B245BD64B00524D4B /* AttributedType.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		CE87C38C245BD64B00524D4B /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				CE87C38D245BD64B00524D4B /* ScalingScheme.swift */,
+				CE87C38E245BD64B00524D4B /* LocationNode.swift */,
+				CE87C38F245BD64B00524D4B /* PolylineNode.swift */,
+				CE87C390245BD64B00524D4B /* LocationAnnotationNode.swift */,
+			);
+			path = Nodes;
+			sourceTree = "<group>";
+		};
+		CE87C392245BD64B00524D4B /* Location Manager */ = {
+			isa = PBXGroup;
+			children = (
+				CE87C393245BD64B00524D4B /* SceneLocationEstimate.swift */,
+				CE87C394245BD64B00524D4B /* SceneLocationEstimate+Extensions.swift */,
+				CE87C395245BD64B00524D4B /* SceneLocationManager.swift */,
+				CE87C396245BD64B00524D4B /* LocationManager.swift */,
+			);
+			path = "Location Manager";
+			sourceTree = "<group>";
+		};
+		CE87C397245BD64B00524D4B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CE87C398245BD64B00524D4B /* SCNVector3+Extensions.swift */,
+				CE87C399245BD64B00524D4B /* FloatingPoint+Radians.swift */,
+				CE87C39A245BD64B00524D4B /* BaseTypes+Extensions.swift */,
+				CE87C39B245BD64B00524D4B /* CGPoint+Extensions.swift */,
+				CE87C39C245BD64B00524D4B /* CLLocation+Extensions.swift */,
+				CE87C39D245BD64B00524D4B /* SCNNode+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -572,29 +669,48 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FA41249244A94CC00C5FA8E /* Emoji.swift in Sources */,
+				CE87C3AF245BD64C00524D4B /* CLLocation+Extensions.swift in Sources */,
 				C0086EC22412B113001C4A22 /* Stroke.swift in Sources */,
 				0F0E0E8D244E993200AC6004 /* MenuCollectionViewCell.swift in Sources */,
 				77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */,
+				CE87C3AE245BD64C00524D4B /* CGPoint+Extensions.swift in Sources */,
 				7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */,
 				7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */,
 				77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */,
+				CE87C3A8245BD64C00524D4B /* SceneLocationEstimate+Extensions.swift in Sources */,
+				CE87C3A1245BD64C00524D4B /* AttributedType.swift in Sources */,
 				77E74DC823E222CF00C6E65C /* LoginViewController.swift in Sources */,
 				CE7C17E4243A4552005CE88A /* EditState.swift in Sources */,
 				77E74DCD23E240F000C6E65C /* Constants.swift in Sources */,
 				CE4CA7B0240E23B6005BEDC8 /* Database.swift in Sources */,
+				CE87C3A9245BD64C00524D4B /* SceneLocationManager.swift in Sources */,
 				0FA41247244A94CB00C5FA8E /* ModeButton.swift in Sources */,
+				CE87C3B1245BD64C00524D4B /* ARKit_CoreLocation.swift in Sources */,
+				CE87C3A4245BD64C00524D4B /* PolylineNode.swift in Sources */,
+				CE87C3AD245BD64C00524D4B /* BaseTypes+Extensions.swift in Sources */,
+				CE87C3B0245BD64C00524D4B /* SCNNode+Extensions.swift in Sources */,
 				7746C3B723DE581C00DDC27C /* SceneDelegate.swift in Sources */,
+				CE87C3AA245BD64C00524D4B /* LocationManager.swift in Sources */,
 				C09D24E6244824BB00FFA752 /* Stack.swift in Sources */,
+				CE87C3AB245BD64C00524D4B /* SCNVector3+Extensions.swift in Sources */,
+				CE87C3AC245BD64C00524D4B /* FloatingPoint+Radians.swift in Sources */,
 				77E804CE23EB6AE300432DCD /* Experience.rcproject in Sources */,
+				CE87C3B3245BD64C00524D4B /* SceneLocationViewEstimateDelegate.swift in Sources */,
 				0F0E0E8B244E98E300AC6004 /* RecentCollectionViewCell.swift in Sources */,
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
 				C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */,
 				CE7C17E0243A3D39005CE88A /* DrawState.swift in Sources */,
 				0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */,
 				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
+				CE87C3B2245BD64C00524D4B /* SceneLocationView.swift in Sources */,
+				CE87C3A5245BD64C00524D4B /* LocationAnnotationNode.swift in Sources */,
 				0F0E0E89244E95F900AC6004 /* EmojiViewController.swift in Sources */,
+				CE87C3A7245BD64C00524D4B /* SceneLocationEstimate.swift in Sources */,
 				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
+				CE87C3A3245BD64C00524D4B /* LocationNode.swift in Sources */,
+				CE87C3A6245BD64C00524D4B /* SceneLocationView+ARSCNViewDelegate.swift in Sources */,
 				0F0E0E932450F50300AC6004 /* RecentHeaderView.swift in Sources */,
+				CE87C3A2245BD64C00524D4B /* ScalingScheme.swift in Sources */,
 				C0086EC62412B492001C4A22 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
