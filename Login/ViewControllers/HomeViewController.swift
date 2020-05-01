@@ -50,7 +50,7 @@ class HomeViewController: UIViewController {
 
     @IBOutlet weak var changeEmojiButton: UIButton!
     @IBOutlet weak var emojiButton: ModeButton!
-    @IBOutlet weak var sceneView: ARSCNView!
+    @IBOutlet weak var sceneView: SceneLocationView!
     
     
     override func viewDidLoad() {

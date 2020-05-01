@@ -14,24 +14,21 @@ import Vision
 
 
 class DrawState: State {
-    weak var sceneView: ARSCNView!
+    weak var sceneView: SceneLocationView!
     
-    let locationManager : CLLocationManager = CLLocationManager()
-    var location : CLLocation = CLLocation()
     var currentTile : String = ""
     // Startup Buffer because the initial locationmanager locations are not the most accurate
     let startupBufferLimit = 3
     var startupBuffer = 0
     
     var currentStroke : Stroke?
-    var hasAngleBeenSaved = false
     
     var cameraTrans = simd_float4()
     var previousNode = SCNNode()
     var touchMovedFirst = true
     var lineBetweenNearFar : SCNVector3?
     var initialNearFarLine : SCNVector3?
-    var userRootNode = SecondTierRoot()
+    var userRootNode : SecondTierRoot?
     var hasLocationBeenSaved =  false
     var heading : CLHeading = CLHeading()
     var headingSet : Bool = false
@@ -138,9 +135,9 @@ class DrawState: State {
         }
     }
     
-    func initialize(_sceneView: ARSCNView!) {
-        _initializeLocationManager()
+    func initialize(_sceneView: SceneLocationView!) {
         _initializeSceneView(_sceneView: _sceneView)
+        initializeUserRootNode()
     }
     
     
@@ -153,30 +150,35 @@ class DrawState: State {
     }
     
     
-    func _initializeLocationManager() {
-        location = CLLocation(latitude: -51, longitude: -51)
-        locationManager.requestAlwaysAuthorization()
-        locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            locationManager.requestAlwaysAuthorization()
-            locationManager.startUpdatingLocation()
+    func initializeUserRootNode() {
+        guard let location = sceneLocationManager.currentLocation else {
+            // No location, try again in a second
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: initializeUserRootNode)
+            return
         }
+        
+        let df = DateFormatter()
+        df.dateFormat = "yyy-MM-dd hh:mm:ss"
+        let now = df.string(from: Date())
+        
+        userRootNode = SecondTierRoot(location: location)
+        userRootNode?.name = "(\(location.coordinate.latitude), \(location.coordinate.longitude)), \(now)"
+        userRootNode?.tileName = Database().getTile(location: location)
+        print("Initialized at tile \(Database().getTile(location: location))")
+        sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode!)
+        
+        load()
     }
     
     
-    func _initializeSceneView(_sceneView: ARSCNView!) {
+    func _initializeSceneView(_sceneView: SceneLocationView!) {
         sceneView = _sceneView
         addSubview(sceneView)
-        sceneView.delegate = self
-        sceneView.session.delegate = self
        // sceneView.showsStatistics = true
         let scene = SCNScene()
         sceneView.scene = scene
         
-        let configuration = ARWorldTrackingConfiguration() // Create a session configuration
-        sceneView.session.run(configuration) // Run the view's session
+        sceneView.run() // Run the view's session
     }
     
     
@@ -196,7 +198,7 @@ extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         isSingleTap = true
         if let singleTouch = touches.first{
-            userRootNode.light = addLighting()
+            userRootNode?.light = addLighting()
         } else {
             print("can't get touch")
         }
@@ -214,7 +216,7 @@ extension DrawState {
             if touchMovedFirst {
                 touchMovedFirst =  false
                 currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
-                userRootNode.addChildNode(currentStroke!)
+                userRootNode?.addChildNode(currentStroke!)
             } else {
                 guard let firstNearFarLine = initialNearFarLine else { return }
                 guard let nearFar = lineBetweenNearFar else { return }
@@ -232,7 +234,7 @@ extension DrawState {
             if let singleTouch = touches.first{
                 let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 let sphereNode = createSphere(position: touchLocation)
-                userRootNode.addChildNode(sphereNode)
+                userRootNode?.addChildNode(sphereNode)
             } else {
                 print("can't get touch")
             }
@@ -260,11 +262,6 @@ extension DrawState {
     }
 }
 
-
-extension DrawState: ARSCNViewDelegate {
-
-}
-    
 
 extension DrawState: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -313,104 +310,32 @@ extension DrawState: ARSessionDelegate {
 }
 
 
-extension DrawState: CLLocationManagerDelegate {
-    // Update location
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if (startupBuffer < startupBufferLimit) {
-            startupBuffer += 1
-            return
-        }
-        
-        if let loc = manager.location {
-            location = loc
-            if(!hasLocationBeenSaved){
-                hasLocationBeenSaved = true
-                locationManager.startUpdatingHeading()
-            }
-            
-            if hasAngleBeenSaved {
-                if Database().getTile(location: loc) != currentTile {
-                    //load()
-                }
-            }
-        }
-    }
-    
-    // Update header
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        heading = newHeading
-        headingSet = true
-        let angle = deg2rad(heading.trueHeading)
-        if !hasAngleBeenSaved {
-            hasAngleBeenSaved = true
-
-            userRootNode.location = self.location
-            userRootNode.angleToNorth = angle
-            userRootNode.tileName = Database().getTile(location: self.location)
-            userRootNode.name = UUID().uuidString
-            sceneView.scene.rootNode.addChildNode(userRootNode)
-            load()
-        }
-        //print("the angle", angle)
-        
-       // userRootNode?.rotate(by: SCNQuaternion(0, 1, 0, angle), aroundTarget: SCNVector3Make(0, 0, 0))
-        //locationManager.stopUpdatingHeading()
-    }
-}
-
-
 extension DrawState {
     func save() {
-        Database().saveDrawing(userRootNode: userRootNode)
         if let localQRNode = self.qrNode {
             Database().saveQRNode(qrNode: localQRNode)
         }
+        guard let location = sceneLocationManager.currentLocation, let rootNode = userRootNode else { return }
+        Database().saveDrawing(location: location, userRootNode: rootNode)
     }
     
     
     func load() {
-        if !headingSet {
-            return
-        }
+        guard let location = sceneLocationManager.currentLocation else { return }
         let db = Database()
         currentTile = db.getTile(location: location)
-        print("load has been called and herer is the tile", currentTile)
+        print("load has been called and here is the tile", currentTile)
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
-            //            for node in self.sceneView.scene.rootNode.childNodes {
-            //                node.removeFromParentNode()
-            //            }
+            //self.sceneView.removeAllNodes() // Clear nodes
             
             for node in retrievedNodes {
                 let nodeExists = self.checkIfNodeExists(newNode: node)
                 if !nodeExists {
-                    print("Node of Name will be added to scene ", node.name)
-                    guard let nodeLocation = node.location else {
-                        print("can't get node location")
-                        return
+                    self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: node)
+                    if let nodeLocation = node.location {
+                        print("Node at location: \(nodeLocation)")
                     }
-                    let nodeLatitude = nodeLocation.coordinate.latitude
-                    let nodeLongitude = nodeLocation.coordinate.longitude
-                    let phoneLatitude = self.location.coordinate.latitude
-                    let phoneLongitude = self.location.coordinate.longitude
-                    var distanceWestToEastMeters = Float(self.location.distance(from: CLLocation.init(latitude: nodeLatitude, longitude: phoneLongitude)))
-                    var distanceNorthToSouthMeters = Float(self.location.distance(from: CLLocation.init(latitude: phoneLatitude, longitude: nodeLongitude)))
-                    
-                    if (nodeLatitude < phoneLatitude) {
-                        distanceWestToEastMeters *= -1
-                    }
-                    if (nodeLongitude < phoneLongitude) {
-                        distanceNorthToSouthMeters *= -1
-                    }
-                    node.simdPosition = SIMD3<Float>(distanceWestToEastMeters, 0.0, distanceNorthToSouthMeters)
-                    //                print("Latitude difference: \(distanceWestToEastMeters)")
-                    //                print("Longitude difference: \(distanceNorthToSouthMeters)")
-                    
-                    let currentAngle = deg2rad(self.heading.trueHeading)
-                    let angleOfRotation = currentAngle - node.angleToNorth
-                    node.rotation = SCNVector4Make(0, 1, 0, Float(angleOfRotation))
-                    self.sceneView.scene.rootNode.addChildNode(node)
                 }
-                
             }
         })
     }

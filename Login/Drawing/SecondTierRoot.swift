@@ -10,26 +10,21 @@ import Foundation
 import SceneKit
 import CoreLocation
 
-class SecondTierRoot : SCNNode{
-    var location : CLLocation?
-    var angleToNorth : Double = 0
+class SecondTierRoot : LocationNode {
     var tileName = ""
     var QRValue = ""
     var QRRelativeDistance = SCNVector3()
     
     enum Keys: String {
-      case location = "Location"
-      case node = "node"
+        case location = "Location"
+        case node = "node"
     }
     
-    override init() {
-        super.init()
+    init(location : CLLocation) {
+        super.init(location: location)
     }
     
     required init?(coder: NSCoder) {
-
-         //self.location = CLLocation()
-        self.location = CLLocation()
         //let node = coder.decodeObject(forKey: Keys.node.rawValue) as! SCNNode
         super.init(coder: coder)
 
