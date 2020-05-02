@@ -20,7 +20,8 @@ class SecondTierRoot : LocationNode {
         case node = "node"
     }
     
-    init(location : CLLocation) {
+    init() {
+        let location = CLLocation()
         super.init(location: location)
     }
     

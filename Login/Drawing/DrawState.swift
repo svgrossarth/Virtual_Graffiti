@@ -13,7 +13,7 @@ import CoreLocation
 import Vision
 
 
-class DrawState: State {
+class DrawState: State, ARSCNViewDelegate {
     weak var sceneView: SceneLocationView!
     
     var currentTile : String = ""
@@ -28,7 +28,7 @@ class DrawState: State {
     var touchMovedFirst = true
     var lineBetweenNearFar : SCNVector3?
     var initialNearFarLine : SCNVector3?
-    var userRootNode : SecondTierRoot?
+    var userRootNode : SecondTierRoot = SecondTierRoot()
     var hasLocationBeenSaved =  false
     var heading : CLHeading = CLHeading()
     var headingSet : Bool = false
@@ -161,11 +161,11 @@ class DrawState: State {
         df.dateFormat = "yyy-MM-dd hh:mm:ss"
         let now = df.string(from: Date())
         
-        userRootNode = SecondTierRoot(location: location)
-        userRootNode?.name = "(\(location.coordinate.latitude), \(location.coordinate.longitude)), \(now)"
-        userRootNode?.tileName = Database().getTile(location: location)
-        print("Initialized at tile \(Database().getTile(location: location))")
-        sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode!)
+        userRootNode = SecondTierRoot()
+        userRootNode.name = UUID().uuidString
+        userRootNode.tileName = Database().getTile(location: location)
+        //print("Initialized at tile \(Database().getTile(location: location))")
+        sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode)
         
         load()
     }
@@ -179,6 +179,10 @@ class DrawState: State {
         sceneView.scene = scene
         
         sceneView.run() // Run the view's session
+        
+         sceneView.arViewDelegate = self
+         sceneView.session.delegate = self
+        // sceneView.showsStatistics = true
     }
     
     
@@ -198,7 +202,7 @@ extension DrawState {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         isSingleTap = true
         if let singleTouch = touches.first{
-            userRootNode?.light = addLighting()
+            userRootNode.light = addLighting()
         } else {
             print("can't get touch")
         }
@@ -216,7 +220,7 @@ extension DrawState {
             if touchMovedFirst {
                 touchMovedFirst =  false
                 currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
-                userRootNode?.addChildNode(currentStroke!)
+                userRootNode.addChildNode(currentStroke!)
             } else {
                 guard let firstNearFarLine = initialNearFarLine else { return }
                 guard let nearFar = lineBetweenNearFar else { return }
@@ -234,7 +238,7 @@ extension DrawState {
             if let singleTouch = touches.first{
                 let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 let sphereNode = createSphere(position: touchLocation)
-                userRootNode?.addChildNode(sphereNode)
+                userRootNode.addChildNode(sphereNode)
             } else {
                 print("can't get touch")
             }
@@ -315,8 +319,8 @@ extension DrawState {
         if let localQRNode = self.qrNode {
             Database().saveQRNode(qrNode: localQRNode)
         }
-        guard let location = sceneLocationManager.currentLocation, let rootNode = userRootNode else { return }
-        Database().saveDrawing(location: location, userRootNode: rootNode)
+        guard let location = sceneLocationManager.currentLocation else { return }
+        Database().saveDrawing(userRootNode: userRootNode)
     }
     
     
