@@ -97,16 +97,19 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
             return menuCell
         }
         let recentCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Recent Cell", for: indexPath) as! RecentCollectionViewCell
+
         if collectionView == RecentCollection {
-            //if has user ->
-                //load from database
-            //if not->
             let modelName = recentModels[indexPath.item].name
             if let image = UIImage(named: "\(modelName)"){
                        recentCell.RecentModelImage.image = image
             }
         }
         return recentCell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
+    {
+        return CGSize(width: view.frame.width/8, height: view.frame.width/8)
     }
 
     //section header view
@@ -144,10 +147,10 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
 
     //MARK: - UICollectionViewDelegateFlowLayout
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        return CGSize(width: collectionView.frame.width, height: 70)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
+//    {
+//        return CGSize(width: collectionView.frame.width, height: 35)
+//    }
 
 
     //MARK: - search

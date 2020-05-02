@@ -12,7 +12,6 @@ class ModeButton: UIButton {
 
 
         static var isOn = false
-        let Blue = UIColor(red: 29.0/255.0, green: 161.0/255.0, blue: 242.0/255.0, alpha: 1.0)
 
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -25,31 +24,42 @@ class ModeButton: UIButton {
         }
 
         func initButton() {
-            setTitleColor( Blue, for: .normal)
+            setImage(UIImage(named: "emojiOff"), for: .normal)
             addTarget(self, action: #selector( ModeButton.buttonPressed), for: .touchUpInside)
         }
 
         @objc func buttonPressed() {
-            activateButton(bool: !ModeButton.isOn)
+            if ModeButton.isOn{
+                deactivateButton()
+            } else{
+                activateButton(imageName: "bandage")
+            }
         }
 
-        func activateButton(bool: Bool) {
+    func activateButton(imageName: String) {
+            ModeButton.isOn = true
 
-            ModeButton.isOn = bool
-
-            let color = bool ?  Blue : .clear
-            let title = bool ? "Emoji On" : "Emoji Off"
-            let titleColor = bool ? .white :  Blue
+            let title = "Emoji On"
+            let image = UIImage(named: imageName)
 
             setTitle(title, for: .normal)
-            setTitleColor(titleColor, for: .normal)
-            backgroundColor = color
+            setImage(image, for: .normal)
         }
+
+    func deactivateButton(){
+        ModeButton.isOn = false
+
+        let title = "Emoji Off"
+        let image = UIImage(named: "emojiOff")
+
+        setTitle(title, for: .normal)
+        setImage(image, for: .normal)
+
+    }
 
     }
 
     class ChoiceButton : UIButton {
-        let Blue = UIColor(red: 29.0/255.0, green: 161.0/255.0, blue: 242.0/255.0, alpha: 1.0)
         override init(frame: CGRect) {
                super.init(frame: frame)
                initButton()
@@ -61,6 +71,6 @@ class ModeButton: UIButton {
            }
 
            func initButton() {
-                setTitleColor(Blue, for: .normal)
+                setImage(UIImage(named: "emojiOff"), for: .normal)
            }
 }

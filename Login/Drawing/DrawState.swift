@@ -36,6 +36,7 @@ class DrawState: State, ARSCNViewDelegate {
     var width : Float = 0.01
     let sphereRadius : CGFloat = 0.01
     var drawingColor: UIColor = .systemBlue
+    var currentPen = "bluePen"
     var isSingleTap = false
     
     var coordinate: CLLocation! = nil

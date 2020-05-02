@@ -12,6 +12,8 @@
 
 //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
+//https://iconsplace.com/custom-color/pencil-icon/
+
 import UIKit
 import SceneKit
 import ARKit
@@ -35,6 +37,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var greenButton: UIButton!
     @IBOutlet weak var blueButton: UIButton!
     
+    @IBOutlet weak var pencilButton: UIButton!
     @IBOutlet weak var eraseButton: UIButton!
     @IBOutlet weak var changeColorButton: UIButton!
     
@@ -48,7 +51,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var undo: UIButton!
     @IBOutlet weak var redo: UIButton!
 
-    @IBOutlet weak var changeEmojiButton: UIButton!
+    @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var emojiButton: ModeButton!
     @IBOutlet weak var sceneView: SceneLocationView!
     
@@ -62,9 +65,14 @@ class HomeViewController: UIViewController {
         state = drawState
         state.enter()
         uiSetup()
+
+        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
+        changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
+
         view.addSubview(editState)
-        editState.initialize(emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
+        editState.initialize(pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
+
     }
     
     func uiSetup () {
@@ -77,18 +85,24 @@ class HomeViewController: UIViewController {
         widthSlider.maximumValue = 2
         widthSlider.value = 1
         widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        blueButton.layer.cornerRadius = 0.5 * blueButton.bounds.size.width
+        redButton.layer.cornerRadius = 0.5 * redButton.bounds.size.width
+        greenButton.layer.cornerRadius = 0.5 * greenButton.bounds.size.width
+        yellowButton.layer.cornerRadius = 0.5 * yellowButton.bounds.size.width
+        orangeButton.layer.cornerRadius = 0.5 * orangeButton.bounds.size.width
         self.view.bringSubviewToFront(distanceSlider)
         self.view.bringSubviewToFront(distanceLable)
         self.view.bringSubviewToFront(distanceValue)
         self.view.bringSubviewToFront(changeColorButton)
         self.view.bringSubviewToFront(eraseButton)
+        self.view.bringSubviewToFront(menuButton)
         self.view.bringSubviewToFront(colorStack)
         self.view.bringSubviewToFront(widthLabel)
         self.view.bringSubviewToFront(widthSlider)
         self.view.bringSubviewToFront(undo)
         self.view.bringSubviewToFront(redo)
         self.view.bringSubviewToFront(emojiButton)
-        self.view.bringSubviewToFront(changeEmojiButton)
+        self.view.bringSubviewToFront(pencilButton)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
@@ -113,47 +127,72 @@ class HomeViewController: UIViewController {
         }
     }
     
+    @IBAction func pencilButton(_ sender: Any) {
+        editState.pencilButtonTouched()
+    }
+
     @IBAction func redButton(_ sender: Any) {
         print("red button clicked")
         drawState.drawingColor = .systemRed
-        changeColorButton.backgroundColor = .systemRed
+        changeColorButton.setImage(UIImage(named: "colorOn"), for: .normal)
+        drawState.currentPen = "redPen"
+        editState.pencilButtonTouched()
+        colorStack.isHidden = true
     }
     @IBAction func orangeButton(_ sender: Any) {
         print("orange button clicked")
         drawState.drawingColor = .systemOrange
-        changeColorButton.backgroundColor = .systemOrange
+        changeColorButton.setImage(UIImage(named: "colorOn"), for: .normal)
+        drawState.currentPen = "orangePen"
+        editState.pencilButtonTouched()
+        colorStack.isHidden = true
     }
     @IBAction func yellowButton(_ sender: Any) {
         print("yellow button clicked")
         drawState.drawingColor = .systemYellow
-        changeColorButton.backgroundColor = .systemYellow
+        changeColorButton.setImage(UIImage(named: "colorOn"), for: .normal)
+
+        drawState.currentPen = "yellowPen"
+        editState.pencilButtonTouched()
+        colorStack.isHidden = true
     }
     @IBAction func greenButton(_ sender: Any) {
         print("green button clicked")
         drawState.drawingColor = .systemGreen
-        changeColorButton.backgroundColor = .systemGreen
+        changeColorButton.setImage(UIImage(named: "colorOn"), for: .normal)
+        drawState.currentPen = "greenPen"
+        editState.pencilButtonTouched()
+        colorStack.isHidden = true
     }
     @IBAction func blueButton(_ sender: Any) {
         print("blue button clicked")
         drawState.drawingColor = .systemBlue
-        changeColorButton.backgroundColor = .systemBlue
+        changeColorButton.setImage(UIImage(named: "colorOn"), for: .normal)
+        drawState.currentPen = "bluePen"
+        editState.pencilButtonTouched()
+        colorStack.isHidden = true
     }
     
     @IBAction func colorSelectorButton(_ sender: Any) {
         editState.changeColor()
     }
+
     @IBAction func eraseButtonTouchUp(_ sender: Any) {
         editState.eraseButtonTouchUp()
+        changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
     }
 
-//    @IBAction func changeEmojiButtonPressed(_ sender: Any) {
-//        let controller = EmojiViewController()
-//        controller.delegate = self
-////        self.dismiss(animated: true, completion:{
-//            print("present")
-//            self.present(controller, animated: true, completion: nil)
-////        })
-//    }
+    @IBAction func emojiButtonPressed(_ sender: Any) {
+        print("emojiButtonPressed")
+        editState.emojiButtonTouched()
+        changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
+        //show view
+    }
+
+    @IBAction func menuButtonTouched(_ sender: Any) {
+        editState.menuButtonTouched()
+    }
+
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
            if let newVC = segue.destination as? EmojiViewController {
@@ -162,26 +201,16 @@ class HomeViewController: UIViewController {
            }
     }
 
-    @IBAction func emojiButtonPressed(_ sender: Any) {
-        print("emojiButtonPressed")
-        editState.emojiButtonTouched()
-    }
-
-
-    
     func changeHiddenOfEditMode(){
-        if distanceSlider.isHidden {
+        if menuButton.isHidden {
             distanceSlider.isHidden = false
             distanceValue.isHidden = false
             distanceLable.isHidden = false
-            changeColorButton.isHidden = false
-            eraseButton.isHidden = false
             widthSlider.isHidden = false
             widthLabel.isHidden = false
             undo.isHidden = false
             redo.isHidden = false
-            emojiButton.isHidden = false
-            changeEmojiButton.isHidden = false
+            menuButton.isHidden = false
         } else {
             distanceSlider.isHidden = true
             distanceValue.isHidden = true
@@ -193,8 +222,9 @@ class HomeViewController: UIViewController {
             widthLabel.isHidden = true
             undo.isHidden = true
             redo.isHidden = true
+            menuButton.isHidden = true
             emojiButton.isHidden = true
-            changeEmojiButton.isHidden = true
+            pencilButton.isHidden = true
         }
     }
     
@@ -263,7 +293,7 @@ class HomeViewController: UIViewController {
             }
         }
     }
-//
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //state.touchesMoved(touches, with: event)
         if !editState.eraserOn && !editState.EmojiOn {
@@ -272,7 +302,7 @@ class HomeViewController: UIViewController {
             editState.touchesMoved(touches, with: event)
         }
     }
-//
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
    //     state.touchesEnded(touches, with: event)
         if !editState.eraserOn {
@@ -338,6 +368,8 @@ extension HomeViewController : ChangeEmojiDelegate{
         self.dismiss(animated: true)
         self.emoji = emoji
         editState.stateChangeEmoji(emoji: emoji)
+        editState.emojiButton.activateButton(imageName: emoji.name)
+        editState.menuButton.setImage(UIImage(named: emoji.name), for: .normal )
         print("home:", emoji.name)
     }
     func getUpdatedList() ->[Emoji] {
