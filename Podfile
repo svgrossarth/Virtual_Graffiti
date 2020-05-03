@@ -1,18 +1,18 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'Login' do
+target 'Virtual Graffiti' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Login
+  # Pods for Virtual Graffiti
 
-  target 'LoginTests' do
+  target 'Virtual GraffitiTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
-  target 'LoginUITests' do
+  target 'Virtual GraffitiUITests' do
     # Pods for testing
   end
 
