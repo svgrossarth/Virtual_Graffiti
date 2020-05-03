@@ -78,7 +78,7 @@ class Database {
                      print("Error saving drawing: \(error.localizedDescription)")
                  }
                  else {
-                     print("QRNode has been saved at \(qrPath)")
+                     //print("QRNode has been saved at \(qrPath)")
                  }
              }
          } catch{
@@ -109,7 +109,10 @@ class Database {
                             }
                             let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! QRNode
                             nodes.append(newNode)
-                            print("Got one QR node and its name is", newNode.name!, " with payload ", newNode.QRValue)
+                            if let childNode = newNode.childNodes.first{
+                                print("Got one QR node and its childs name is", childNode.name!)
+                            }
+                            
                         } catch {
                             print("Could not pull down node")
                         }

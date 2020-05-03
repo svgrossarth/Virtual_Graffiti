@@ -92,7 +92,11 @@ class DrawState: State, ARSCNViewDelegate {
                 
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
-                self.sceneView.scene.rootNode.addChildNode(self.qrNode!)
+                guard let sceneNode = self.sceneView.sceneNode else {
+                    print("ERROR: sceneNode not available to place qrNode, this is a problem with the new ARCL library")
+                    return
+                }
+                sceneNode.addChildNode(self.qrNode!)
                 self.userRootNode.worldPosition = SCNVector3(0,0,0)
                 Database().saveQRNode(qrNode: self.qrNode!)
                 Database().loadQRNode(qrNode: self.qrNode!, placeQRNodes: self.placeQRNodes)
@@ -104,10 +108,13 @@ class DrawState: State, ARSCNViewDelegate {
     
     func placeQRNodes(qrNodes : [QRNode]){
         for qrNode in qrNodes{
-            self.sceneView.scene.rootNode.addChildNode(qrNode)
+            guard let sceneNode = self.sceneView.sceneNode else {
+                print("ERROR: sceneNode not available to place qrNode pulled from db, this is a problem with the new ARCL library")
+                return
+            }
+            sceneNode.addChildNode(qrNode)
             if let localQRNode = self.qrNode {
                 qrNode.position = localQRNode.position
-                print("Place qr node")
                 checkForDupUserRootNode(qrNode : qrNode)
             }
         }
@@ -118,7 +125,11 @@ class DrawState: State, ARSCNViewDelegate {
             print("can't get qr nodes user root node")
             return
         }
-        for node in self.sceneView.scene.rootNode.childNodes {
+        guard let sceneNode = self.sceneView.sceneNode else {
+            print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
+            return
+        }
+        for node in sceneNode.childNodes {
             if let userRootNode = node as? SecondTierRoot{
                 guard let userRootName = userRootNode.name else {
                     print("can't get userRootName")
@@ -128,11 +139,12 @@ class DrawState: State, ARSCNViewDelegate {
                     print("can't get qrUserRootName")
                     return
                 }
+                //print("checkForDupUserRootNode: Checking if user root node with name: ", userRootName, "matches any qr user root nodes")
                 if userRootName == qrUserRootName {
-                    print("found duplicated userRootNode and removing, name of node is ", userRootName)
+                    //print("checkForDupUserRootNode: found duplicated userRootNode and removing, name of node is ", userRootName)
                     userRootNode.removeFromParentNode()
                 }
-            }
+            } 
         }
     }
     
@@ -332,13 +344,13 @@ extension DrawState {
         print("load has been called and here is the tile", currentTile)
         db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
             //self.sceneView.removeAllNodes() // Clear nodes
-            
             for node in retrievedNodes {
+                //print("drawFunction: node going to placed in scene with name: ", node.name)
                 let nodeExists = self.checkIfNodeExists(newNode: node)
                 if !nodeExists {
                     self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: node)
                     if let nodeLocation = node.location {
-                        print("Node at location: \(nodeLocation)")
+                       // print("Node at location: \(nodeLocation)")
                     }
                 }
             }
@@ -346,9 +358,19 @@ extension DrawState {
     }
     
     func checkIfNodeExists(newNode : SecondTierRoot) -> Bool {
-        let listOfCurrentNodes = sceneView.scene.rootNode.childNodes
+        guard let sceneNode = self.sceneView.sceneNode else {
+            print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
+            return false
+        }
+        let listOfCurrentNodes = sceneNode.childNodes
         for childNode in listOfCurrentNodes {
-            if childNode.name == newNode.name{
+            if let qrNode = childNode as? QRNode {
+                if let innerUserNode = qrNode.childNodes.first {
+                    if innerUserNode.name == newNode.name{
+                        return true
+                    }
+                }
+            } else if childNode.name == newNode.name {
                 return true
             }
         }

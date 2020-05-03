@@ -30,7 +30,7 @@ class EditState: State {
     var drawState = DrawState()
     var refSphere = SCNNode()
     var ObjNode : SCNNode!
-    let emojiRootNode = SCNNode()
+    var emojiRootNode : SCNNode?
     var emoji = Emoji(name: "bandage", ID: "Group50555");
     lazy var modelName = String()
     lazy var pathName = String()
@@ -58,7 +58,6 @@ class EditState: State {
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
         self.sceneView.automaticallyUpdatesLighting = false
-        sceneView.scene.rootNode.addChildNode(emojiRootNode)
     }
     
     func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
@@ -229,7 +228,11 @@ class EditState: State {
         distanceValue.text = String(format: "%.2f", drawState.distance)
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
-        drawState.sceneView.scene.rootNode.addChildNode(refSphere)
+        guard let sceneNode = drawState.sceneView.sceneNode else {
+            print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
+            return
+        }
+        sceneNode.addChildNode(refSphere)
 
     }
     
@@ -245,7 +248,12 @@ class EditState: State {
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
         refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
-        drawState.sceneView.scene.rootNode.addChildNode(refSphere)
+        guard let sceneNode = drawState.sceneView.sceneNode else {
+            print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
+            return
+        }
+        sceneNode.addChildNode(refSphere)
+        
 
     }
     
@@ -336,8 +344,16 @@ class EditState: State {
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 self.setModel()
                 ObjNode.position = touchLocation
-                emojiRootNode.light = emojiLighting()
-                emojiRootNode.addChildNode(ObjNode)
+                if emojiRootNode == nil {
+                    self.emojiRootNode = SCNNode()
+                    guard let sceneNode = drawState.sceneView.sceneNode else {
+                        print("ERROR: sceneNode not available to place emoji, this is a problem with the new ARCL library")
+                        return
+                    }
+                    sceneNode.addChildNode(emojiRootNode!)
+                }
+                emojiRootNode!.light = emojiLighting()
+                emojiRootNode!.addChildNode(ObjNode)
                 menuButton.setImage(UIImage(named: emoji.name), for: .normal)
                 updateRecentEmojiList()
             } else {
@@ -380,7 +396,11 @@ class EditState: State {
     func undoErase(){
         if let stroke = erasedStake.pop(){
             undoStake.push(stroke)
-            drawState.sceneView.scene.rootNode.addChildNode(stroke)
+            guard let sceneNode = drawState.sceneView.sceneNode else {
+                print("ERROR: sceneNode not available to remove stroke, this is a problem with the new ARCL library")
+                return
+            }
+            sceneNode.addChildNode(stroke)
         }
     }
     
