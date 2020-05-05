@@ -100,6 +100,7 @@ class Stroke : SCNNode {
             
             let material = SCNMaterial()
             material.diffuse.contents = drawingColor
+            material.lightingModel = SCNMaterial.LightingModel.constant
             customGeom.materials = [material]
             
             //points[points.count - 1].material = material
@@ -122,6 +123,7 @@ class Stroke : SCNNode {
             
             let material = SCNMaterial()
             material.diffuse.contents = drawingColor
+            material.lightingModel = SCNMaterial.LightingModel.constant
             customGeom.materials = [material]
 
             self.geometry = customGeom

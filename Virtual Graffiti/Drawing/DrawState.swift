@@ -179,6 +179,10 @@ class DrawState: State, ARSCNViewDelegate {
         userRootNode.tileName = Database().getTile(location: location)
         //print("Initialized at tile \(Database().getTile(location: location))")
         sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode)
+
+        if let sceneNode = self.sceneView.sceneNode{
+            sceneNode.light = addLighting()
+        }
         
         load()
     }
@@ -212,20 +216,27 @@ class DrawState: State, ARSCNViewDelegate {
 
 
 extension DrawState {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isSingleTap = true
-        if let singleTouch = touches.first{
-            userRootNode.light = addLighting()
-        } else {
-            print("can't get touch")
-        }
-    }
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        isSingleTap = true
+//        if let singleTouch = touches.first{
+//
+//        } else {
+//            print("can't get touch")
+//        }
+//    }
+
      func addLighting() ->SCNLight{
-            let light = SCNLight()
-            light.type = SCNLight.LightType.ambient
-            light.color = UIColor.white
-            return light
-        }
+                let estimate: ARLightEstimate!
+                let light = SCNLight()
+
+                estimate = self.sceneView.session.currentFrame?.lightEstimate
+                light.intensity = estimate.ambientIntensity*0.5
+                light.castsShadow = false
+                light.type = SCNLight.LightType.directional
+                light.categoryBitMask = 1
+               
+                return light
+    }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
@@ -233,10 +244,12 @@ extension DrawState {
             if touchMovedFirst {
                 touchMovedFirst =  false
                 currentStroke = Stroke(firstPoint: touchLocation, color: drawingColor, thickness : width)
+                currentStroke?.categoryBitMask = ~1
                 userRootNode.addChildNode(currentStroke!)
             } else {
                 guard let firstNearFarLine = initialNearFarLine else { return }
                 guard let nearFar = lineBetweenNearFar else { return }
+                currentStroke?.categoryBitMask = ~1
                 currentStroke?.addVertices(point3D: touchLocation, initialNearFarLine: firstNearFarLine, lineBetweenNearFar: nearFar)
                 currentStroke?.previousPoint = touchLocation
             }
@@ -251,6 +264,8 @@ extension DrawState {
             if let singleTouch = touches.first{
                 let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 let sphereNode = createSphere(position: touchLocation)
+                sphereNode.geometry?.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant;
+                sphereNode.categoryBitMask = ~1
                 userRootNode.addChildNode(sphereNode)
             } else {
                 print("can't get touch")

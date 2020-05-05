@@ -29,8 +29,7 @@ class EditState: State {
     var widthLabel = UILabel()
     var drawState = DrawState()
     var refSphere = SCNNode()
-    var ObjNode : SCNNode!
-    var emojiRootNode : SCNNode?
+    var ObjNode = SCNNode()
     var emoji = Emoji(name: "bandage", ID: "Group50555");
     lazy var modelName = String()
     lazy var pathName = String()
@@ -203,7 +202,6 @@ class EditState: State {
                 emojiButton.deactivateButton()//if eraser is on, deactivate emoji
             }
             eraseButton.setImage(UIImage(named: "eraserOn"), for: .normal)
-//            menuButton.setImage(UIImage(named: "eraserOn"), for: .normal)
             pencilButton.setImage(UIImage(named: "pencil"), for: .normal)
             menuButtonTouched()
 
@@ -284,7 +282,6 @@ class EditState: State {
             self.widthLabel.isHidden = false
             self.widthSlider.isHidden = false
             colorStack.isHidden = true;
-//        }
     }
 
     func saveRecentEmoji(){
@@ -297,19 +294,20 @@ class EditState: State {
 
     func setModel(){
         guard let emojiScene = SCNScene(named: pathName) else {
-            print("model does not exist")
+            print("model with path: ", pathName," does not exist")
             fatalError()
         }
-        ObjNode = emojiScene.rootNode.childNode(withName: emoji.ID, recursively: true)
+        ObjNode = emojiScene.rootNode.childNode(withName: emoji.ID, recursively: true)!
     }
 
     func emojiLighting() ->SCNLight{
         let estimate: ARLightEstimate!
-        estimate = self.sceneView.session.currentFrame?.lightEstimate
         let light = SCNLight()
-        light.intensity = estimate.ambientIntensity*0.5
+        estimate = self.sceneView.session.currentFrame?.lightEstimate
+        light.intensity = estimate.ambientIntensity
         light.type = SCNLight.LightType.directional
-        light.color = UIColor.white
+        light.categoryBitMask = 1
+
         return light
     }
 
@@ -344,16 +342,9 @@ class EditState: State {
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 self.setModel()
                 ObjNode.position = touchLocation
-                if emojiRootNode == nil {
-                    self.emojiRootNode = SCNNode()
-                    guard let sceneNode = drawState.sceneView.sceneNode else {
-                        print("ERROR: sceneNode not available to place emoji, this is a problem with the new ARCL library")
-                        return
-                    }
-                    sceneNode.addChildNode(emojiRootNode!)
-                }
-                emojiRootNode!.light = emojiLighting()
-                emojiRootNode!.addChildNode(ObjNode)
+                let emojiRootNode = drawState.userRootNode
+                ObjNode.categoryBitMask = 1
+                emojiRootNode.addChildNode(ObjNode)
                 menuButton.setImage(UIImage(named: emoji.name), for: .normal)
                 updateRecentEmojiList()
             } else {
@@ -368,7 +359,6 @@ class EditState: State {
         if eraserOn{
             if menuExpand {
                 menuButtonTouched()
-//                menuButton.setImage(UIImage(named: "eraserOn"), for: .normal)
             }
             eraseNode(touches: touches)
         }
