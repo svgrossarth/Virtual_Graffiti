@@ -40,8 +40,9 @@ class EditState: State {
     var erasedStake = Stack<SCNNode>()
     var undoStake = Stack<SCNNode>()
     var recentUsedEmoji = [Emoji]()
+    var userUID = ""
     
-    func initialize(pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
+    func initialize(pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
         self.pencilButton = pencilButton
         self.menuButton = menuButton
         self.emojiButton = emojiButton
@@ -54,6 +55,7 @@ class EditState: State {
         self.sceneView = sceneView
         self.widthSlider = widthSlider
         self.widthLabel = widthLabel
+        self.userUID = userUID
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
         self.sceneView.automaticallyUpdatesLighting = false
@@ -374,9 +376,13 @@ class EditState: State {
                 let touchPosition = touch.location(in: sceneView)
                 let hitTestResults = sceneView.hitTest(touchPosition)
                 for hitTestResult in hitTestResults{
-                    if let _ = hitTestResult.node.geometry{
-                        hitTestResult.node.removeFromParentNode()
-                        erasedStake.push(hitTestResult.node)
+                    let userRootNode = hitTestResult.node.parent as? SecondTierRoot
+                    print(userRootNode?.uid)
+                    if userRootNode?.uid == userUID {
+                        if let _ = hitTestResult.node.geometry{
+                            hitTestResult.node.removeFromParentNode()
+                            erasedStake.push(hitTestResult.node)
+                        }
                     }
                 }
             }

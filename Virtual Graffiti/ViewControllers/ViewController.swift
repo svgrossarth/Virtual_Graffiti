@@ -44,7 +44,7 @@ class ViewController: UIViewController, GIDSignInDelegate {
                 print(error)
                 return
             }
-            self.transitionToHome()
+            self.transitionToHome(userUID: Auth.auth().currentUser!.uid)
         }
     }
     
@@ -61,10 +61,10 @@ class ViewController: UIViewController, GIDSignInDelegate {
     Google Sign In [END]
     */
     
-    func transitionToHome() {
+    func transitionToHome(userUID: String) {
         
         let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        
+        homeViewController?.userUID = userUID
         view.window?.rootViewController = homeViewController
         view.window?.makeKeyAndVisible()
         

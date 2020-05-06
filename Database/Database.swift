@@ -20,10 +20,12 @@ class Database {
     var docRef : DocumentReference!
     let DICT_KEY_NODE = "node"
     let DICT_KEY_LOCATION = "location"
+    let DICT_KEY_UID = "uid"
     var listeners : [ListenerRegistration] = [ListenerRegistration]()
 
     // retval: Local save success
     func saveDrawing(userRootNode : SecondTierRoot) -> Void {
+        print("saving uid: ", userRootNode.uid)
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
         let tile = userRootNode.tileName
@@ -43,10 +45,11 @@ class Database {
         do{
            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
            let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
-
+            let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.uid, requiringSecureCoding: false)
 
            dataToSave[DICT_KEY_NODE] = nodeData
            dataToSave[DICT_KEY_LOCATION] = nodeLocation
+           dataToSave[DICT_KEY_UID] = nodeUID
 
            docRef.setData(dataToSave) { (error) in
                if let error = error {
@@ -172,14 +175,18 @@ class Database {
                     for response in snapshot.documents {
                         do {
                             let dictionary = response.data()
-                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data, let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data else{
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data, let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data, let nodeUID = dictionary[self.DICT_KEY_UID] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
                             let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
                             let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
+                            let newUID = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeUID) as! String
+                            //print(newNode.location)
                             newNode.location = newLocation
+                            newNode.uid = newUID
                             nodes.append(newNode)
+                            print("Node uid is: ", newNode.uid)
                             print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {
                             print("Could not pull down node")

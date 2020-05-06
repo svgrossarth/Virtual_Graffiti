@@ -98,13 +98,8 @@ class SignUpViewController: UIViewController {
                     
                     db.collection("users").addDocument(data:
                     ["firstname": firstName,
-                     "lastname": lastName,
-                     "uid": result!.user.uid]) { (error) in
-                        if error != nil {
-                            self.showError("User's name could not be saved.")
-                        }
-                    }
-                    self.transitionToHome()
+                     "lastname": lastName])
+                    self.transitionToHome(userUID: Auth.auth().currentUser!.uid)
                 }
             }
             
@@ -117,10 +112,10 @@ class SignUpViewController: UIViewController {
         errorLabel.alpha = 1
     }
     
-    func transitionToHome() {
+    func transitionToHome(userUID: String) {
         
         let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        
+        homeViewController?.userUID = userUID
         view.window?.rootViewController = homeViewController
         view.window?.makeKeyAndVisible()
         

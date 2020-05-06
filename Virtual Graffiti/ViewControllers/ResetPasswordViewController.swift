@@ -53,9 +53,7 @@ class ResetPasswordViewController: UIViewController {
     }
     
     func transitionToFirstView() {
-        
-        guard let loginViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.loginViewController) as? LoginViewController else { return }
-        self.navigationController?.pushViewController(loginViewController, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func showError(_ message: String) {

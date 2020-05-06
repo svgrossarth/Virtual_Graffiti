@@ -73,7 +73,7 @@ class LoginViewController: UIViewController {
                 if err != nil {
                     self.showError("Please use a valid email or password.")
                 } else {
-                    self.transitionToHome()
+                    self.transitionToHome(userUID: Auth.auth().currentUser!.uid)
                 }
             }
         }
@@ -84,10 +84,9 @@ class LoginViewController: UIViewController {
         errorLabel.alpha = 1
     }
     
-    func transitionToHome() {
-        
+    func transitionToHome(userUID: String) {
         let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        
+        homeViewController?.userUID = userUID
         view.window?.rootViewController = homeViewController
         view.window?.makeKeyAndVisible()
         

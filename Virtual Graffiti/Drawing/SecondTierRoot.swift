@@ -14,6 +14,7 @@ class SecondTierRoot : LocationNode {
     var tileName = ""
     var QRValue = ""
     var QRRelativeDistance = SCNVector3()
+    var uid = ""
     
     enum Keys: String {
         case location = "Location"

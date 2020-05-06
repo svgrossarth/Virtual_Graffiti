@@ -54,13 +54,13 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var emojiButton: ModeButton!
     @IBOutlet weak var sceneView: SceneLocationView!
-    
+    var userUID = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.addSubview(drawState)
-        drawState.initialize(_sceneView: sceneView)
+        drawState.initialize(_sceneView: sceneView, userUID: userUID)
         
         state = drawState
         state.enter()
@@ -70,7 +70,7 @@ class HomeViewController: UIViewController {
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
 
         view.addSubview(editState)
-        editState.initialize(pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel)
+        editState.initialize(pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
 
     }

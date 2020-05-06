@@ -46,6 +46,7 @@ class DrawState: State, ARSCNViewDelegate {
     var QRNodePosition = SCNVector3()
     var qrNode: QRNode? = nil
     var currentFrame : ARFrame?
+    var userUID = ""
     
     lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
@@ -148,7 +149,8 @@ class DrawState: State, ARSCNViewDelegate {
         }
     }
     
-    func initialize(_sceneView: SceneLocationView!) {
+    func initialize(_sceneView: SceneLocationView!, userUID: String) {
+        self.userUID = userUID
         _initializeSceneView(_sceneView: _sceneView)
         initializeUserRootNode()
     }
@@ -179,6 +181,7 @@ class DrawState: State, ARSCNViewDelegate {
         userRootNode.tileName = Database().getTile(location: location)
         //print("Initialized at tile \(Database().getTile(location: location))")
         sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode)
+        userRootNode.uid = userUID
 
         if let sceneNode = self.sceneView.sceneNode{
             sceneNode.light = addLighting()
