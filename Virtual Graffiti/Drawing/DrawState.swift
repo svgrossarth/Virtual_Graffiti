@@ -93,6 +93,7 @@ class DrawState: State, ARSCNViewDelegate {
                 
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
+                self.qrNode!.uid = self.userUID
                 guard let sceneNode = self.sceneView.sceneNode else {
                     print("ERROR: sceneNode not available to place qrNode, this is a problem with the new ARCL library")
                     return

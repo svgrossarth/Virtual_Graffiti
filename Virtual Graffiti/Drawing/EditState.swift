@@ -378,7 +378,6 @@ class EditState: State {
                 let hitTestResults = sceneView.hitTest(touchPosition)
                 for hitTestResult in hitTestResults{
                     let userRootNode = hitTestResult.node.parent as? SecondTierRoot
-                    print(userRootNode?.uid)
                     if userRootNode?.uid == userUID {
                         if let _ = hitTestResult.node.geometry{
                             guard let parent = hitTestResult.node.parent as? SecondTierRoot else {

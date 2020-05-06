@@ -25,7 +25,6 @@ class Database {
 
     // retval: Local save success
     func saveDrawing(userRootNode : SecondTierRoot) -> Void {
-        print("saving uid: ", userRootNode.uid)
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
         let tile = userRootNode.tileName
@@ -69,12 +68,13 @@ class Database {
     func saveQRNode(qrNode: QRNode) {
         let qrPath = "QRNodes/\(qrNode.QRValue)/nodes/\(qrNode.name!)"
         let qrRef = db.document(qrPath)
-        
         var qrData: [String: Any] = [:]
          do{
              let nodeData = try NSKeyedArchiver.archivedData(withRootObject: qrNode, requiringSecureCoding: false)
+            let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: qrNode.uid, requiringSecureCoding: false)
             
             qrData[DICT_KEY_NODE] = nodeData
+            qrData[DICT_KEY_UID] = nodeUID
 
              qrRef.setData(qrData) { (error) in
                  if let error = error {
@@ -106,11 +106,20 @@ class Database {
                     for response in snapshot.documents {
                         do {
                             let dictionary = response.data()
-                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data else{
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data,
+                                let nodeUID = dictionary[self.DICT_KEY_UID] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
                             let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! QRNode
+                            let newUID = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeUID) as! String
+                            //print("loading in UID ", newUID)
+                            newNode.uid = newUID
+                            guard let userRootNode = newNode.childNodes.first as? SecondTierRoot else {
+                                print("does not exist")
+                                return
+                            }
+                            userRootNode.uid = newUID
                             nodes.append(newNode)
                             if let childNode = newNode.childNodes.first{
                                 print("Got one QR node and its childs name is", childNode.name!)
@@ -186,7 +195,6 @@ class Database {
                             newNode.location = newLocation
                             newNode.uid = newUID
                             nodes.append(newNode)
-                            print("Node uid is: ", newNode.uid)
                             print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {
                             print("Could not pull down node")
