@@ -37,10 +37,11 @@ class EditState: State {
     var EmojiOn = false
     var pencilOn = true
     weak var sceneView: ARSCNView!
-    var erasedStake = Stack<SCNNode>()
-    var undoStake = Stack<SCNNode>()
+    var erasedStack = Stack<[String : SCNNode]>()
+    var undoStack = Stack<[String : SCNNode]>()
     var recentUsedEmoji = [Emoji]()
     var userUID = ""
+    
     
     func initialize(pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
         self.pencilButton = pencilButton
@@ -380,8 +381,18 @@ class EditState: State {
                     print(userRootNode?.uid)
                     if userRootNode?.uid == userUID {
                         if let _ = hitTestResult.node.geometry{
-                            hitTestResult.node.removeFromParentNode()
-                            erasedStake.push(hitTestResult.node)
+                            guard let parent = hitTestResult.node.parent as? SecondTierRoot else {
+                                print("can't get parent")
+                                return
+                            }
+                            if let parentName = parent.name {
+                                hitTestResult.node.removeFromParentNode()
+                                erasedStack.push([parentName : hitTestResult.node])
+                                Database().saveDrawing(userRootNode: parent)
+                                if let qrNode = parent.parent as? QRNode{
+                                    Database().saveQRNode(qrNode: qrNode)
+                                }
+                            }
                         }
                     }
                 }
@@ -390,20 +401,57 @@ class EditState: State {
     }
     
     func undoErase(){
-        if let stroke = erasedStake.pop(){
-            undoStake.push(stroke)
+        if let stroke = erasedStack.pop(){
+            undoStack.push(stroke)
             guard let sceneNode = drawState.sceneView.sceneNode else {
                 print("ERROR: sceneNode not available to remove stroke, this is a problem with the new ARCL library")
                 return
             }
-            sceneNode.addChildNode(stroke)
+            guard let parentName = stroke.first?.key else {
+                print("can't get parent name")
+                return
+            }
+            guard let drawingNode = stroke.first?.value else {
+                print("can't get drawing node")
+                return
+            }
+            for node in sceneNode.childNodes {
+                if let qrNode = node as? QRNode{
+                    guard let userRootNode = qrNode.childNodes.first as? SecondTierRoot else {
+                        print("can't get userRootNode from qrNode")
+                        return
+                    }
+                    if parentName == userRootNode.name{
+                        userRootNode.addChildNode(drawingNode)
+                        Database().saveDrawing(userRootNode: userRootNode)
+                        Database().saveQRNode(qrNode: qrNode)
+                        return
+                    }
+                } else if let userRootNode = node as? SecondTierRoot {
+                    if parentName == userRootNode.name{
+                        userRootNode.addChildNode(drawingNode)
+                        Database().saveDrawing(userRootNode: userRootNode)
+                        return
+                    }
+                }
+            }
         }
     }
     
     func redoErase(){
-        if let stroke = undoStake.pop(){
-            stroke.removeFromParentNode()
-            erasedStake.push(stroke)
+        if let stroke = undoStack.pop(){
+            guard let drawingNode = stroke.first?.value else {
+                print("can't get drawing node")
+                return
+            }
+            drawingNode.removeFromParentNode()
+            if let userRootNode = drawingNode.parent as? SecondTierRoot{
+                if let qrNode = userRootNode.parent as? QRNode {
+                    Database().saveQRNode(qrNode: qrNode)
+                }
+                Database().saveDrawing(userRootNode: userRootNode)
+            }
+            erasedStack.push(stroke)
         }
         
     }
