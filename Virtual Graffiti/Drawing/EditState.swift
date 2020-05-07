@@ -244,19 +244,27 @@ class EditState: State {
         let defaultWidth : Float = 0.01
         if(widthSlider.value > 1){
             drawState.width = defaultWidth * powf(widthSlider.value, 4)
+            emojiScale = powf(widthSlider.value, 2)
         } else {
-           drawState.width = defaultWidth * widthSlider.value
+            drawState.width = defaultWidth * widthSlider.value
+            emojiScale = widthSlider.value
         }
+        //emojiScale = widthSlider.value
         widthLabel.text = String(format: "Width: %.3f", drawState.width)
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
-        refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
+        if EmojiOn{
+            let sphereEmojiWidth : Float = emojiScale / 19
+            refSphere.geometry = SCNSphere(radius: CGFloat(sphereEmojiWidth))
+        } else {
+            refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
+        }
         guard let sceneNode = drawState.sceneView.sceneNode else {
             print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
             return
         }
         sceneNode.addChildNode(refSphere)
-        emojiScale = drawState.width / defaultWidth
+        //emojiScale = drawState.width / defaultWidth
         print("drawing state width", drawState.width)
         print("emoji scale", emojiScale)
 
