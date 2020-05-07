@@ -70,14 +70,18 @@ class Database {
 
     
     func saveQRNode(qrNode: QRNode) {
-        let qrPath = "QRNodes/\(qrNode.QRValue)/nodes/\(qrNode.name!)"
+        guard let encodedQRValue = qrNode.QRValue.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
+            print("Can't encode qrValue")
+            return
+        }
+        let qrPath = "QRNodes/\(encodedQRValue)/nodes/\(qrNode.name!)"
         let qrRef = db.document(qrPath)
         var qrData: [String: Any] = [:]
          do{
              let nodeData = try NSKeyedArchiver.archivedData(withRootObject: qrNode, requiringSecureCoding: false)
             let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: qrNode.uid, requiringSecureCoding: false)
             let nodeTileName = try NSKeyedArchiver.archivedData(withRootObject: qrNode.tileName, requiringSecureCoding: false)
-            let nodeQRValue = try NSKeyedArchiver.archivedData(withRootObject: qrNode.QRValue, requiringSecureCoding: false)
+            let nodeQRValue = try NSKeyedArchiver.archivedData(withRootObject: encodedQRValue, requiringSecureCoding: false)
             
             qrData[DICT_KEY_NODE] = nodeData
             qrData[DICT_KEY_UID] = nodeUID
@@ -98,7 +102,11 @@ class Database {
     }
     
     func loadQRNode(qrNode : QRNode, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void){
-        let qrPath = "QRNodes/\(qrNode.QRValue)/nodes"
+        guard let encodedQRValue = qrNode.QRValue.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
+            print("Can't encode qrValue")
+            return
+        }
+        let qrPath = "QRNodes/\(encodedQRValue)/nodes"
         db.collection(qrPath).getDocuments() { (querySnapshot, err) in
             self.qrCallBack(querySnapshot: querySnapshot, err: err, placeQRNodes: placeQRNodes)
         }
@@ -125,10 +133,13 @@ class Database {
                             let newUID = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeUID) as! String
                             let newTileName = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeTileName) as! String
                             let newQRValue = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeQRValue) as! String
-                            //print("loading in UID ", newUID)
+                            guard let decodedQRValue = newQRValue.removingPercentEncoding else {
+                                print("Can't remove string encoding")
+                                return
+                            }
                             newNode.uid = newUID
                             newNode.tileName = newTileName
-                            newNode.QRValue = newQRValue
+                            newNode.QRValue = decodedQRValue
                             
                             guard let userRootNode = newNode.childNodes.first as? SecondTierRoot else {
                                 print("does not exist")
