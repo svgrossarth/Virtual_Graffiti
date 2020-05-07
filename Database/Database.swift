@@ -23,7 +23,8 @@ class Database {
     let DICT_KEY_UID = "uid"
     let DICT_KEY_TILENAME = "tileName"
     let DICT_KEY_QRVALUE = "qrValue"
-    var listeners : [ListenerRegistration] = [ListenerRegistration]()
+    var drawingListeners : [ListenerRegistration] = [ListenerRegistration]()
+    var qrListeners : [ListenerRegistration] = [ListenerRegistration]()
 
     // retval: Local save success
     func saveDrawing(userRootNode : SecondTierRoot) -> Void {
@@ -70,6 +71,7 @@ class Database {
 
     
     func saveQRNode(qrNode: QRNode) {
+        print("saveQRNode")
         guard let encodedQRValue = qrNode.QRValue.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
             print("Can't encode qrValue")
             return
@@ -110,6 +112,10 @@ class Database {
         db.collection(qrPath).getDocuments() { (querySnapshot, err) in
             self.qrCallBack(querySnapshot: querySnapshot, err: err, placeQRNodes: placeQRNodes)
         }
+        let listener = db.collection(qrPath).addSnapshotListener{ (querySnapshot, err) in
+            self.qrCallBack(querySnapshot: querySnapshot, err: err, placeQRNodes: placeQRNodes)
+        }
+        qrListeners.append(listener)
     }
     
     func qrCallBack(querySnapshot : QuerySnapshot?, err : Error?, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void){
@@ -197,7 +203,7 @@ class Database {
             self.dbCallback(querySnapshot: querySnapshot, err: err, drawFunction: drawFunction)
             
         }
-        listeners.append(listener)
+        drawingListeners.append(listener)
     }
     
     

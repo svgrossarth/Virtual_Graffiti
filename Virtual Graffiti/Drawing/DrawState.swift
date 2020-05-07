@@ -37,7 +37,6 @@ class DrawState: State, ARSCNViewDelegate {
     let sphereRadius : CGFloat = 0.01
     var drawingColor: UIColor = .systemBlue
     var currentPen = "bluePen"
-    var isSingleTap = false
     
     var coordinate: CLLocation! = nil
     var frameCount = 0
@@ -48,6 +47,7 @@ class DrawState: State, ARSCNViewDelegate {
     var currentFrame : ARFrame?
     var userUID = ""
     var tileName = ""
+    var dataBase = Database()
     
     lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
@@ -104,55 +104,59 @@ class DrawState: State, ARSCNViewDelegate {
                 }
                 sceneNode.addChildNode(self.qrNode!)
                 self.userRootNode.worldPosition = SCNVector3(0,0,0)
-                Database().saveQRNode(qrNode: self.qrNode!)
-                Database().loadQRNode(qrNode: self.qrNode!, placeQRNodes: self.placeQRNodes)
+                self.dataBase.saveQRNode(qrNode: self.qrNode!)
+                self.dataBase.loadQRNode(qrNode: self.qrNode!, placeQRNodes: self.placeQRNodes)
             } else {
                 //print("Cannot extract barcode information from data.")
             }
         }
     }
     
+    
     func placeQRNodes(qrNodes : [QRNode]){
         for qrNode in qrNodes{
-            guard let sceneNode = self.sceneView.sceneNode else {
-                print("ERROR: sceneNode not available to place qrNode pulled from db, this is a problem with the new ARCL library")
+            var duplicateQRNode = false
+            guard let qrNodeUserRoot = qrNode.childNodes.first else {
+                print("can't get qr nodes user root node")
                 return
             }
-            sceneNode.addChildNode(qrNode)
-            if let localQRNode = self.qrNode {
-                qrNode.position = localQRNode.position
-                checkForDupUserRootNode(qrNode : qrNode)
+            guard let sceneNode = self.sceneView.sceneNode else {
+                print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
+                return
+            }
+            for node in sceneNode.childNodes {
+                if let userRootNode = node as? SecondTierRoot{
+                    guard let userRootName = userRootNode.name else {
+                        print("can't get userRootName")
+                        return
+                    }
+                    guard let qrUserRootName = qrNodeUserRoot.name else {
+                        print("can't get qrUserRootName")
+                        return
+                    }
+                    //print("checkForDupUserRootNode: Checking if user root node with name: ", userRootName, "matches any qr user root nodes")
+                    if userRootName == qrUserRootName {
+                        //print("checkForDupUserRootNode: found duplicated userRootNode and removing, name of node is ", userRootName)
+                        userRootNode.removeFromParentNode()
+                    }
+                } else if let childQRNode = node as? QRNode {
+                    if qrNode.name == childQRNode.name && childQRNode.name != self.qrNode?.name {
+                        qrNode.position = childQRNode.position
+                        childQRNode.removeFromParentNode()
+                        sceneNode.addChildNode(qrNode)
+                        duplicateQRNode = true
+                    }
+                }
+            }
+            if !duplicateQRNode{
+                if let localQRNode = self.qrNode {
+                    qrNode.position = localQRNode.position
+                    sceneNode.addChildNode(qrNode)
+                }
             }
         }
     }
     
-    func checkForDupUserRootNode(qrNode : QRNode){
-        guard let qrNodeUserRoot = qrNode.childNodes.first else {
-            print("can't get qr nodes user root node")
-            return
-        }
-        guard let sceneNode = self.sceneView.sceneNode else {
-            print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
-            return
-        }
-        for node in sceneNode.childNodes {
-            if let userRootNode = node as? SecondTierRoot{
-                guard let userRootName = userRootNode.name else {
-                    print("can't get userRootName")
-                    return
-                }
-                guard let qrUserRootName = qrNodeUserRoot.name else {
-                    print("can't get qrUserRootName")
-                    return
-                }
-                //print("checkForDupUserRootNode: Checking if user root node with name: ", userRootName, "matches any qr user root nodes")
-                if userRootName == qrUserRootName {
-                    //print("checkForDupUserRootNode: found duplicated userRootNode and removing, name of node is ", userRootName)
-                    userRootNode.removeFromParentNode()
-                }
-            } 
-        }
-    }
     
     func initialize(_sceneView: SceneLocationView!, userUID: String) {
         self.userUID = userUID
@@ -183,7 +187,7 @@ class DrawState: State, ARSCNViewDelegate {
         
         userRootNode = SecondTierRoot()
         userRootNode.name = UUID().uuidString
-        self.tileName = Database().getTile(location: location)
+        self.tileName = self.dataBase.getTile(location: location)
         userRootNode.tileName = self.tileName
         if qrNode != nil {
             qrNode?.tileName = self.tileName
@@ -228,14 +232,7 @@ class DrawState: State, ARSCNViewDelegate {
 
 
 extension DrawState {
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        isSingleTap = true
-//        if let singleTouch = touches.first{
-//
-//        } else {
-//            print("can't get touch")
-//        }
-//    }
+
 
      func addLighting() ->SCNLight{
                 let estimate: ARLightEstimate!
@@ -272,21 +269,19 @@ extension DrawState {
      
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if touchMovedFirst && isSingleTap {
-            if let singleTouch = touches.first{
-                let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
-                let sphereNode = createSphere(position: touchLocation)
-                sphereNode.geometry?.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant;
-                sphereNode.categoryBitMask = ~1
-                userRootNode.addChildNode(sphereNode)
-            } else {
-                print("can't get touch")
-            }
-        }
-        isSingleTap = false
         touchMovedFirst = true
         initialNearFarLine = nil
         save()
+    }
+    
+    func placeSingleTapBall(touches: Set<UITouch>){
+        if let singleTouch = touches.first{
+            let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
+            let sphereNode = createSphere(position: touchLocation)
+            sphereNode.geometry?.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant;
+            sphereNode.categoryBitMask = ~1
+            userRootNode.addChildNode(sphereNode)
+        }
     }
     
     func touchLocationIn3D (touchLocation2D: CGPoint) -> SCNVector3 {
@@ -357,51 +352,54 @@ extension DrawState: ARSessionDelegate {
 extension DrawState {
     func save() {
         if let localQRNode = self.qrNode {
-            Database().saveQRNode(qrNode: localQRNode)
+            self.dataBase.saveQRNode(qrNode: localQRNode)
         }
         guard let location = sceneLocationManager.currentLocation else { return }
-        Database().saveDrawing(userRootNode: userRootNode)
+        self.dataBase.saveDrawing(userRootNode: userRootNode)
     }
     
     
     func load() {
         guard let location = sceneLocationManager.currentLocation else { return }
-        let db = Database()
-        currentTile = db.getTile(location: location)
+        self.dataBase = Database()
+        currentTile = dataBase.getTile(location: location)
         print("load has been called and here is the tile", currentTile)
-        db.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
+        dataBase.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
             //self.sceneView.removeAllNodes() // Clear nodes
             for node in retrievedNodes {
                 //print("drawFunction: node going to placed in scene with name: ", node.name)
-                let nodeExists = self.checkIfNodeExists(newNode: node)
-                if !nodeExists {
-                    self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: node)
-                    if let nodeLocation = node.location {
-                       // print("Node at location: \(nodeLocation)")
-                    }
-                }
+                self.checkAndPlaceUserRootNode(newNode: node)
             }
         })
     }
     
-    func checkIfNodeExists(newNode : SecondTierRoot) -> Bool {
+    func checkAndPlaceUserRootNode(newNode : SecondTierRoot) {
+        var duplicateUserRootNode = false
         guard let sceneNode = self.sceneView.sceneNode else {
             print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
-            return false
+            return
         }
         let listOfCurrentNodes = sceneNode.childNodes
         for childNode in listOfCurrentNodes {
             if let qrNode = childNode as? QRNode {
                 if let innerUserNode = qrNode.childNodes.first {
                     if innerUserNode.name == newNode.name{
-                        return true
+                        duplicateUserRootNode = true
                     }
                 }
-            } else if childNode.name == newNode.name {
-                return true
+            } else if let userNode = childNode as? SecondTierRoot {
+                if userNode.name == newNode.name && userNode.name != self.userRootNode.name{
+                    duplicateUserRootNode = true
+                    userNode.removeFromParentNode()
+                    self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: newNode)
+                }
             }
+            
+            
         }
-        return false
+        if !duplicateUserRootNode{
+            self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: newNode)
+        }
     }
 }
 

@@ -277,7 +277,7 @@ class HomeViewController: UIViewController {
                     if !self.doubleTapHappened {
                         print("tap count is 1")
                         if !self.editState.eraserOn && !self.editState.EmojiOn {
-                            self.drawState.touchesBegan(touches, with: event)
+                            self.drawState.placeSingleTapBall(touches: touches)
                         } else {
                             self.editState.touchesBegan(touches, with: event)
                         }
