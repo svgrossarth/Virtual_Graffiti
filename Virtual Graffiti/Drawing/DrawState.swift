@@ -47,6 +47,7 @@ class DrawState: State, ARSCNViewDelegate {
     var qrNode: QRNode? = nil
     var currentFrame : ARFrame?
     var userUID = ""
+    var tileName = ""
     
     lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
@@ -82,6 +83,9 @@ class DrawState: State, ARSCNViewDelegate {
                 sphere.materials = [material]
                 
                 self.qrNode = QRNode(QRValue: self.QRValue, name: UUID().uuidString)
+                if self.tileName != "" {
+                    self.qrNode?.tileName = self.tileName
+                }
                 self.qrNode!.geometry = sphere
                 if let hitResult = self.currentFrame?.hitTest(center, types: .featurePoint).first {
                     //https://stackoverflow.com/questions/48980834/position-of-node-in-scene
@@ -179,7 +183,11 @@ class DrawState: State, ARSCNViewDelegate {
         
         userRootNode = SecondTierRoot()
         userRootNode.name = UUID().uuidString
-        userRootNode.tileName = Database().getTile(location: location)
+        self.tileName = Database().getTile(location: location)
+        userRootNode.tileName = self.tileName
+        if qrNode != nil {
+            qrNode?.tileName = self.tileName
+        }
         //print("Initialized at tile \(Database().getTile(location: location))")
         sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode)
         userRootNode.uid = userUID

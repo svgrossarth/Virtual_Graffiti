@@ -21,6 +21,8 @@ class Database {
     let DICT_KEY_NODE = "node"
     let DICT_KEY_LOCATION = "location"
     let DICT_KEY_UID = "uid"
+    let DICT_KEY_TILENAME = "tileName"
+    let DICT_KEY_QRVALUE = "qrValue"
     var listeners : [ListenerRegistration] = [ListenerRegistration]()
 
     // retval: Local save success
@@ -37,23 +39,25 @@ class Database {
         }
         let docPath = collectionPath + "/" + nodeName
         docRef = db.document(docPath)
-
-       // TODO: Save drawing!
-       var dataToSave: [String: Any] = [:]
-
+        
+        // TODO: Save drawing!
+        var dataToSave: [String: Any] = [:]
+        
         do{
-           let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
-           let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
+            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
+            let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
             let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.uid, requiringSecureCoding: false)
-
-           dataToSave[DICT_KEY_NODE] = nodeData
-           dataToSave[DICT_KEY_LOCATION] = nodeLocation
-           dataToSave[DICT_KEY_UID] = nodeUID
-
-           docRef.setData(dataToSave) { (error) in
-               if let error = error {
-                   print("Error saving drawing: \(error.localizedDescription)")
-               }
+            let nodeTileName = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.tileName, requiringSecureCoding: false)
+            
+            dataToSave[DICT_KEY_NODE] = nodeData
+            dataToSave[DICT_KEY_LOCATION] = nodeLocation
+            dataToSave[DICT_KEY_UID] = nodeUID
+            dataToSave[DICT_KEY_TILENAME] = nodeTileName
+            
+            docRef.setData(dataToSave) { (error) in
+                if let error = error {
+                    print("Error saving drawing: \(error.localizedDescription)")
+                }
                else {
                    //print("Data has been saved at \(docPath)")
                }
@@ -72,10 +76,14 @@ class Database {
          do{
              let nodeData = try NSKeyedArchiver.archivedData(withRootObject: qrNode, requiringSecureCoding: false)
             let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: qrNode.uid, requiringSecureCoding: false)
+            let nodeTileName = try NSKeyedArchiver.archivedData(withRootObject: qrNode.tileName, requiringSecureCoding: false)
+            let nodeQRValue = try NSKeyedArchiver.archivedData(withRootObject: qrNode.QRValue, requiringSecureCoding: false)
             
             qrData[DICT_KEY_NODE] = nodeData
             qrData[DICT_KEY_UID] = nodeUID
-
+            qrData[DICT_KEY_TILENAME] = nodeTileName
+            qrData[DICT_KEY_QRVALUE] = nodeQRValue
+            
              qrRef.setData(qrData) { (error) in
                  if let error = error {
                      print("Error saving drawing: \(error.localizedDescription)")
@@ -107,19 +115,27 @@ class Database {
                         do {
                             let dictionary = response.data()
                             guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data,
-                                let nodeUID = dictionary[self.DICT_KEY_UID] as? Data else{
+                                let nodeUID = dictionary[self.DICT_KEY_UID] as? Data,
+                                let nodeTileName = dictionary[self.DICT_KEY_TILENAME] as? Data,
+                                let nodeQRValue = dictionary[self.DICT_KEY_QRVALUE] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
                             let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! QRNode
                             let newUID = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeUID) as! String
+                            let newTileName = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeTileName) as! String
+                            let newQRValue = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeQRValue) as! String
                             //print("loading in UID ", newUID)
                             newNode.uid = newUID
+                            newNode.tileName = newTileName
+                            newNode.QRValue = newQRValue
+                            
                             guard let userRootNode = newNode.childNodes.first as? SecondTierRoot else {
                                 print("does not exist")
                                 return
                             }
                             userRootNode.uid = newUID
+                            userRootNode.tileName = newTileName
                             nodes.append(newNode)
                             if let childNode = newNode.childNodes.first{
                                 print("Got one QR node and its childs name is", childNode.name!)
@@ -184,16 +200,21 @@ class Database {
                     for response in snapshot.documents {
                         do {
                             let dictionary = response.data()
-                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data, let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data, let nodeUID = dictionary[self.DICT_KEY_UID] as? Data else{
+                            guard let nodeData = dictionary[self.DICT_KEY_NODE] as? Data,
+                                let nodeLocation = dictionary[self.DICT_KEY_LOCATION] as? Data,
+                                let nodeUID = dictionary[self.DICT_KEY_UID] as? Data,
+                                let nodeTileName = dictionary[self.DICT_KEY_TILENAME] as? Data else{
                                 print("can't convert to data")
                                 return
                             }
                             let newNode = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeData) as! SecondTierRoot
                             let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
                             let newUID = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeUID) as! String
+                            let newTileName = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeTileName) as! String
                             //print(newNode.location)
                             newNode.location = newLocation
                             newNode.uid = newUID
+                            newNode.tileName = newTileName
                             nodes.append(newNode)
                             print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {

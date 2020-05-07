@@ -41,6 +41,8 @@ class EditState: State {
     var undoStack = Stack<[String : SCNNode]>()
     var recentUsedEmoji = [Emoji]()
     var userUID = ""
+    var emojiScale : Float = 1
+    var emojiInitialScale : SCNVector3?
     
     
     func initialize(pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
@@ -254,7 +256,9 @@ class EditState: State {
             return
         }
         sceneNode.addChildNode(refSphere)
-        
+        emojiScale = drawState.width / defaultWidth
+        print("drawing state width", drawState.width)
+        print("emoji scale", emojiScale)
 
     }
     
@@ -304,10 +308,10 @@ class EditState: State {
     }
 
     func emojiLighting() ->SCNLight{
-        let estimate: ARLightEstimate!
+        //let estimate: ARLightEstimate!
         let light = SCNLight()
-        estimate = self.sceneView.session.currentFrame?.lightEstimate
-        light.intensity = estimate.ambientIntensity
+        //estimate = self.sceneView.session.currentFrame?.lightEstimate
+        //light.intensity = estimate.ambientIntensity
         light.type = SCNLight.LightType.directional
         light.categoryBitMask = 1
 
@@ -344,10 +348,20 @@ class EditState: State {
             if let singleTouch = touches.first{
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 self.setModel()
-                ObjNode.position = touchLocation
+                let cloneEmoji = ObjNode.clone()
+                cloneEmoji.position = touchLocation
                 let emojiRootNode = drawState.userRootNode
-                ObjNode.categoryBitMask = 1
-                emojiRootNode.addChildNode(ObjNode)
+                cloneEmoji.categoryBitMask = 1
+                if emojiInitialScale == nil {
+                    emojiInitialScale = cloneEmoji.scale
+                }
+                //cloneEmoji.scale = SCNVector3(emojiScale, emojiScale, emojiScale)
+                guard let initialScale = emojiInitialScale else {
+                    print("Can't get scale")
+                    return
+                }
+                cloneEmoji.scale = SCNVector3(initialScale.x * emojiScale, initialScale.y * emojiScale, initialScale.z * emojiScale)
+                emojiRootNode.addChildNode(cloneEmoji)
                 menuButton.setImage(UIImage(named: emoji.name), for: .normal)
                 updateRecentEmojiList()
             } else {

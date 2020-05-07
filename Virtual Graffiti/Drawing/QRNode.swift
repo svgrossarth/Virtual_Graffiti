@@ -12,6 +12,7 @@ import SceneKit
 class QRNode : SCNNode {
     var QRValue = ""
     var uid = ""
+    var tileName = ""
     
     init(QRValue: String, name: String) {
         super.init()
