@@ -66,7 +66,7 @@ class HomeViewController: UIViewController {
         state.enter()
         uiSetup()
 
-        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
+        eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
 
         view.addSubview(editState)
@@ -186,7 +186,6 @@ class HomeViewController: UIViewController {
         print("emojiButtonPressed")
         editState.emojiButtonTouched()
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
-        //show view
     }
 
     @IBAction func menuButtonTouched(_ sender: Any) {

@@ -216,21 +216,9 @@ class DrawState: State, ARSCNViewDelegate {
 
 
 extension DrawState {
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        isSingleTap = true
-//        if let singleTouch = touches.first{
-//
-//        } else {
-//            print("can't get touch")
-//        }
-//    }
 
      func addLighting() ->SCNLight{
-                let estimate: ARLightEstimate!
                 let light = SCNLight()
-
-                estimate = self.sceneView.session.currentFrame?.lightEstimate
-                light.intensity = estimate.ambientIntensity*0.5
                 light.castsShadow = false
                 light.type = SCNLight.LightType.directional
                 light.categoryBitMask = 1

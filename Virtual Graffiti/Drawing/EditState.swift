@@ -40,6 +40,7 @@ class EditState: State {
     var erasedStake = Stack<SCNNode>()
     var undoStake = Stack<SCNNode>()
     var recentUsedEmoji = [Emoji]()
+    var prePopEmoji = [Emoji]()
     
     func initialize(pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel) {
         self.pencilButton = pencilButton
@@ -81,7 +82,7 @@ class EditState: State {
     
     override func exit() {
         eraserOn = false
-        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
+        eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
         self.refSphere.removeFromParentNode()
         EmojiOn = false
         menuExpand = false
@@ -161,7 +162,7 @@ class EditState: State {
             changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
         }
         eraserOn = false
-        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
+        eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
         EmojiOn = false
         emojiButton.deactivateButton()
     }
@@ -190,7 +191,7 @@ class EditState: State {
     func eraseButtonTouchUp() {
         if eraserOn == true {
             eraserOn = false
-            eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
+            eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
             if EmojiOn == false && pencilOn == false{
                 pencilButtonTouched()
             }
@@ -301,12 +302,9 @@ class EditState: State {
     }
 
     func emojiLighting() ->SCNLight{
-        let estimate: ARLightEstimate!
         let light = SCNLight()
-        estimate = self.sceneView.session.currentFrame?.lightEstimate
-        light.intensity = estimate.ambientIntensity
-        light.type = SCNLight.LightType.directional
-        light.categoryBitMask = 1
+        light.type = SCNLight.LightType.ambient
+        light.intensity = 500
 
         return light
     }
@@ -315,11 +313,24 @@ class EditState: State {
         self.emoji = emoji
         self.modelName = emoji.name + ".scn"
         self.pathName = "emojis.scnassets/" + modelName
-        print("EditState:", emoji.name)
+        print("EditState change emoji:", emoji.name)
     }
 
     func getEmojiList() -> [Emoji]{
+        if prePopEmoji.count == 0 {
+            setupRecentList()
+        }
+        if recentUsedEmoji.count == 0{
+            print("prePopEmoji emoji:", prePopEmoji.count)
+            return prePopEmoji
+        }
+        print("recent used emoji:", recentUsedEmoji.count)
         return recentUsedEmoji
+    }
+    func setupRecentList(){
+        prePopEmoji.append(Emoji(name:"bandage", ID:"Group50555" ))
+        prePopEmoji.append(Emoji(name:"tired", ID:"Group3677"))
+        prePopEmoji.append(Emoji(name:"very happy", ID:"Group19895"))
     }
 
     func updateRecentEmojiList(){
@@ -329,8 +340,12 @@ class EditState: State {
             recentUsedEmoji.popLast()
         }
         recentUsedEmoji.insert(emoji, at: 0)
-        print(recentUsedEmoji.count)
     }
+
+    func degToRadians(degrees:Double) -> Double
+    {
+       return degrees * (M_PI / 180);
+     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if menuExpand {
@@ -399,11 +414,7 @@ class EditState: State {
             stroke.removeFromParentNode()
             erasedStake.push(stroke)
         }
-        
     }
-    
-    
-    
 }
 
 
