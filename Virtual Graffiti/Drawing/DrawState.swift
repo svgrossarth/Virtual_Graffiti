@@ -114,6 +114,7 @@ class DrawState: State, ARSCNViewDelegate {
     
     
     func placeQRNodes(qrNodes : [QRNode]){
+        print("calling place qr nodes")
         for qrNode in qrNodes{
             var duplicateQRNode = false
             guard let qrNodeUserRoot = qrNode.childNodes.first else {
@@ -144,6 +145,8 @@ class DrawState: State, ARSCNViewDelegate {
                         qrNode.position = childQRNode.position
                         childQRNode.removeFromParentNode()
                         sceneNode.addChildNode(qrNode)
+                        duplicateQRNode = true
+                    } else if qrNode.name == childQRNode.name && childQRNode.name == self.qrNode?.name {
                         duplicateQRNode = true
                     }
                 }
@@ -352,6 +355,7 @@ extension DrawState: ARSessionDelegate {
 extension DrawState {
     func save() {
         if let localQRNode = self.qrNode {
+            print("save in drawstate saving qr node")
             self.dataBase.saveQRNode(qrNode: localQRNode)
         }
         guard let location = sceneLocationManager.currentLocation else { return }
@@ -392,6 +396,8 @@ extension DrawState {
                     duplicateUserRootNode = true
                     userNode.removeFromParentNode()
                     self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: newNode)
+                } else if userNode.name == newNode.name && userNode.name == self.userRootNode.name{
+                    duplicateUserRootNode = true
                 }
             }
             

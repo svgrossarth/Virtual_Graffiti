@@ -358,7 +358,6 @@ class EditState: State {
                 self.setModel()
                 let cloneEmoji = ObjNode.clone()
                 cloneEmoji.position = touchLocation
-                let emojiRootNode = drawState.userRootNode
                 cloneEmoji.categoryBitMask = 1
                 if emojiInitialScale == nil {
                     emojiInitialScale = cloneEmoji.scale
@@ -369,7 +368,7 @@ class EditState: State {
                     return
                 }
                 cloneEmoji.scale = SCNVector3(initialScale.x * emojiScale, initialScale.y * emojiScale, initialScale.z * emojiScale)
-                emojiRootNode.addChildNode(cloneEmoji)
+                drawState.userRootNode.addChildNode(cloneEmoji)
                 menuButton.setImage(UIImage(named: emoji.name), for: .normal)
                 updateRecentEmojiList()
             } else {

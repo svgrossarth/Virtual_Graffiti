@@ -28,6 +28,7 @@ class Database {
 
     // retval: Local save success
     func saveDrawing(userRootNode : SecondTierRoot) -> Void {
+        print("save drawing")
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
         let tile = userRootNode.tileName
@@ -119,6 +120,7 @@ class Database {
     }
     
     func qrCallBack(querySnapshot : QuerySnapshot?, err : Error?, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void){
+        print("called qr call back in database")
         if let err = err {
                 print("Error with query snapshot: \(err.localizedDescription)")
                 return
@@ -155,7 +157,7 @@ class Database {
                             userRootNode.tileName = newTileName
                             nodes.append(newNode)
                             if let childNode = newNode.childNodes.first{
-                                print("Got one QR node and its childs name is", childNode.name!)
+                               // print("Got one QR node and its childs name is", childNode.name!)
                             }
                             
                         } catch {
@@ -208,6 +210,7 @@ class Database {
     
     
     func dbCallback(querySnapshot : QuerySnapshot?, err : Error?, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void){
+        print("dbcallback called for drawings")
         if let err = err {
                 print("Error with query snapshot: \(err.localizedDescription)")
                 return
@@ -233,7 +236,7 @@ class Database {
                             newNode.uid = newUID
                             newNode.tileName = newTileName
                             nodes.append(newNode)
-                            print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
+                            //print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {
                             print("Could not pull down node")
                         }
