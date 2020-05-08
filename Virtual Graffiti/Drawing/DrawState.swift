@@ -164,7 +164,7 @@ class DrawState: State, ARSCNViewDelegate {
     func initialize(_sceneView: SceneLocationView!, userUID: String) {
         self.userUID = userUID
         _initializeSceneView(_sceneView: _sceneView)
-        initializeUserRootNode()
+        load()
     }
     
     
@@ -198,12 +198,11 @@ class DrawState: State, ARSCNViewDelegate {
         //print("Initialized at tile \(Database().getTile(location: location))")
         sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode)
         userRootNode.uid = userUID
+        userRootNode.simdPosition = simd_float3(0, 0, 0)
 
         if let sceneNode = self.sceneView.sceneNode{
             sceneNode.light = addLighting()
         }
-        
-        load()
     }
     
     
@@ -364,7 +363,12 @@ extension DrawState {
     
     
     func load() {
-        guard let location = sceneLocationManager.currentLocation else { return }
+        guard let location = sceneLocationManager.currentLocation else {
+            // No location, try again in a second
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: load)
+            return
+        }
+        initializeUserRootNode()
         self.dataBase = Database()
         currentTile = dataBase.getTile(location: location)
         print("load has been called and here is the tile", currentTile)

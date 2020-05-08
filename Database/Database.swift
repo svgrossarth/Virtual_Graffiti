@@ -25,6 +25,7 @@ class Database {
     let DICT_KEY_QRVALUE = "qrValue"
     var drawingListeners : [ListenerRegistration] = [ListenerRegistration]()
     var qrListeners : [ListenerRegistration] = [ListenerRegistration]()
+    var currentlyPulledTiles : [String] = [String]()
 
     // retval: Local save success
     func saveDrawing(userRootNode : SecondTierRoot) -> Void {
@@ -197,6 +198,13 @@ class Database {
         // Longitude gets bigger at the equator and smaller at poles
         let tile = doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
         //print("all tiles near by ", tile)
+        
+        if currentlyPulledTiles.contains(tile) {
+            return
+        }
+        
+        currentlyPulledTiles.append(tile)
+        
         let collectionPath = "tiles/\(tile)/nodes"
         db.collection(collectionPath).getDocuments() { (querySnapshot, err) in
             self.dbCallback(querySnapshot: querySnapshot, err: err, drawFunction: drawFunction)
@@ -210,7 +218,7 @@ class Database {
     
     
     func dbCallback(querySnapshot : QuerySnapshot?, err : Error?, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void){
-        print("dbcallback called for drawings")
+        //print("dbcallback called for drawings")
         if let err = err {
                 print("Error with query snapshot: \(err.localizedDescription)")
                 return
