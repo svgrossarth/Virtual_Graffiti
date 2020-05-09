@@ -280,7 +280,7 @@
                                     <constraint firstAttribute="height" constant="30" id="w5c-cS-Jou"/>
                                 </constraints>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Erase" image="eraserOFF">
+                                <state key="normal" title="Erase" image="eraserOff">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -695,7 +695,7 @@
         <image name="colorOff" width="100" height="100"/>
         <image name="dropDown" width="100" height="100"/>
         <image name="emojiOff" width="100" height="100"/>
-        <image name="eraserOFF" width="128" height="128"/>
+        <image name="eraserOff" width="128" height="128"/>
         <image name="pencil" width="512" height="512"/>
         <image name="redo" width="512" height="512"/>
         <image name="undo" width="512" height="512"/>
