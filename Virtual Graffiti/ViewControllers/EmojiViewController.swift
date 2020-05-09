@@ -13,7 +13,7 @@ protocol ChangeEmojiDelegate {
     func getUpdatedList()->[Emoji]
 }
 
-class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate {
+class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate {
 
     var delegate : ChangeEmojiDelegate?
 
@@ -23,17 +23,38 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
     var selectedEmoji = Emoji(name: "bandage", ID: "Group50555")
     private var selectedModelIndex = 0
 
-    @IBOutlet weak var RecentCollection: UICollectionView!
     @IBOutlet weak var MenuCollection: UICollectionView!
     @IBOutlet weak var searchbar: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        MenuCollection.keyboardDismissMode = .onDrag
         searchbar.delegate = self
         setupEmojiModels()
         setupRecentModels()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @IBAction func doneButtonTap(_ sender: Any) {
+        print("emoji menu dismissed")
+        self.dismiss(animated: true, completion: nil)
+    }
 
+    @objc func keyboardWillShow(notification: NSNotification) {
+        var userInfo = notification.userInfo
+        let keyboardFrame: NSValue = userInfo?.removeValue(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let newYOrigin = CGFloat(-keyboardHeight) // or whatever new value you want
+            self.view.frame.origin.y = newYOrigin
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let newYOrigin = CGFloat(0) // or whatever new value you want
+            self.view.frame.origin.y = newYOrigin
+        }
     }
 
     func setupEmojiModels(){
@@ -72,39 +93,39 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
     }
 
     //MARK: - collectionView
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+       return 2
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == MenuCollection {
-            return filteredModels.count
-        }
-        recentModels = delegate?.getUpdatedList() as! [Emoji]
-        if recentModels.count == 0 {
-            //reset to pre-populated ones
-            setupRecentModels()
-        }
-        if recentModels.count < 5 {
-            return recentModels.count
-        }
-            return 5
+            if section == 1{
+                return filteredModels.count
+            }else{
+                recentModels = delegate!.getUpdatedList()
+                if recentModels.count < 5 {
+                    return recentModels.count
+                }
+                    return 5
+            }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == MenuCollection {
-                let menuCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Menu Cell", for: indexPath) as! MenuCollectionViewCell
-                let modelName = filteredModels[indexPath.item].name
-                if let image = UIImage(named: "\(modelName)") {
-                    menuCell.ModelImage.image = image
-                }
-            return menuCell
-        }
-        let recentCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Recent Cell", for: indexPath) as! RecentCollectionViewCell
+        if indexPath.section == 0 {
+            let recentCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Menu Cell", for: indexPath) as! MenuCollectionViewCell
 
-        if collectionView == RecentCollection {
             let modelName = recentModels[indexPath.item].name
             if let image = UIImage(named: "\(modelName)"){
-                       recentCell.RecentModelImage.image = image
+                            recentCell.ModelImage.image = image
             }
+            return recentCell
         }
-        return recentCell
+            let menuCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Menu Cell", for: indexPath) as! MenuCollectionViewCell
+            let modelName = filteredModels[indexPath.item].name
+            if let image = UIImage(named: "\(modelName)") {
+                menuCell.ModelImage.image = image
+            }
+        return menuCell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
@@ -112,45 +133,46 @@ class EmojiViewController: ViewController, UICollectionViewDelegate, UICollectio
         return CGSize(width: view.frame.width/8, height: view.frame.width/8)
     }
 
-    //section header view
+    func collectionView(collecitonView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
+        print(section)
+        if section == 1{
+            return Models.count
+        }
+        return recentModels.count
+    }
 
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        let recentHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "RecentHeaderView", for: indexPath) as! RecentHeaderView
-//        recentHeader.recentHeaderTitle = "recently Used"
-//
-//        if collectionView == MenuCollection{
-//            let listHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ListHeaderView", for: indexPath) as! ListHeaderView
-//            listHeader.listHeaderTitle = "all Emojis"
-//
-//            return listHeader
-//        }
-//
-//
-//        return recentHeader
-//    }
+ //section header view
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        print("set height")
+        return CGSize(width: self.view.frame.width, height: 200)
+    }
 
-//
-//     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//            return CGSize(width:collectionView.frame.size.width, height:70)
-//    }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
+        if kind == UICollectionView.elementKindSectionHeader{
+            if indexPath.section == 0 {
+                let recentHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ListHeaderView", for: indexPath) as! ListHeaderView
+                recentHeader.listHeaderTitle = "RECENTLY USED"
+
+                return recentHeader
+            }
+            let listHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ListHeaderView", for: indexPath) as! ListHeaderView
+            listHeader.listHeaderTitle = "EMOJIS"
+
+            return listHeader
+        }
+        fatalError("no header")
+    }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == RecentCollection{
+        if indexPath.section == 0 {
             selectedEmoji = recentModels[indexPath.item]
-        }
-        if collectionView == MenuCollection{
+        } else{
             selectedEmoji = filteredModels[indexPath.item]
         }
         delegate?.changeEmoji(emoji: selectedEmoji)
         self.dismiss(animated: true, completion: nil)
     }
-
-    //MARK: - UICollectionViewDelegateFlowLayout
-
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-//    {
-//        return CGSize(width: collectionView.frame.width, height: 35)
-//    }
 
 
     //MARK: - search
