@@ -66,7 +66,7 @@ class HomeViewController: UIViewController {
         state.enter()
         uiSetup()
 
-        eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
+        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
 
         view.addSubview(editState)
