@@ -87,7 +87,7 @@ class EditState: State {
     
     override func exit() {
         eraserOn = false
-        eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
+        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
         self.refSphere.removeFromParentNode()
         EmojiOn = false
         menuExpand = false
@@ -167,7 +167,7 @@ class EditState: State {
             changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
         }
         eraserOn = false
-        eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
+        eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
         EmojiOn = false
         emojiButton.deactivateButton()
     }
