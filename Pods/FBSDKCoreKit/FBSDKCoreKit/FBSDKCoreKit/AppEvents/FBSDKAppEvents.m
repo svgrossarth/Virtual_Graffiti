@@ -46,7 +46,7 @@
 
 #if !TARGET_OS_TV
 
-#import "FBSDKAddressFilterManager.h"
+#import "FBSDKIntegrityManager.h"
 #import "FBSDKEventBindingManager.h"
 #import "FBSDKHybridAppEventsScriptMessageHandler.h"
 #import "FBSDKModelManager.h"
@@ -455,7 +455,7 @@ static NSString *g_overrideAppID = nil;
   [[FBSDKAppEvents singleton] instanceLogEvent:eventName
                                     valueToSum:valueToSum
                                     parameters:parameters
-                            isImplicitlyLogged:(BOOL)parameters[FBSDKAppEventParameterImplicitlyLogged]
+                            isImplicitlyLogged:[parameters[FBSDKAppEventParameterImplicitlyLogged] boolValue]
                                    accessToken:accessToken];
 }
 
@@ -830,6 +830,11 @@ static NSString *g_overrideAppID = nil;
   [request startWithCompletionHandler:handler];
 }
 
++ (NSString *)anonymousID
+{
+  return [FBSDKBasicUtility anonymousID];
+}
+
 #if !TARGET_OS_TV
 + (void)augmentHybridWKWebView:(WKWebView *)webView {
   // Ensure we can instantiate WebKit before trying this
@@ -1030,7 +1035,6 @@ static dispatch_once_t *onceTokenPointer;
   }
   [self fetchServerConfiguration:^{
     NSDictionary *params = [FBSDKAppEventsUtility activityParametersDictionaryForEvent:@"MOBILE_APP_INSTALL"
-                                                                    implicitEventsOnly:NO
                                                              shouldAccessAdvertisingID:self->_serverConfiguration.isAdvertisingIDEnabled];
     NSString *path = [NSString stringWithFormat:@"%@/activities", appID];
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:path
@@ -1153,8 +1157,8 @@ static dispatch_once_t *onceTokenPointer;
   parameters = [FBSDKEventDeactivationManager processParameters:parameters eventName:eventName];
 
 #if !defined BUCK && !TARGET_OS_TV
-  // Filter out address data
-  parameters = [FBSDKAddressFilterManager processParameters:parameters];
+  // Filter out restrictive data with on-device ML
+  parameters = [FBSDKIntegrityManager processParameters:parameters];
 #endif
   // Filter out restrictive keys
   parameters = [FBSDKRestrictiveDataFilterManager processParameters:parameters
@@ -1290,7 +1294,6 @@ static dispatch_once_t *onceTokenPointer;
     }
     NSMutableDictionary *postParameters = [FBSDKAppEventsUtility
                                            activityParametersDictionaryForEvent:@"CUSTOM_APP_EVENTS"
-                                           implicitEventsOnly:appEventsState.areAllEventsImplicit
                                            shouldAccessAdvertisingID:self->_serverConfiguration.advertisingIDEnabled];
     NSInteger length = receipt_data.length;
     if (length > 0) {
