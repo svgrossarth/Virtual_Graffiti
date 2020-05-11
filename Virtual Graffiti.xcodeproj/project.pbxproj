@@ -37,9 +37,7 @@
 		C0086EC22412B113001C4A22 /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC12412B113001C4A22 /* Stroke.swift */; };
 		C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */; };
 		C0086EC62412B492001C4A22 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC52412B492001C4A22 /* Math.swift */; };
-		C01B55F8245E58D9004007BC /* RecentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01B55F7245E58D9004007BC /* RecentHeaderView.swift */; };
 		C01B55FA245E58ED004007BC /* DrawState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01B55F9245E58ED004007BC /* DrawState.swift */; };
-		C01B55FC245E5907004007BC /* RecentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01B55FB245E5907004007BC /* RecentCollectionViewCell.swift */; };
 		C09D24E6244824BB00FFA752 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D24E5244824BA00FFA752 /* Stack.swift */; };
 		C4428F1649E6E995D5630731 /* Pods_Virtual_GraffitiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713D8F45B78325543AE00400 /* Pods_Virtual_GraffitiTests.framework */; };
 		CE4CA7B0240E23B6005BEDC8 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CA7AF240E23B6005BEDC8 /* Database.swift */; };
@@ -125,9 +123,7 @@
 		C0086EC12412B113001C4A22 /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
 		C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTierRoot.swift; sourceTree = "<group>"; };
 		C0086EC52412B492001C4A22 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
-		C01B55F7245E58D9004007BC /* RecentHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentHeaderView.swift; sourceTree = "<group>"; };
 		C01B55F9245E58ED004007BC /* DrawState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawState.swift; sourceTree = "<group>"; };
-		C01B55FB245E5907004007BC /* RecentCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentCollectionViewCell.swift; sourceTree = "<group>"; };
 		C09D24E5244824BA00FFA752 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		CC1DA7D233F32C423E671A34 /* Pods_Virtual_Graffiti.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Virtual_Graffiti.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE4CA7AF240E23B6005BEDC8 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
@@ -186,8 +182,6 @@
 		0FA41240244A94CB00C5FA8E /* Emoji */ = {
 			isa = PBXGroup;
 			children = (
-				C01B55FB245E5907004007BC /* RecentCollectionViewCell.swift */,
-				C01B55F7245E58D9004007BC /* RecentHeaderView.swift */,
 				0F0E0E942450F61B00AC6004 /* ListHeaderView.swift */,
 				0FA41242244A94CB00C5FA8E /* ModeButton.swift */,
 				0F0E0E8C244E993200AC6004 /* MenuCollectionViewCell.swift */,
@@ -677,7 +671,6 @@
 				0F0E0E8D244E993200AC6004 /* MenuCollectionViewCell.swift in Sources */,
 				77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */,
 				CE87C3AE245BD64C00524D4B /* CGPoint+Extensions.swift in Sources */,
-				C01B55FC245E5907004007BC /* RecentCollectionViewCell.swift in Sources */,
 				7746C3B923DE581C00DDC27C /* ViewController.swift in Sources */,
 				7746C3B523DE581C00DDC27C /* AppDelegate.swift in Sources */,
 				77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */,
@@ -703,7 +696,6 @@
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
 				C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */,
 				0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */,
-				C01B55F8245E58D9004007BC /* RecentHeaderView.swift in Sources */,
 				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
 				CE87C3B2245BD64C00524D4B /* SceneLocationView.swift in Sources */,
 				CE87C3A5245BD64C00524D4B /* LocationAnnotationNode.swift in Sources */,
@@ -897,7 +889,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.ecs-193.virtual-graffiti";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -919,7 +911,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.ecs-193.virtual-graffiti";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

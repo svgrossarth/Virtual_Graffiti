@@ -186,7 +186,6 @@ class HomeViewController: UIViewController {
         print("emojiButtonPressed")
         editState.emojiButtonTouched()
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
-        //show view
     }
 
     @IBAction func menuButtonTouched(_ sender: Any) {
