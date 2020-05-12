@@ -196,7 +196,7 @@ class EditState: State {
     func eraseButtonTouchUp() {
         if eraserOn == true {
             eraserOn = false
-            eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
+            eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
             if EmojiOn == false && pencilOn == false{
                 pencilButtonTouched()
             }
