@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RGp-mB-gpr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vgd-0d-5jD">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginPage" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -199,7 +199,7 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8eH-37-oqy">
                                         <rect key="frame" x="0.0" y="108" width="295" height="30"/>
-                                        <state key="normal" title="Virtual Graffiti"/>
+                                        <state key="normal" title="Login"/>
                                         <connections>
                                             <action selector="loginTapped:" destination="6S6-od-da5" eventType="touchUpInside" id="tCN-YS-2Ew"/>
                                         </connections>
@@ -315,7 +315,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P9N-um-jKB">
-                                <rect key="frame" x="59" y="74" width="30" height="30"/>
+                                <rect key="frame" x="59" y="30" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="KA2-km-eCe"/>
                                     <constraint firstAttribute="width" constant="30" id="eTL-Yj-YFu"/>
@@ -424,7 +424,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Xp-pQ-uWC">
-                                <rect key="frame" x="20" y="74" width="30" height="30"/>
+                                <rect key="frame" x="20" y="30" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ZiR-WW-bii"/>
                                     <constraint firstAttribute="width" constant="30" id="eKk-aH-7yf"/>
@@ -432,6 +432,17 @@
                                 <state key="normal" title="Button" image="undo"/>
                                 <connections>
                                     <action selector="undoButton:" destination="RGp-mB-gpr" eventType="touchUpInside" id="30Y-iX-vX0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zvp-gi-cTI">
+                                <rect key="frame" x="159" y="20" width="57" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="1ZJ-PE-Flt"/>
+                                    <constraint firstAttribute="width" constant="57" id="7ou-3H-bb6"/>
+                                </constraints>
+                                <state key="normal" title="Sign out"/>
+                                <connections>
+                                    <action selector="signoutAction:" destination="RGp-mB-gpr" eventType="touchUpInside" id="sup-W5-ccF"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -462,12 +473,14 @@
                             <constraint firstItem="9Xp-pQ-uWC" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="VZS-ot-IkH"/>
                             <constraint firstItem="N5s-Kg-KQr" firstAttribute="top" secondItem="vRh-nN-10E" secondAttribute="bottom" constant="153" id="Z9e-PD-Q1a"/>
                             <constraint firstItem="6Ws-aO-AaH" firstAttribute="leading" secondItem="AT0-kT-hHa" secondAttribute="leading" id="eNc-v5-rcd"/>
+                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="leading" secondItem="P9N-um-jKB" secondAttribute="trailing" constant="70" id="eaJ-X7-1r1"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="N5s-Kg-KQr" secondAttribute="trailing" constant="11" id="fSA-nI-ENT"/>
                             <constraint firstItem="plp-51-2fN" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="fvW-V3-rpm"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="aIY-sM-oJG" secondAttribute="trailing" constant="219" id="iOV-B6-Tqt"/>
                             <constraint firstAttribute="trailing" secondItem="Yj7-dO-9gz" secondAttribute="trailing" constant="35" id="jf0-kI-tMk"/>
                             <constraint firstItem="P9N-um-jKB" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="maw-4b-Qqz"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="ZgC-Gp-X6X" secondAttribute="trailing" constant="35" id="oQy-0v-mU1"/>
+                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="20" id="pAB-Q7-FJz"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="hG4-mj-yll" secondAttribute="trailing" constant="79" id="uCt-gu-0jo"/>
                             <constraint firstItem="AT0-kT-hHa" firstAttribute="top" secondItem="N5s-Kg-KQr" secondAttribute="bottom" constant="8" id="yBs-OM-f8E"/>
                             <constraint firstAttribute="trailing" secondItem="vRh-nN-10E" secondAttribute="trailing" constant="-98" id="ywL-RC-lNC"/>
@@ -497,6 +510,7 @@
                         <outlet property="redButton" destination="TA5-k4-GBD" id="3SQ-QV-0XX"/>
                         <outlet property="redo" destination="P9N-um-jKB" id="aXY-1q-1pC"/>
                         <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
+                        <outlet property="signoutButton" destination="Zvp-gi-cTI" id="SQ5-Dt-RYg"/>
                         <outlet property="undo" destination="9Xp-pQ-uWC" id="OfE-8T-ZD1"/>
                         <outlet property="widthLabel" destination="aIY-sM-oJG" id="1vm-Uk-yAz"/>
                         <outlet property="widthSlider" destination="hG4-mj-yll" id="0OL-Z5-wfN"/>
@@ -505,7 +519,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7SG-Oj-ba8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3469.5652173913045" y="-320.08928571428572"/>
+            <point key="canvasLocation" x="2775" y="117"/>
         </scene>
         <!--Emoji View Controller-->
         <scene sceneID="46U-RC-v4c">
@@ -620,7 +634,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ktt-5c-eNN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4324.6376811594209" y="-322.76785714285711"/>
+            <point key="canvasLocation" x="3631" y="114"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7ui-NF-nfu">
@@ -688,7 +702,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6HA-Bp-dgZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2586.9565217391305" y="-319.41964285714283"/>
+            <point key="canvasLocation" x="2594" y="-714"/>
         </scene>
     </scenes>
     <resources>

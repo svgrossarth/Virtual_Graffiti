@@ -77,23 +77,27 @@ class DrawState: State, ARSCNViewDelegate {
                 // Get center
                 let center = CGPoint(x: rect.midX, y: rect.midY)
                 
-                let sphere = SCNSphere(radius: self.sphereRadius)
-                let material = SCNMaterial()
-                material.diffuse.contents = self.drawingColor
-                sphere.materials = [material]
+                let box = SCNBox(width: rect.width, height: rect.height, length: 0, chamferRadius: 0.01)
+
+                let rectangleMaterial = SCNMaterial()
+                rectangleMaterial.diffuse.contents = UIImage(named: "square")
+                box.materials = [rectangleMaterial]
+                
+                let node = SCNNode()
+                node.geometry = box
                 
                 self.qrNode = QRNode(QRValue: self.QRValue, name: UUID().uuidString)
                 if self.tileName != "" {
                     self.qrNode?.tileName = self.tileName
                 }
-                self.qrNode!.geometry = sphere
+                
                 if let hitResult = self.currentFrame?.hitTest(center, types: .featurePoint).first {
                     //https://stackoverflow.com/questions/48980834/position-of-node-in-scene
                     let pointTransform = SCNMatrix4(hitResult.worldTransform) //turns the point into a point on the world grid
                     let pointVector = SCNVector3Make(pointTransform.m41, pointTransform.m42, pointTransform.m43) //the X, Y, and Z of the clicked coordinate
                     self.qrNode!.position = pointVector
+                    node.position = pointVector
                 }
-                
                 
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
@@ -102,7 +106,14 @@ class DrawState: State, ARSCNViewDelegate {
                     print("ERROR: sceneNode not available to place qrNode, this is a problem with the new ARCL library")
                     return
                 }
+                print(self.qrNode?.geometry)
                 sceneNode.addChildNode(self.qrNode!)
+                sceneNode.addChildNode(node)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { // Change `2.0` to the desired number of seconds.
+                    node.removeFromParentNode()
+                }
+                
                 self.userRootNode.worldPosition = SCNVector3(0,0,0)
                 self.dataBase.saveQRNode(qrNode: self.qrNode!)
                 self.dataBase.loadQRNode(qrNode: self.qrNode!, placeQRNodes: self.placeQRNodes)

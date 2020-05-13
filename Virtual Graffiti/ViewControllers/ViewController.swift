@@ -17,10 +17,19 @@ class ViewController: UIViewController, GIDSignInDelegate {
     
     @IBOutlet weak var signUpButton: UIButton!
     
+    var user = Auth.auth().currentUser?.uid ?? ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance()?.presentingViewController = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print(Auth.auth().currentUser?.uid)
+        if Auth.auth().currentUser?.uid != nil {
+            transitionToHome(userUID: Auth.auth().currentUser?.uid ?? "")
+        }
     }
     /*
      Google Sign In [START]
@@ -63,10 +72,10 @@ class ViewController: UIViewController, GIDSignInDelegate {
     
     func transitionToHome(userUID: String) {
         
-        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        homeViewController?.userUID = userUID
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()
+        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as! HomeViewController
+        homeViewController.userUID = userUID
+        self.navigationController?.isNavigationBarHidden = true;
+        self.navigationController?.pushViewController(homeViewController, animated: false)
         
     }
 }

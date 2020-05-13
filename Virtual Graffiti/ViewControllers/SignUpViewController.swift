@@ -93,12 +93,6 @@ class SignUpViewController: UIViewController {
                     // There was an error creating the user
                     self.showError("Error creating user.")
                 } else {
-                    // User created successfully, store first name and last name now
-                    let db = Firestore.firestore()
-                    
-                    db.collection("users").addDocument(data:
-                    ["firstname": firstName,
-                     "lastname": lastName])
                     self.transitionToHome(userUID: Auth.auth().currentUser!.uid)
                 }
             }
@@ -114,10 +108,11 @@ class SignUpViewController: UIViewController {
     
     func transitionToHome(userUID: String) {
         
-        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        homeViewController?.userUID = userUID
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()
+        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as! HomeViewController
+        homeViewController.userUID = userUID
+        homeViewController.firstTime = true
+        self.navigationController?.isNavigationBarHidden = true;
+        self.navigationController?.pushViewController(homeViewController, animated: false)
         
     }
     
