@@ -28,8 +28,8 @@ class Database {
     var currentlyPulledTiles : [String] = [String]()
 
     // retval: Local save success
-    func saveDrawing(userRootNode : SecondTierRoot) -> Void {
-        print("save drawing")
+    func saveDrawing(userRootNode : SecondTierRoot) -> Bool {
+        print("Saving drawing")
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
         let tile = userRootNode.tileName
@@ -38,15 +38,14 @@ class Database {
         
         guard let nodeName = userRootNode.name else {
             print("Node doesn't have name")
-            return
+            return false
         }
         let docPath = collectionPath + "/" + nodeName
         docRef = db.document(docPath)
         
-        // TODO: Save drawing!
         var dataToSave: [String: Any] = [:]
         
-        do{
+        do {
             let nodeData = try NSKeyedArchiver.archivedData(withRootObject: userRootNode as SCNNode, requiringSecureCoding: false)
             let nodeLocation = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.location, requiringSecureCoding: false)
             let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: userRootNode.uid, requiringSecureCoding: false)
@@ -61,28 +60,31 @@ class Database {
                 if let error = error {
                     print("Error saving drawing: \(error.localizedDescription)")
                 }
-               else {
-                   //print("Data has been saved at \(docPath)")
-               }
-           }
-       } catch{
-           print("Can't convert node to data")
-
-       }
-   }
+                else {
+                    //print("QRNode has been saved at \(qrPath)")
+                }
+            }
+        } catch {
+            print("Can't convert node to data")
+            return false
+        }
+        
+        //print("Data has been saved at \(docPath)")
+        return true
+    }
 
     
-    func saveQRNode(qrNode: QRNode) {
+    func saveQRNode(qrNode: QRNode) -> Bool {
         print("saveQRNode")
         guard let encodedQRValue = qrNode.QRValue.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
             print("Can't encode qrValue")
-            return
+            return false
         }
         let qrPath = "QRNodes/\(encodedQRValue)/nodes/\(qrNode.name!)"
         let qrRef = db.document(qrPath)
         var qrData: [String: Any] = [:]
-         do{
-             let nodeData = try NSKeyedArchiver.archivedData(withRootObject: qrNode, requiringSecureCoding: false)
+        do{
+            let nodeData = try NSKeyedArchiver.archivedData(withRootObject: qrNode, requiringSecureCoding: false)
             let nodeUID = try NSKeyedArchiver.archivedData(withRootObject: qrNode.uid, requiringSecureCoding: false)
             let nodeTileName = try NSKeyedArchiver.archivedData(withRootObject: qrNode.tileName, requiringSecureCoding: false)
             let nodeQRValue = try NSKeyedArchiver.archivedData(withRootObject: encodedQRValue, requiringSecureCoding: false)
@@ -91,21 +93,25 @@ class Database {
             qrData[DICT_KEY_UID] = nodeUID
             qrData[DICT_KEY_TILENAME] = nodeTileName
             qrData[DICT_KEY_QRVALUE] = nodeQRValue
-            
-             qrRef.setData(qrData) { (error) in
-                 if let error = error {
-                     print("Error saving drawing: \(error.localizedDescription)")
-                 }
-                 else {
-                     //print("QRNode has been saved at \(qrPath)")
-                 }
-             }
-         } catch{
-             print("Can't convert node to data")
-         }
+
+            qrRef.setData(qrData) { (error) in
+                if let error = error {
+                    print("Error saving drawing: \(error.localizedDescription)")
+                }
+                else {
+                    //print("QRNode has been saved at \(qrPath)")
+                }
+            }
+        } catch{
+            print("Can't convert node to data")
+            return false
+        }
+        //print("QRNode has been saved at \(qrPath)")
+        return true
     }
     
-    func loadQRNode(qrNode : QRNode, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void){
+    
+    func loadQRNode(qrNode : QRNode, placeQRNodes: @escaping (_ nodes : [QRNode]) -> Void) {
         guard let encodedQRValue = qrNode.QRValue.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
             print("Can't encode qrValue")
             return

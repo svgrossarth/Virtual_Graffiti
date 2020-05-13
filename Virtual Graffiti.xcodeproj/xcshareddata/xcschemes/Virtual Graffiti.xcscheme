@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7746C3D123DE581E00DDC27C"
+               BuildableName = "Virtual GraffitiUITests.xctest"
+               BlueprintName = "Virtual GraffitiUITests"
+               ReferencedContainer = "container:Virtual Graffiti.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CECFCA37246A24C30003EA98"
+               BuildableName = "Virtual Graffiti Tests.xctest"
+               BlueprintName = "Virtual Graffiti Tests"
+               ReferencedContainer = "container:Virtual Graffiti.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -19,7 +19,6 @@
 		7746C3BC23DE581C00DDC27C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7746C3BA23DE581C00DDC27C /* Main.storyboard */; };
 		7746C3BE23DE581D00DDC27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7746C3BD23DE581D00DDC27C /* Assets.xcassets */; };
 		7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7746C3BF23DE581D00DDC27C /* LaunchScreen.storyboard */; };
-		7746C3CC23DE581E00DDC27C /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3CB23DE581E00DDC27C /* LoginTests.swift */; };
 		7746C3D723DE581E00DDC27C /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3D623DE581E00DDC27C /* LoginUITests.swift */; };
 		77811513245B95AB00985F42 /* QRNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77811512245B95AB00985F42 /* QRNode.swift */; };
 		7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info.plist */; };
@@ -61,6 +60,7 @@
 		CE87C3B1245BD64C00524D4B /* ARKit_CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */; };
 		CE87C3B2245BD64C00524D4B /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39F245BD64B00524D4B /* SceneLocationView.swift */; };
 		CE87C3B3245BD64C00524D4B /* SceneLocationViewEstimateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */; };
+		CECFCA3B246A24C40003EA98 /* Virtual_Graffiti_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFCA3A246A24C40003EA98 /* Virtual_Graffiti_Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +77,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7746C3B023DE581C00DDC27C;
 			remoteInfo = Login;
+		};
+		CECFCA3D246A24C40003EA98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7746C3A923DE581C00DDC27C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7746C3B023DE581C00DDC27C;
+			remoteInfo = "Virtual Graffiti";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -104,8 +111,6 @@
 		7746C3C023DE581D00DDC27C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7746C3C223DE581D00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7746C3C723DE581E00DDC27C /* Virtual GraffitiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual GraffitiTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7746C3CB23DE581E00DDC27C /* LoginTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTests.swift; sourceTree = "<group>"; };
-		7746C3CD23DE581E00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7746C3D223DE581E00DDC27C /* Virtual GraffitiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual GraffitiUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7746C3D623DE581E00DDC27C /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		7746C3D823DE581E00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -147,6 +152,9 @@
 		CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit_CoreLocation.swift; sourceTree = "<group>"; };
 		CE87C39F245BD64B00524D4B /* SceneLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationViewEstimateDelegate.swift; sourceTree = "<group>"; };
+		CECFCA38246A24C30003EA98 /* Virtual Graffiti Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual Graffiti Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CECFCA3A246A24C40003EA98 /* Virtual_Graffiti_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Virtual_Graffiti_Tests.swift; sourceTree = "<group>"; };
+		CECFCA3C246A24C40003EA98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DBD766DFC17567705C4EF56F /* Pods_Virtual_Graffiti_Virtual_GraffitiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Virtual_Graffiti_Virtual_GraffitiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -173,6 +181,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9112A514735DB6531EA41E97 /* Pods_Virtual_Graffiti_Virtual_GraffitiUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECFCA35246A24C30003EA98 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,8 +224,8 @@
 				CE87C389245BD64B00524D4B /* ARKit-CoreLocation */,
 				CE4CA7AE240E238B005BEDC8 /* Database */,
 				7746C3B323DE581C00DDC27C /* Virtual Graffiti */,
-				7746C3CA23DE581E00DDC27C /* Virtual_GraffitiTests */,
 				7746C3D523DE581E00DDC27C /* Virtual_GraffitiUITests */,
+				CECFCA39246A24C30003EA98 /* Virtual Graffiti Tests */,
 				7746C3B223DE581C00DDC27C /* Products */,
 				A8B72136C347A71617C4AB60 /* Pods */,
 				4383BAD7677B1109D60843AA /* Frameworks */,
@@ -223,6 +238,7 @@
 				7746C3B123DE581C00DDC27C /* Virtual Graffiti.app */,
 				7746C3C723DE581E00DDC27C /* Virtual GraffitiTests.xctest */,
 				7746C3D223DE581E00DDC27C /* Virtual GraffitiUITests.xctest */,
+				CECFCA38246A24C30003EA98 /* Virtual Graffiti Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -245,15 +261,6 @@
 				7746C3C223DE581D00DDC27C /* Info.plist */,
 			);
 			path = "Virtual Graffiti";
-			sourceTree = "<group>";
-		};
-		7746C3CA23DE581E00DDC27C /* Virtual_GraffitiTests */ = {
-			isa = PBXGroup;
-			children = (
-				7746C3CB23DE581E00DDC27C /* LoginTests.swift */,
-				7746C3CD23DE581E00DDC27C /* Info.plist */,
-			);
-			path = Virtual_GraffitiTests;
 			sourceTree = "<group>";
 		};
 		7746C3D523DE581E00DDC27C /* Virtual_GraffitiUITests */ = {
@@ -388,6 +395,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		CECFCA39246A24C30003EA98 /* Virtual Graffiti Tests */ = {
+			isa = PBXGroup;
+			children = (
+				CECFCA3A246A24C40003EA98 /* Virtual_Graffiti_Tests.swift */,
+				CECFCA3C246A24C40003EA98 /* Info.plist */,
+			);
+			path = "Virtual Graffiti Tests";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -451,13 +467,31 @@
 			productReference = 7746C3D223DE581E00DDC27C /* Virtual GraffitiUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		CECFCA37246A24C30003EA98 /* Virtual Graffiti Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CECFCA3F246A24C40003EA98 /* Build configuration list for PBXNativeTarget "Virtual Graffiti Tests" */;
+			buildPhases = (
+				CECFCA34246A24C30003EA98 /* Sources */,
+				CECFCA35246A24C30003EA98 /* Frameworks */,
+				CECFCA36246A24C30003EA98 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CECFCA3E246A24C40003EA98 /* PBXTargetDependency */,
+			);
+			name = "Virtual Graffiti Tests";
+			productName = "Virtual Graffiti Tests";
+			productReference = CECFCA38246A24C30003EA98 /* Virtual Graffiti Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		7746C3A923DE581C00DDC27C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Team Rocket";
 				TargetAttributes = {
@@ -470,6 +504,10 @@
 					};
 					7746C3D123DE581E00DDC27C = {
 						CreatedOnToolsVersion = 11.3.1;
+						TestTargetID = 7746C3B023DE581C00DDC27C;
+					};
+					CECFCA37246A24C30003EA98 = {
+						CreatedOnToolsVersion = 11.4;
 						TestTargetID = 7746C3B023DE581C00DDC27C;
 					};
 				};
@@ -490,6 +528,7 @@
 				7746C3B023DE581C00DDC27C /* Virtual Graffiti */,
 				7746C3C623DE581E00DDC27C /* Virtual GraffitiTests */,
 				7746C3D123DE581E00DDC27C /* Virtual GraffitiUITests */,
+				CECFCA37246A24C30003EA98 /* Virtual Graffiti Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -515,6 +554,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7746C3D023DE581E00DDC27C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECFCA36246A24C30003EA98 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -715,7 +761,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7746C3CC23DE581E00DDC27C /* LoginTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +769,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7746C3D723DE581E00DDC27C /* LoginUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECFCA34246A24C30003EA98 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CECFCA3B246A24C40003EA98 /* Virtual_Graffiti_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,6 +792,11 @@
 			isa = PBXTargetDependency;
 			target = 7746C3B023DE581C00DDC27C /* Virtual Graffiti */;
 			targetProxy = 7746C3D323DE581E00DDC27C /* PBXContainerItemProxy */;
+		};
+		CECFCA3E246A24C40003EA98 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7746C3B023DE581C00DDC27C /* Virtual Graffiti */;
+			targetProxy = CECFCA3D246A24C40003EA98 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -970,6 +1028,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2XTPH96H59;
 				INFOPLIST_FILE = LoginUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -990,6 +1049,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2XTPH96H59;
 				INFOPLIST_FILE = LoginUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1001,6 +1061,48 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Login;
+			};
+			name = Release;
+		};
+		CECFCA40246A24C40003EA98 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2XTPH96H59;
+				INFOPLIST_FILE = "Virtual Graffiti Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ecs193.virtual-graffiti.Virtual-Graffiti-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Virtual Graffiti.app/Virtual Graffiti";
+			};
+			name = Debug;
+		};
+		CECFCA41246A24C40003EA98 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2XTPH96H59;
+				INFOPLIST_FILE = "Virtual Graffiti Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ecs193.virtual-graffiti.Virtual-Graffiti-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Virtual Graffiti.app/Virtual Graffiti";
 			};
 			name = Release;
 		};
@@ -1039,6 +1141,15 @@
 			buildConfigurations = (
 				7746C3E223DE581E00DDC27C /* Debug */,
 				7746C3E323DE581E00DDC27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CECFCA3F246A24C40003EA98 /* Build configuration list for PBXNativeTarget "Virtual Graffiti Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CECFCA40246A24C40003EA98 /* Debug */,
+				CECFCA41246A24C40003EA98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
