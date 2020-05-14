@@ -63,7 +63,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
 
         view.addSubview(drawState)
-        self.view.bringSubviewToFront(signoutButton)
+//        self.view.bringSubviewToFront(signoutButton)
         drawState.initialize(_sceneView: sceneView, userUID: userUID)
         
         state = drawState
@@ -74,7 +74,7 @@ class HomeViewController: UIViewController {
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
 
         view.addSubview(editState)
-        editState.initialize(pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
+        editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
     }
     
@@ -134,6 +134,7 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(redo)
         self.view.bringSubviewToFront(emojiButton)
         self.view.bringSubviewToFront(pencilButton)
+        self.view.bringSubviewToFront(signoutButton)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
@@ -255,6 +256,7 @@ class HomeViewController: UIViewController {
             menuButton.isHidden = true
             emojiButton.isHidden = true
             pencilButton.isHidden = true
+            signoutButton.isHidden = true
         }
     }
     

@@ -21,6 +21,7 @@ class EditState: State {
     var changeColorButton = UIButton()
     var emojiButton = ModeButton()
     var pencilButton = UIButton()
+    var signoutButton = UIButton()
     var menuButton = UIButton()
     var distanceSlider = UISlider()
     var distanceValue = UILabel()
@@ -46,7 +47,7 @@ class EditState: State {
     var prePopEmoji = [Emoji]()
     
     
-    func initialize(pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
+    func initialize(signoutButton: UIButton, pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
         self.pencilButton = pencilButton
         self.menuButton = menuButton
         self.emojiButton = emojiButton
@@ -60,6 +61,7 @@ class EditState: State {
         self.widthSlider = widthSlider
         self.widthLabel = widthLabel
         self.userUID = userUID
+        self.signoutButton = signoutButton
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
         self.sceneView.automaticallyUpdatesLighting = false
@@ -107,10 +109,12 @@ class EditState: State {
                 self.emojiButton.transform = CGAffineTransform(translationX: 0, y: 10)
                 self.pencilButton.transform = CGAffineTransform(translationX: 0, y: 15)
                 self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: 20)
+                self.signoutButton.transform = CGAffineTransform(translationX: 0, y: 25)
                 self.emojiButton.isHidden = false
                 self.eraseButton.isHidden = false
                 self.pencilButton.isHidden = false
                 self.changeColorButton.isHidden = false
+                self.signoutButton.isHidden = false
 
                 //hide labels and sliders
                 self.distanceLabel.isHidden = true
@@ -126,12 +130,14 @@ class EditState: State {
                 self.eraseButton.transform = CGAffineTransform(translationX: 0, y: -15)
                 self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -20)
                 self.pencilButton.transform = CGAffineTransform(translationX: 0, y: -25)
-                self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -35)
+                self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -33)
+                self.signoutButton.transform = CGAffineTransform(translationX: 0, y: -41)
                 self.colorStack.isHidden = true
                 self.emojiButton.isHidden = true
                 self.eraseButton.isHidden = true
                 self.pencilButton.isHidden = true
                 self.changeColorButton.isHidden = true
+                self.signoutButton.isHidden = true
                 self.changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
                 if self.EmojiOn {
                     self.menuButton.setImage(UIImage(named: self.emoji.name), for: .normal)
@@ -154,6 +160,7 @@ class EditState: State {
                 self.changeColorButton.transform = .identity
                 self.pencilButton.transform = .identity
                 self.eraseButton.transform = .identity
+                self.signoutButton.transform = .identity
             }
         })
     }
@@ -196,7 +203,7 @@ class EditState: State {
     func eraseButtonTouchUp() {
         if eraserOn == true {
             eraserOn = false
-            eraseButton.setImage(UIImage(named: "eraserOFF"), for: .normal)
+            eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
             if EmojiOn == false && pencilOn == false{
                 pencilButtonTouched()
             }

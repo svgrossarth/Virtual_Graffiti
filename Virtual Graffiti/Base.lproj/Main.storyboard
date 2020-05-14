@@ -434,13 +434,13 @@
                                     <action selector="undoButton:" destination="RGp-mB-gpr" eventType="touchUpInside" id="30Y-iX-vX0"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zvp-gi-cTI">
-                                <rect key="frame" x="159" y="20" width="57" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zvp-gi-cTI">
+                                <rect key="frame" x="310" y="237" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="1ZJ-PE-Flt"/>
-                                    <constraint firstAttribute="width" constant="57" id="7ou-3H-bb6"/>
+                                    <constraint firstAttribute="width" constant="30" id="7ou-3H-bb6"/>
                                 </constraints>
-                                <state key="normal" title="Sign out"/>
+                                <state key="normal" title="Sign out" image="logout"/>
                                 <connections>
                                     <action selector="signoutAction:" destination="RGp-mB-gpr" eventType="touchUpInside" id="sup-W5-ccF"/>
                                 </connections>
@@ -471,16 +471,17 @@
                             <constraint firstItem="hG4-mj-yll" firstAttribute="top" secondItem="aIY-sM-oJG" secondAttribute="bottom" constant="8" id="UfF-xC-trd"/>
                             <constraint firstItem="9Xp-pQ-uWC" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="20" id="V5n-1S-Nlo"/>
                             <constraint firstItem="9Xp-pQ-uWC" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="VZS-ot-IkH"/>
+                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="top" secondItem="ZgC-Gp-X6X" secondAttribute="bottom" constant="8" id="WN5-3x-ccU"/>
                             <constraint firstItem="N5s-Kg-KQr" firstAttribute="top" secondItem="vRh-nN-10E" secondAttribute="bottom" constant="153" id="Z9e-PD-Q1a"/>
                             <constraint firstItem="6Ws-aO-AaH" firstAttribute="leading" secondItem="AT0-kT-hHa" secondAttribute="leading" id="eNc-v5-rcd"/>
-                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="leading" secondItem="P9N-um-jKB" secondAttribute="trailing" constant="70" id="eaJ-X7-1r1"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="N5s-Kg-KQr" secondAttribute="trailing" constant="11" id="fSA-nI-ENT"/>
+                            <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="Zvp-gi-cTI" secondAttribute="trailing" constant="35" id="fgh-C9-7o6"/>
                             <constraint firstItem="plp-51-2fN" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="fvW-V3-rpm"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="aIY-sM-oJG" secondAttribute="trailing" constant="219" id="iOV-B6-Tqt"/>
                             <constraint firstAttribute="trailing" secondItem="Yj7-dO-9gz" secondAttribute="trailing" constant="35" id="jf0-kI-tMk"/>
                             <constraint firstItem="P9N-um-jKB" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="maw-4b-Qqz"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="ZgC-Gp-X6X" secondAttribute="trailing" constant="35" id="oQy-0v-mU1"/>
-                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="20" id="pAB-Q7-FJz"/>
+                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="237" id="pAB-Q7-FJz"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="hG4-mj-yll" secondAttribute="trailing" constant="79" id="uCt-gu-0jo"/>
                             <constraint firstItem="AT0-kT-hHa" firstAttribute="top" secondItem="N5s-Kg-KQr" secondAttribute="bottom" constant="8" id="yBs-OM-f8E"/>
                             <constraint firstAttribute="trailing" secondItem="vRh-nN-10E" secondAttribute="trailing" constant="-98" id="ywL-RC-lNC"/>
@@ -710,6 +711,7 @@
         <image name="dropDown" width="100" height="100"/>
         <image name="emojiOff" width="100" height="100"/>
         <image name="eraserOff" width="128" height="128"/>
+        <image name="logout" width="100" height="100"/>
         <image name="pencil" width="512" height="512"/>
         <image name="redo" width="512" height="512"/>
         <image name="undo" width="512" height="512"/>
