@@ -20,3 +20,11 @@ By downloading this application you accept our Terms and Conditions and Privacy 
 
 https://github.com/svgrossarth/Virtual_Graffiti/blob/master/Privacy_Policy.md
 https://github.com/svgrossarth/Virtual_Graffiti/blob/master/Terms_and_Conditions.md
+
+
+## Credits
+The [app logo](https://www.flaticon.com/free-icon/spray-can_1791945?term=spray%20can&page=1&position=86) was created by [Pixelmeetup](https://www.flaticon.com/authors/pixelmeetup) from  www.flaticon.com.
+
+The [undo icon](https://www.flaticon.com/free-icon/undo_565344?term=undo&page=1&position=19) was created by [Google](https://www.flaticon.com/authors/google) from www.flaticon.com.
+
+The [redo icon](https://www.flaticon.com/free-icon/redo_565331?term=redo%20google&page=1&position=2) was created by [Google](https://www.flaticon.com/authors/google) from www.flaticon.com.
