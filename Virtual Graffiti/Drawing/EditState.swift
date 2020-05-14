@@ -63,6 +63,9 @@ class EditState: State {
         modelName = emoji.name + ".scn"
         pathName = "emojis.scnassets/" + modelName
         self.sceneView.automaticallyUpdatesLighting = false
+        let lightNode = SCNNode()
+        lightNode.light = directionalLighting()
+        sceneView.pointOfView?.addChildNode(lightNode)
     }
     
     func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
@@ -295,8 +298,8 @@ class EditState: State {
             self.distanceLabel.isHidden = false
             self.distanceValue.isHidden = false
             self.distanceSlider.isHidden = false
-            self.widthLabel.isHidden = false
-            self.widthSlider.isHidden = false
+            self.widthLabel.isHidden = true
+            self.widthSlider.isHidden = true
             colorStack.isHidden = true;
     }
 
@@ -309,6 +312,7 @@ class EditState: State {
     }
 
     func setModel(){
+        print("pathname:",pathName)
         guard let emojiScene = SCNScene(named: pathName) else {
             print("model with path: ", pathName," does not exist")
             fatalError()
@@ -316,9 +320,10 @@ class EditState: State {
         ObjNode = emojiScene.rootNode.childNode(withName: emoji.ID, recursively: true)!
     }
 
-    func emojiLighting() ->SCNLight{
+    func directionalLighting() ->SCNLight{
         let light = SCNLight()
-        light.type = SCNLight.LightType.ambient
+        light.type = SCNLight.LightType.directional
+        light.categoryBitMask = 1
         light.intensity = 500
 
         return light
@@ -359,9 +364,9 @@ class EditState: State {
 
     func degToRadians(degrees:Double) -> Double
     {
-       return degrees * (M_PI / 180);
+       return degrees * (Double.pi / 180);
      }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if menuExpand {
             menuButtonTouched()
@@ -371,6 +376,7 @@ class EditState: State {
             if let singleTouch = touches.first{
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 self.setModel()
+
                 let cloneEmoji = ObjNode.clone()
                 cloneEmoji.position = touchLocation
                 cloneEmoji.categoryBitMask = 1
@@ -383,6 +389,15 @@ class EditState: State {
                     return
                 }
                 cloneEmoji.scale = SCNVector3(initialScale.x * emojiScale, initialScale.y * emojiScale, initialScale.z * emojiScale)
+//  cloneEmoji facing to User Screen
+                let screenOrientation = sceneView.pointOfView?.orientation
+                cloneEmoji.orientation = screenOrientation!
+
+//  cloneEmojis would follow the camera as it moves
+//                let billboardConstraint = SCNBillboardConstraint()
+//                billboardConstraint.freeAxes = SCNBillboardAxis.Y
+//                cloneEmoji.constraints = [billboardConstraint]
+
                 drawState.userRootNode.addChildNode(cloneEmoji)
                 menuButton.setImage(UIImage(named: emoji.name), for: .normal)
                 updateRecentEmojiList()

@@ -200,9 +200,9 @@ class DrawState: State, ARSCNViewDelegate {
         userRootNode.uid = userUID
         userRootNode.simdPosition = simd_float3(0, 0, 0)
 
-        if let sceneNode = self.sceneView.sceneNode{
-            sceneNode.light = addLighting()
-        }
+//        if let sceneNode = self.sceneView.sceneNode{
+//            sceneNode.light = addLighting()
+//        }
     }
     
     
