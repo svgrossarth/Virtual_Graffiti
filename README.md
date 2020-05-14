@@ -3,7 +3,7 @@
 This exciting new augmented reality (AR) app allows you and your friends to add some color to the virtual world around you. In this app you can place emojis, draw, and edit your drawings using your devices camera. Your creations are saved based on GPS location and will reappear when you visit that spot again. You can also see the creations of other players who have visited the same spot. Let your imagination soar as you draw life into the world around you. Bring family and friends along with you and draw together whether you are lounging by a pool or walking down the street. The possibilities lay in your hands, so go explore and have fun drawing. 
 
 
-Note: While the drawings are automatically saved using GPS location, the accuracy varies. Thus, to ensure your drawings will be there when you return, you can use a QR code to save them.*    
+Note: While the drawings are automatically saved using GPS location, the accuracy varies. Thus, to ensure your drawings will be there when you return, you can use a QR code to save them. User provides QR code to scan and save drawings.   
 
 ## How to play: 
 - Open the app and touch the screen to start drawing 
@@ -13,8 +13,6 @@ Note: While the drawings are automatically saved using GPS location, the accurac
 - Have fun!
 
 For assistance please email svgrossarth@ucdavis.edu
-
-*User provides QR code to scan and save drawings. 
 
 By downloading this application you accept our Terms and Conditions and Privacy Policy.
 
