@@ -50,7 +50,7 @@ public class LocationManager: NSObject {
         self.locationManager!.startUpdatingHeading()
         self.locationManager!.startUpdatingLocation()
 
-        self.locationManager!.requestWhenInUseAuthorization()
+        //self.locationManager!.requestWhenInUseAuthorization()
 
         self.currentLocation = self.locationManager!.location
     }
@@ -61,10 +61,10 @@ public class LocationManager: NSObject {
             return
         }
 
-        if CLLocationManager.authorizationStatus() == .denied ||
-            CLLocationManager.authorizationStatus() == .restricted {
-            return
-        }
+        //if CLLocationManager.authorizationStatus() == .denied ||
+        //    CLLocationManager.authorizationStatus() == .restricted {
+        //    return
+        //}
 
         locationManager?.requestWhenInUseAuthorization()
     }

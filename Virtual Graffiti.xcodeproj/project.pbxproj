@@ -61,6 +61,7 @@
 		CE87C3B1245BD64C00524D4B /* ARKit_CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */; };
 		CE87C3B2245BD64C00524D4B /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C39F245BD64B00524D4B /* SceneLocationView.swift */; };
 		CE87C3B3245BD64C00524D4B /* SceneLocationViewEstimateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */; };
+		CECFCA4C246D01440003EA98 /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFCA4B246D01440003EA98 /* PermissionsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,7 @@
 		CE87C39E245BD64B00524D4B /* ARKit_CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit_CoreLocation.swift; sourceTree = "<group>"; };
 		CE87C39F245BD64B00524D4B /* SceneLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		CE87C3A0245BD64B00524D4B /* SceneLocationViewEstimateDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationViewEstimateDelegate.swift; sourceTree = "<group>"; };
+		CECFCA4B246D01440003EA98 /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		DBD766DFC17567705C4EF56F /* Pods_Virtual_Graffiti_Virtual_GraffitiUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Virtual_Graffiti_Virtual_GraffitiUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -278,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				7746C3B823DE581C00DDC27C /* ViewController.swift */,
+				CECFCA4B246D01440003EA98 /* PermissionsViewController.swift */,
 				77E74DC523E222C100C6E65C /* SignUpViewController.swift */,
 				77E74DC723E222CF00C6E65C /* LoginViewController.swift */,
 				77E74DC923E222E700C6E65C /* HomeViewController.swift */,
@@ -706,6 +709,7 @@
 				C01B55FA245E58ED004007BC /* DrawState.swift in Sources */,
 				CE87C3A3245BD64C00524D4B /* LocationNode.swift in Sources */,
 				CE87C3A6245BD64C00524D4B /* SceneLocationView+ARSCNViewDelegate.swift in Sources */,
+				CECFCA4C246D01440003EA98 /* PermissionsViewController.swift in Sources */,
 				CE87C3A2245BD64C00524D4B /* ScalingScheme.swift in Sources */,
 				C0086EC62412B492001C4A22 /* Math.swift in Sources */,
 			);
