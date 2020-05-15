@@ -85,10 +85,10 @@ class LoginViewController: UIViewController {
     }
     
     func transitionToHome(userUID: String) {
-        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        homeViewController?.userUID = userUID
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()
+        let homeViewController = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as! HomeViewController
+        homeViewController.userUID = userUID
+        self.navigationController?.isNavigationBarHidden = true;
+        self.navigationController?.pushViewController(homeViewController, animated: false)
         
     }
     
