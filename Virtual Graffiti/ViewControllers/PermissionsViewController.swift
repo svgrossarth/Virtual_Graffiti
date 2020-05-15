@@ -228,9 +228,8 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     
     func transitionToViewController() {
         DispatchQueue.main.async {
-            let viewController = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.viewController) as? ViewController
-            self.view.window?.rootViewController = viewController
-            self.view.window?.makeKeyAndVisible()
+            let viewController = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.viewController) as! ViewController
+            self.navigationController?.pushViewController(viewController, animated: false)
         }
     }
 }

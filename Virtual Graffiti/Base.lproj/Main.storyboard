@@ -10,14 +10,14 @@
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
-            <objects>              
-                <viewController storyboardIdentifier="loginPage" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
+            <objects>
+                <viewController storyboardIdentifier="VC" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zci-2e-Fhu">
-                                <rect key="frame" x="0.0" y="44" width="375" height="110"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="110"/>
                                 <color key="backgroundColor" red="0.0" green="0.15686274509803921" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="110" id="aZu-0e-R0y"/>
@@ -31,13 +31,13 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Virtual Graffiti" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gjh-3r-7Hw">
-                                <rect key="frame" x="22" y="162" width="330" height="136.5"/>
+                                <rect key="frame" x="22" y="118" width="330" height="136.5"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="57"/>
                                 <color key="textColor" red="0.0" green="0.15686274509803921" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fnU-1T-plh">
-                                <rect key="frame" x="110" y="307" width="151" height="47"/>
+                                <rect key="frame" x="110" y="263" width="151" height="47"/>
                                 <color key="backgroundColor" red="0.70196078431372544" green="0.63921568627450975" blue="0.41176470588235292" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="Login">
@@ -48,7 +48,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GvD-W2-3Wn">
-                                <rect key="frame" x="110" y="362" width="151" height="47"/>
+                                <rect key="frame" x="110" y="318" width="151" height="47"/>
                                 <color key="backgroundColor" red="0.70196078429999997" green="0.63921568630000003" blue="0.41176470590000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="Sign Up">
@@ -59,7 +59,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cFF-4z-VMA" customClass="GIDSignInButton">
-                                <rect key="frame" x="110" y="426" width="151" height="49"/>
+                                <rect key="frame" x="110" y="382" width="151" height="49"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="r7I-7t-oAG"/>
@@ -98,18 +98,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="768.11594202898561" y="113.83928571428571"/>
+            <point key="canvasLocation" x="1633" y="116"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="khh-fX-ZTR">
             <objects>
                 <viewController id="bGM-vd-qKX" customClass="SignUpViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UN0-Lf-aCe">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="5cv-Tr-C0n">
-                                <rect key="frame" x="40" y="84" width="295" height="320.5"/>
+                                <rect key="frame" x="40" y="40" width="295" height="320.5"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="r6Z-CM-dh4">
                                         <rect key="frame" x="0.0" y="0.0" width="295" height="40"/>
@@ -175,26 +175,28 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j5z-gj-FZu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1655" y="391"/>
+            <point key="canvasLocation" x="2519" y="393"/>
         </scene>
         <!--Permissions View Controller-->
         <scene sceneID="ncx-M3-7gd">
             <objects>
-                <hostingController title="Permissions View Controller" id="Njf-SI-yMQ" customClass="PermissionsViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController"/>
+                <hostingController title="Permissions View Controller" id="Njf-SI-yMQ" customClass="PermissionsViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="lTm-Pt-uju"/>
+                </hostingController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fwg-FT-Uee" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2586" y="412"/>
+            <point key="canvasLocation" x="762" y="116"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="1aw-JE-3Bf">
             <objects>
                 <viewController storyboardIdentifier="LoginVC" id="6S6-od-da5" customClass="LoginViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lcu-di-h7m">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="hMs-gZ-xac">
-                                <rect key="frame" x="40" y="84" width="295" height="228.5"/>
+                                <rect key="frame" x="40" y="40" width="295" height="228.5"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Mp-fs-JP3">
                                         <rect key="frame" x="0.0" y="0.0" width="295" height="34"/>
@@ -246,7 +248,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uWI-Pu-BBb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1653.6231884057972" y="-319.41964285714283"/>
+            <point key="canvasLocation" x="2519" y="-318"/>
         </scene>
         <!--ARView-->
         <scene sceneID="IfY-mq-7yE">
@@ -532,7 +534,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7SG-Oj-ba8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2775" y="117"/>
+            <point key="canvasLocation" x="3543" y="114"/>
         </scene>
         <!--Emoji View Controller-->
         <scene sceneID="46U-RC-v4c">
@@ -647,7 +649,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ktt-5c-eNN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3631" y="114"/>
+            <point key="canvasLocation" x="4398" y="112"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7ui-NF-nfu">
@@ -660,7 +662,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="ThF-Rk-DOR"/>
+                        <segue destination="Njf-SI-yMQ" kind="relationship" relationship="rootViewController" id="kTS-8H-SaS"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RdC-RI-NOl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -672,11 +674,11 @@
             <objects>
                 <viewController id="bnm-dN-ciz" customClass="ResetPasswordViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lMG-jV-Tvo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FXD-bA-hSm">
-                                <rect key="frame" x="40" y="84" width="295" height="124.5"/>
+                                <rect key="frame" x="40" y="40" width="295" height="124.5"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wkC-2h-K1T">
                                         <rect key="frame" x="0.0" y="0.0" width="295" height="34"/>
@@ -715,7 +717,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6HA-Bp-dgZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2594" y="-714"/>
+            <point key="canvasLocation" x="3458" y="-713"/>
         </scene>
     </scenes>
     <resources>
