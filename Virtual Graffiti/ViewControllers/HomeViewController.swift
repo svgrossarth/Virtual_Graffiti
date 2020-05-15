@@ -93,7 +93,7 @@ class HomeViewController: UIViewController {
         do {
             try Auth.auth().signOut()
             self.navigationController?.isNavigationBarHidden = false;
-            _ = navigationController?.popToRootViewController(animated: true)
+            _ = navigationController?.popToRootViewController(animated: false)
             
         } catch let signOutError {
             print("Error signing out: %@", signOutError)
