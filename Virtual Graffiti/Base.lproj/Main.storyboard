@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Njf-SI-yMQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vgd-0d-5jD">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,8 +10,8 @@
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController storyboardIdentifier="VC" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
+            <objects>              
+                <viewController storyboardIdentifier="loginPage" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -31,13 +31,13 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Virtual Graffiti" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gjh-3r-7Hw">
-                                <rect key="frame" x="23" y="184" width="330" height="136.5"/>
+                                <rect key="frame" x="22" y="162" width="330" height="136.5"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="57"/>
                                 <color key="textColor" red="0.0" green="0.15686274509803921" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fnU-1T-plh">
-                                <rect key="frame" x="112" y="329" width="151" height="47"/>
+                                <rect key="frame" x="110" y="307" width="151" height="47"/>
                                 <color key="backgroundColor" red="0.70196078431372544" green="0.63921568627450975" blue="0.41176470588235292" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="Login">
@@ -48,7 +48,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GvD-W2-3Wn">
-                                <rect key="frame" x="112" y="384" width="151" height="47"/>
+                                <rect key="frame" x="110" y="362" width="151" height="47"/>
                                 <color key="backgroundColor" red="0.70196078429999997" green="0.63921568630000003" blue="0.41176470590000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="Sign Up">
@@ -59,7 +59,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cFF-4z-VMA" customClass="GIDSignInButton">
-                                <rect key="frame" x="112" y="448" width="151" height="49"/>
+                                <rect key="frame" x="110" y="426" width="151" height="49"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="r7I-7t-oAG"/>
@@ -70,27 +70,28 @@
                         <constraints>
                             <constraint firstItem="SbY-1u-50q" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="1HZ-Eb-Itm"/>
                             <constraint firstItem="cFF-4z-VMA" firstAttribute="top" secondItem="GvD-W2-3Wn" secondAttribute="bottom" constant="17" id="9DD-3g-3Ww"/>
-                            <constraint firstItem="gjh-3r-7Hw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="23" id="FeT-8e-xe8"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GvD-W2-3Wn" secondAttribute="trailing" constant="112" id="Ghh-vg-CLu"/>
+                            <constraint firstItem="gjh-3r-7Hw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="FeT-8e-xe8"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GvD-W2-3Wn" secondAttribute="trailing" constant="114" id="Ghh-vg-CLu"/>
                             <constraint firstItem="zci-2e-Fhu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HKr-Gi-Snh"/>
                             <constraint firstItem="zci-2e-Fhu" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="I80-Nw-xdP"/>
                             <constraint firstItem="zci-2e-Fhu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="NwS-Hc-d8a"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gjh-3r-7Hw" secondAttribute="trailing" constant="22" id="U8f-8T-AUH"/>
-                            <constraint firstItem="fnU-1T-plh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="112" id="VfH-1e-fZI"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fnU-1T-plh" secondAttribute="trailing" constant="112" id="arD-3t-0qr"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gjh-3r-7Hw" secondAttribute="trailing" constant="23" id="U8f-8T-AUH"/>
+                            <constraint firstItem="fnU-1T-plh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="110" id="VfH-1e-fZI"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fnU-1T-plh" secondAttribute="trailing" constant="114" id="arD-3t-0qr"/>
                             <constraint firstItem="fnU-1T-plh" firstAttribute="top" secondItem="gjh-3r-7Hw" secondAttribute="bottom" constant="8.5" id="eut-Kd-RNO"/>
                             <constraint firstItem="SbY-1u-50q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hvz-GL-Zc5"/>
-                            <constraint firstItem="cFF-4z-VMA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="112" id="iLg-fR-U3Z"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cFF-4z-VMA" secondAttribute="trailing" constant="112" id="lEw-z1-cCh"/>
-                            <constraint firstItem="GvD-W2-3Wn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="112" id="tVu-is-WBx"/>
+                            <constraint firstItem="cFF-4z-VMA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="110" id="iLg-fR-U3Z"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cFF-4z-VMA" secondAttribute="trailing" constant="114" id="lEw-z1-cCh"/>
+                            <constraint firstItem="GvD-W2-3Wn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="110" id="tVu-is-WBx"/>
                             <constraint firstItem="GvD-W2-3Wn" firstAttribute="top" secondItem="fnU-1T-plh" secondAttribute="bottom" constant="8" id="uGu-2m-Ev9"/>
                             <constraint firstItem="SbY-1u-50q" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="xSc-H2-p6s"/>
-                            <constraint firstItem="gjh-3r-7Hw" firstAttribute="top" secondItem="zci-2e-Fhu" secondAttribute="bottom" constant="30" id="xpl-Ya-PBg"/>
+                            <constraint firstItem="gjh-3r-7Hw" firstAttribute="top" secondItem="zci-2e-Fhu" secondAttribute="bottom" constant="8" id="xpl-Ya-PBg"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="cyk-Kk-jqP"/>
                     <connections>
+                        <outlet property="googleLoginButton" destination="cFF-4z-VMA" id="Krt-kk-OKg"/>
                         <outlet property="loginButton" destination="fnU-1T-plh" id="cck-F7-UEN"/>
                         <outlet property="signUpButton" destination="GvD-W2-3Wn" id="Mah-jY-YIh"/>
                     </connections>
@@ -207,7 +208,7 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8eH-37-oqy">
                                         <rect key="frame" x="0.0" y="108" width="295" height="30"/>
-                                        <state key="normal" title="Virtual Graffiti"/>
+                                        <state key="normal" title="Login"/>
                                         <connections>
                                             <action selector="loginTapped:" destination="6S6-od-da5" eventType="touchUpInside" id="tCN-YS-2Ew"/>
                                         </connections>
@@ -445,6 +446,17 @@
                                     <action selector="undoButton:" destination="RGp-mB-gpr" eventType="touchUpInside" id="30Y-iX-vX0"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zvp-gi-cTI">
+                                <rect key="frame" x="310" y="237" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="1ZJ-PE-Flt"/>
+                                    <constraint firstAttribute="width" constant="30" id="7ou-3H-bb6"/>
+                                </constraints>
+                                <state key="normal" title="Sign out" image="logout"/>
+                                <connections>
+                                    <action selector="signoutAction:" destination="RGp-mB-gpr" eventType="touchUpInside" id="sup-W5-ccF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -471,14 +483,17 @@
                             <constraint firstItem="hG4-mj-yll" firstAttribute="top" secondItem="aIY-sM-oJG" secondAttribute="bottom" constant="8" id="UfF-xC-trd"/>
                             <constraint firstItem="9Xp-pQ-uWC" firstAttribute="leading" secondItem="za5-uP-9DW" secondAttribute="leading" constant="20" id="V5n-1S-Nlo"/>
                             <constraint firstItem="9Xp-pQ-uWC" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="VZS-ot-IkH"/>
+                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="top" secondItem="ZgC-Gp-X6X" secondAttribute="bottom" constant="8" id="WN5-3x-ccU"/>
                             <constraint firstItem="N5s-Kg-KQr" firstAttribute="top" secondItem="vRh-nN-10E" secondAttribute="bottom" constant="153" id="Z9e-PD-Q1a"/>
                             <constraint firstItem="6Ws-aO-AaH" firstAttribute="leading" secondItem="AT0-kT-hHa" secondAttribute="leading" id="eNc-v5-rcd"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="N5s-Kg-KQr" secondAttribute="trailing" constant="11" id="fSA-nI-ENT"/>
+                            <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="Zvp-gi-cTI" secondAttribute="trailing" constant="35" id="fgh-C9-7o6"/>
                             <constraint firstItem="plp-51-2fN" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="fvW-V3-rpm"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="aIY-sM-oJG" secondAttribute="trailing" constant="219" id="iOV-B6-Tqt"/>
                             <constraint firstAttribute="trailing" secondItem="Yj7-dO-9gz" secondAttribute="trailing" constant="35" id="jf0-kI-tMk"/>
                             <constraint firstItem="P9N-um-jKB" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="30" id="maw-4b-Qqz"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="ZgC-Gp-X6X" secondAttribute="trailing" constant="35" id="oQy-0v-mU1"/>
+                            <constraint firstItem="Zvp-gi-cTI" firstAttribute="top" secondItem="za5-uP-9DW" secondAttribute="top" constant="237" id="pAB-Q7-FJz"/>
                             <constraint firstItem="za5-uP-9DW" firstAttribute="trailing" secondItem="hG4-mj-yll" secondAttribute="trailing" constant="79" id="uCt-gu-0jo"/>
                             <constraint firstItem="AT0-kT-hHa" firstAttribute="top" secondItem="N5s-Kg-KQr" secondAttribute="bottom" constant="8" id="yBs-OM-f8E"/>
                             <constraint firstAttribute="trailing" secondItem="vRh-nN-10E" secondAttribute="trailing" constant="-98" id="ywL-RC-lNC"/>
@@ -508,6 +523,7 @@
                         <outlet property="redButton" destination="TA5-k4-GBD" id="3SQ-QV-0XX"/>
                         <outlet property="redo" destination="P9N-um-jKB" id="aXY-1q-1pC"/>
                         <outlet property="sceneView" destination="IvR-tW-E8K" id="J99-bK-wOA"/>
+                        <outlet property="signoutButton" destination="Zvp-gi-cTI" id="SQ5-Dt-RYg"/>
                         <outlet property="undo" destination="9Xp-pQ-uWC" id="OfE-8T-ZD1"/>
                         <outlet property="widthLabel" destination="aIY-sM-oJG" id="1vm-Uk-yAz"/>
                         <outlet property="widthSlider" destination="hG4-mj-yll" id="0OL-Z5-wfN"/>
@@ -516,7 +532,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7SG-Oj-ba8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3469.5652173913045" y="-320.08928571428572"/>
+            <point key="canvasLocation" x="2775" y="117"/>
         </scene>
         <!--Emoji View Controller-->
         <scene sceneID="46U-RC-v4c">
@@ -631,7 +647,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ktt-5c-eNN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4324.6376811594209" y="-322.76785714285711"/>
+            <point key="canvasLocation" x="3631" y="114"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7ui-NF-nfu">
@@ -699,7 +715,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6HA-Bp-dgZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2586.9565217391305" y="-319.41964285714283"/>
+            <point key="canvasLocation" x="2594" y="-714"/>
         </scene>
     </scenes>
     <resources>
@@ -707,6 +723,7 @@
         <image name="dropDown" width="100" height="100"/>
         <image name="emojiOff" width="100" height="100"/>
         <image name="eraserOff" width="128" height="128"/>
+        <image name="logout" width="100" height="100"/>
         <image name="pencil" width="512" height="512"/>
         <image name="redo" width="512" height="512"/>
         <image name="undo" width="512" height="512"/>

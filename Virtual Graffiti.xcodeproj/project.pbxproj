@@ -111,6 +111,7 @@
 		7746C3D623DE581E00DDC27C /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		7746C3D823DE581E00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77811512245B95AB00985F42 /* QRNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRNode.swift; sourceTree = "<group>"; };
+		77814ACF246E0C0600AEA19D /* Virtual Graffiti.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Virtual Graffiti.entitlements"; sourceTree = "<group>"; };
 		7791645923DECE6600BDDDCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilKitInterface.swift; sourceTree = "<group>"; };
@@ -232,6 +233,7 @@
 		7746C3B323DE581C00DDC27C /* Virtual Graffiti */ = {
 			isa = PBXGroup;
 			children = (
+				77814ACF246E0C0600AEA19D /* Virtual Graffiti.entitlements */,
 				0FA41240244A94CB00C5FA8E /* Emoji */,
 				77DD9B5024078D7A005AF15C /* PencilKit */,
 				C0086EC02412B0FE001C4A22 /* Drawing */,
@@ -885,6 +887,7 @@
 			baseConfigurationReference = 49143AAF3F0F9F07745D4977 /* Pods-Virtual Graffiti.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_ENTITLEMENTS = "Virtual Graffiti/Virtual Graffiti.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2XTPH96H59;
@@ -907,6 +910,7 @@
 			baseConfigurationReference = 4DDD39B1CD0AF522C942535E /* Pods-Virtual Graffiti.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_ENTITLEMENTS = "Virtual Graffiti/Virtual Graffiti.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2XTPH96H59;

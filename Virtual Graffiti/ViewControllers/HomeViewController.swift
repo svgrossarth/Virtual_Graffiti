@@ -19,6 +19,7 @@ import SceneKit
 import ARKit
 import CoreLocation
 import SwiftUI
+import Firebase
 
 class HomeViewController: UIViewController {
     var drawState = DrawState()
@@ -29,6 +30,7 @@ class HomeViewController: UIViewController {
     var doubleTapHappened = false
     var EmojiOn : Bool = false
     var emoji = Emoji(name: "bandage", ID: "Group50555");
+    var firstTime = false
     
     @IBOutlet weak var colorStack: UIStackView!
     @IBOutlet weak var redButton: UIButton!
@@ -55,11 +57,13 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var emojiButton: ModeButton!
     @IBOutlet weak var sceneView: SceneLocationView!
     var userUID = ""
+    @IBOutlet weak var signoutButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.addSubview(drawState)
+//        self.view.bringSubviewToFront(signoutButton)
         drawState.initialize(_sceneView: sceneView, userUID: userUID)
         
         state = drawState
@@ -70,9 +74,36 @@ class HomeViewController: UIViewController {
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
 
         view.addSubview(editState)
-        editState.initialize(pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
+        editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
-
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if firstTime == true {
+            showAppInfo()
+        }
+    }
+    
+    @IBAction func signoutAction(_ sender: Any) {
+        signOut()
+    }
+    
+    func signOut() {
+        do {
+            try Auth.auth().signOut()
+            self.navigationController?.isNavigationBarHidden = false;
+            _ = navigationController?.popToRootViewController(animated: true)
+            
+        } catch let signOutError {
+            print("Error signing out: %@", signOutError)
+        }
+    }
+    
+    func showAppInfo() {
+        let alert = UIAlertController(title: "Virtual Graffiti Functionalities", message: "Virtual Graffiti has a double tap feature that brings up the drawing menu and a QR code scanning functionality that will save your drawings based on the scanned QR code.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func uiSetup () {
@@ -103,6 +134,7 @@ class HomeViewController: UIViewController {
         self.view.bringSubviewToFront(redo)
         self.view.bringSubviewToFront(emojiButton)
         self.view.bringSubviewToFront(pencilButton)
+        self.view.bringSubviewToFront(signoutButton)
         refSphere = createReferenceSphere()
         changeHiddenOfEditMode()
     }
@@ -224,6 +256,7 @@ class HomeViewController: UIViewController {
             menuButton.isHidden = true
             emojiButton.isHidden = true
             pencilButton.isHidden = true
+            signoutButton.isHidden = true
         }
     }
     
