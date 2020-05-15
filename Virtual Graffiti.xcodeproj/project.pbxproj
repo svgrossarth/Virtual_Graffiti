@@ -22,7 +22,7 @@
 		7746C3CC23DE581E00DDC27C /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3CB23DE581E00DDC27C /* LoginTests.swift */; };
 		7746C3D723DE581E00DDC27C /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3D623DE581E00DDC27C /* LoginUITests.swift */; };
 		77811513245B95AB00985F42 /* QRNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77811512245B95AB00985F42 /* QRNode.swift */; };
-		7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info.plist */; };
+		7791645A23DECE6600BDDDCC /* GoogleService-Info-old.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info-old.plist */; };
 		77D57EF423EE23D400A665A3 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770663F823EB860600E98F63 /* AppAuth.framework */; };
 		77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */; };
 		77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */; };
@@ -38,6 +38,7 @@
 		C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */; };
 		C0086EC62412B492001C4A22 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0086EC52412B492001C4A22 /* Math.swift */; };
 		C01B55FA245E58ED004007BC /* DrawState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01B55F9245E58ED004007BC /* DrawState.swift */; };
+		C07CB34E246F3421003D396E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C07CB34D246F3421003D396E /* GoogleService-Info.plist */; };
 		C09D24E6244824BB00FFA752 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D24E5244824BA00FFA752 /* Stack.swift */; };
 		C4428F1649E6E995D5630731 /* Pods_Virtual_GraffitiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713D8F45B78325543AE00400 /* Pods_Virtual_GraffitiTests.framework */; };
 		CE4CA7B0240E23B6005BEDC8 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CA7AF240E23B6005BEDC8 /* Database.swift */; };
@@ -111,7 +112,7 @@
 		7746C3D623DE581E00DDC27C /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		7746C3D823DE581E00DDC27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77811512245B95AB00985F42 /* QRNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRNode.swift; sourceTree = "<group>"; };
-		7791645923DECE6600BDDDCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7791645923DECE6600BDDDCC /* GoogleService-Info-old.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-old.plist"; sourceTree = "<group>"; };
 		77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilKitInterface.swift; sourceTree = "<group>"; };
 		77DD9B5224078DA6005AF15C /* PKCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCanvas.swift; sourceTree = "<group>"; };
@@ -125,6 +126,7 @@
 		C0086EC32412B33E001C4A22 /* SecondTierRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTierRoot.swift; sourceTree = "<group>"; };
 		C0086EC52412B492001C4A22 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		C01B55F9245E58ED004007BC /* DrawState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawState.swift; sourceTree = "<group>"; };
+		C07CB34D246F3421003D396E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C09D24E5244824BA00FFA752 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		CC1DA7D233F32C423E671A34 /* Pods_Virtual_Graffiti.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Virtual_Graffiti.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE4CA7AF240E23B6005BEDC8 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
@@ -242,8 +244,9 @@
 				7746C3BA23DE581C00DDC27C /* Main.storyboard */,
 				7746C3BD23DE581D00DDC27C /* Assets.xcassets */,
 				77E804CD23EB6AE300432DCD /* Experience.rcproject */,
+				C07CB34D246F3421003D396E /* GoogleService-Info.plist */,
 				7746C3BF23DE581D00DDC27C /* LaunchScreen.storyboard */,
-				7791645923DECE6600BDDDCC /* GoogleService-Info.plist */,
+				7791645923DECE6600BDDDCC /* GoogleService-Info-old.plist */,
 				7746C3C223DE581D00DDC27C /* Info.plist */,
 			);
 			path = "Virtual Graffiti";
@@ -503,8 +506,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */,
+				C07CB34E246F3421003D396E /* GoogleService-Info.plist in Resources */,
 				0FA4124A244A94CC00C5FA8E /* emojis.scnassets in Resources */,
-				7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */,
+				7791645A23DECE6600BDDDCC /* GoogleService-Info-old.plist in Resources */,
 				7746C3BE23DE581D00DDC27C /* Assets.xcassets in Resources */,
 				7746C3BC23DE581C00DDC27C /* Main.storyboard in Resources */,
 			);

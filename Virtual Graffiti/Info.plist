@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.217097925426-dol7g6u1lqbq3ffv7vhv5uubqfg92dt7</string>
+				<string>com.googleusercontent.apps.467074486071-3t408pp7v3a66rh8jdsmqr746psvs155</string>
 			</array>
 		</dict>
 		<dict>
@@ -37,7 +37,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.Login</string>
+				<string>edu.ecs-193.virtual-graffiti</string>
 			</array>
 		</dict>
 	</array>
