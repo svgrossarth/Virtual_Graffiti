@@ -308,7 +308,8 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     if !self.doubleTapHappened {
                         print("tap count is 1")
-                        if !self.editState.eraserOn && !self.editState.EmojiOn {
+                        if !self.editState.eraserOn && !self.editState.EmojiOn
+                            && self.drawState.touchMovedFirst {
                             self.drawState.placeSingleTapBall(touches: touches)
                         } else {
                             self.editState.touchesBegan(touches, with: event)
