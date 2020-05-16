@@ -185,6 +185,7 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     
     
     func transitionOut() {
+        sceneLocationManager.locationManager.delegate = sceneLocationManager
         DispatchQueue.main.async {
             let viewController = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.viewController) as! ViewController
             self.navigationController?.pushViewController(viewController, animated: false)
