@@ -138,6 +138,10 @@ public extension SceneLocationManager {
 }
 
 extension SceneLocationManager: LocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: LocationManager, status: CLAuthorizationStatus) {
+        return
+    }
+    
 
     func locationManagerDidUpdateLocation(_ locationManager: LocationManager,
                                           location: CLLocation) {

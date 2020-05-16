@@ -15,6 +15,8 @@ protocol LocationManagerDelegate: class {
     func locationManagerDidUpdateHeading(_ locationManager: LocationManager,
                                          heading: CLLocationDirection,
                                          accuracy: CLLocationDirection)
+    func locationManagerDidChangeAuthorization(_ locationManager: LocationManager,
+                                               status: CLAuthorizationStatus)
 }
 
 extension LocationManagerDelegate {
@@ -24,6 +26,9 @@ extension LocationManagerDelegate {
     func locationManagerDidUpdateHeading(_ locationManager: LocationManager,
                                          heading: CLLocationDirection,
                                          accuracy: CLLocationDirection) { }
+    
+    func locationManagerDidChangeAuthorization(_ locationManager: LocationManager,
+                                               status: CLAuthorizationStatus) { print("Location Manager") }
 }
 
 /// Handles retrieving the location and heading from CoreLocation
@@ -61,10 +66,10 @@ public class LocationManager: NSObject {
             return
         }
 
-        //if CLLocationManager.authorizationStatus() == .denied ||
-        //    CLLocationManager.authorizationStatus() == .restricted {
-        //    return
-        //}
+        if CLLocationManager.authorizationStatus() == .denied ||
+            CLLocationManager.authorizationStatus() == .restricted {
+            return
+        }
 
         locationManager?.requestWhenInUseAuthorization()
     }
@@ -75,21 +80,20 @@ public class LocationManager: NSObject {
 extension LocationManager: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-
+        delegate?.locationManagerDidChangeAuthorization(self, status: status)
     }
 
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locations.forEach {
             delegate?.locationManagerDidUpdateLocation(self, location: $0)
         }
-
         self.currentLocation = manager.location
     }
 
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         heading = newHeading.headingAccuracy >= 0 ? newHeading.trueHeading : newHeading.magneticHeading
         headingAccuracy = newHeading.headingAccuracy
-
+        
         delegate?.locationManagerDidUpdateHeading(self, heading: heading!, accuracy: newHeading.headingAccuracy)
     }
 

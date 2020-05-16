@@ -73,7 +73,7 @@ struct PermissionsMotherView: View {
 }
 
 
-class ViewRouter: ObservableObject {
+class ViewRouter: ObservableObject, LocationManagerDelegate {
     let objectWillChange = PassthroughSubject<ViewRouter, Never>()
     var viewController : PermissionsViewController?
     var permissionStatus : PermissionStatus = .notDetermined {
@@ -81,6 +81,7 @@ class ViewRouter: ObservableObject {
             objectWillChange.send(self)
         }
     }
+    
     
     func permissionsAccepted() {
         permissionStatus = .authorized
@@ -132,19 +133,26 @@ class ViewRouter: ObservableObject {
             authorizeLocation()
         }
         else {
-            AVCaptureDevice.requestAccess(for: .video, completionHandler: { success in
-                if success {
-                    authorizeLocation()
-                }
-                else {
-                    sceneLocationManager.locationManager.requestAuthorization()
-                }
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { _ in
+                authorizeLocation()
             })
         }
         
         
         if checkAuthorizationDetermined() && checkPermissions() == false {
             permissionsDenied()
+        }
+    }
+
+    
+    func locationManagerDidChangeAuthorization(_ locationManager: LocationManager, status: CLAuthorizationStatus) {
+        if checkAuthorizationDetermined() {
+            if checkPermissions() {
+                permissionsAccepted()
+            }
+            else {
+                permissionsDenied()
+            }
         }
     }
 }
@@ -163,6 +171,7 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
         
         viewRouter.viewController = self
         viewRouter.permissionStatus = .notDetermined
+        sceneLocationManager.locationManager.delegate = viewRouter
         
         if viewRouter.checkAuthorizationDetermined() {
             if viewRouter.checkPermissions() {
