@@ -78,10 +78,8 @@
             filePath = "Virtual Graffiti/ViewControllers/PermissionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "transitionToViewController()"
-            landmarkType = "7">
+            startingLineNumber = "204"
+            endingLineNumber = "204">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

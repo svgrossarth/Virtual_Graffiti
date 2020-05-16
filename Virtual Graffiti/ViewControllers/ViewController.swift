@@ -28,7 +28,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         createAppleIDButton()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         print(Auth.auth().currentUser?.uid)
         if Auth.auth().currentUser?.uid != nil {
             transitionToHome(userUID: Auth.auth().currentUser?.uid ?? "")
