@@ -77,7 +77,8 @@ class DrawState: State, ARSCNViewDelegate {
                 // Get center
                 let center = CGPoint(x: rect.midX, y: rect.midY)
                 
-                let box = SCNBox(width: rect.width, height: rect.height, length: 0, chamferRadius: 0.01)
+                
+                let box = SCNBox(width: 0, height: rect.height, length: rect.width, chamferRadius: 0.01)
 
                 let rectangleMaterial = SCNMaterial()
                 rectangleMaterial.diffuse.contents = UIImage(named: "square")
@@ -96,6 +97,7 @@ class DrawState: State, ARSCNViewDelegate {
                     let pointTransform = SCNMatrix4(hitResult.worldTransform) //turns the point into a point on the world grid
                     let pointVector = SCNVector3Make(pointTransform.m41, pointTransform.m42, pointTransform.m43) //the X, Y, and Z of the clicked coordinate
                     self.qrNode!.position = pointVector
+                    
                     node.position = pointVector
                 }
                 
