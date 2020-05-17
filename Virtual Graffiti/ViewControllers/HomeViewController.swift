@@ -80,9 +80,10 @@ class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if firstTime == true {
-            showAppInfo()
-        }
+//        if firstTime == true {
+//            showAppInfo()
+//        }
+        showAppInfo()
     }
     
     @IBAction func signoutAction(_ sender: Any) {
