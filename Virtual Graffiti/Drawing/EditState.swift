@@ -98,7 +98,6 @@ class EditState: State {
         menuExpand = false
         emojiButton.deactivateButton()
         isHidden = true
-        saveRecentEmoji()
     }
 
     func menuButtonTouched(){
@@ -310,14 +309,6 @@ class EditState: State {
             colorStack.isHidden = true;
     }
 
-    func saveRecentEmoji(){
-        //TODO:
-    }
-
-    func LoadRecentEmoji(){
-        //TODO:
-    }
-
     func setModel(){
         print("pathname:",pathName)
         guard let emojiScene = SCNScene(named: pathName) else {
@@ -375,11 +366,11 @@ class EditState: State {
      }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if menuExpand {
-            menuButtonTouched()
-            menuButton.setImage(UIImage(named: emoji.name), for: .normal)
-        }
         if EmojiOn {
+            if menuExpand {
+                menuButtonTouched()
+                menuButton.setImage(UIImage(named: emoji.name), for: .normal)
+            }
             if let singleTouch = touches.first{
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
                 self.setModel()
@@ -412,6 +403,11 @@ class EditState: State {
                 print("can't get touch")
             }
         }else if !EmojiOn{
+            if menuExpand && !eraserOn{
+                let penName = drawState.currentPen
+                menuButtonTouched()
+                menuButton.setImage(UIImage(named: penName), for: .normal)
+            }
             eraseNode(touches: touches)
         }
     }
