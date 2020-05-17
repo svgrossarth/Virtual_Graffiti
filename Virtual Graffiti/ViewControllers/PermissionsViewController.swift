@@ -171,8 +171,8 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         viewRouter.viewController = self
         viewRouter.permissionStatus = .notDetermined
@@ -193,16 +193,13 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     }
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    
     func transitionOut() {
         sceneLocationManager.locationManager.delegate = sceneLocationManager
+        
         DispatchQueue.main.async {
-            let viewController = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.viewController) as! ViewController
-            self.navigationController?.pushViewController(viewController, animated: false)
+            // Segue has to be asynchronous or it won't automatically transition if permissions are enabled.
+            // Why? Who knows.
+            self.performSegue(withIdentifier: "next", sender: self)
         }
     }
 }
