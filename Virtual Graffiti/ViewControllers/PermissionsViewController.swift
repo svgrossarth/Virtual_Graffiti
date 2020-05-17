@@ -26,7 +26,10 @@ struct PermissionsMotherView: View {
     
     var body: some View {
         VStack {
-            if viewRouter.permissionStatus == .denied {
+            if viewRouter.initialized == false {
+                // Blank, don't display anything until fully initialized
+            }
+            else if viewRouter.permissionStatus == .denied {
                 Text("Virtual Graffiti permissions were denied")
                     .font(.title)
                     .multilineTextAlignment(.center)
@@ -81,6 +84,7 @@ class ViewRouter: ObservableObject, LocationManagerDelegate {
             objectWillChange.send(self)
         }
     }
+    var initialized : Bool = false
     
     
     func permissionsAccepted() {
@@ -161,13 +165,14 @@ class ViewRouter: ObservableObject, LocationManagerDelegate {
 class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     let viewRouter = ViewRouter()
     
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder, rootView: PermissionsMotherView(viewRouter: viewRouter))
     }
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         viewRouter.viewController = self
         viewRouter.permissionStatus = .notDetermined
@@ -179,8 +184,17 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
             }
             else {
                 viewRouter.permissionsDenied()
+                viewRouter.initialized = true
             }
         }
+        else {
+            viewRouter.initialized = true
+        }
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
     
     
