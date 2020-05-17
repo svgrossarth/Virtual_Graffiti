@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="VC" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VC" modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="ViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -183,7 +183,7 @@
                 <hostingController title="Permissions View Controller" id="Njf-SI-yMQ" customClass="PermissionsViewController" customModule="Virtual_Graffiti" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="lTm-Pt-uju"/>
                     <connections>
-                        <segue destination="vgd-0d-5jD" kind="show" identifier="next" destinationCreationSelector="next" id="a7c-A8-gLI"/>
+                        <segue destination="vgd-0d-5jD" kind="show" identifier="next" destinationCreationSelector="next" animates="NO" id="a7c-A8-gLI"/>
                     </connections>
                 </hostingController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fwg-FT-Uee" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

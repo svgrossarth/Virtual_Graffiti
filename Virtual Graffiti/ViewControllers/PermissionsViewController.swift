@@ -29,46 +29,48 @@ struct PermissionsMotherView: View {
             if viewRouter.initialized == false {
                 // Blank, don't display anything until fully initialized
             }
-            else if viewRouter.permissionStatus == .denied {
-                Text("Virtual Graffiti permissions were denied")
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding(64)
-                
-                Spacer()
-                
-                Text("To enable permissions, go to Settings > Virtual Graffiti and enable 'Camera' and 'Location Services'")
-                    .multilineTextAlignment(.center)
-                    .padding(64)
-                
-                Spacer()
-            }
             else {
-                Text("Virtual Graffiti is requesting the following permissions")
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding(64)
-                
-                Spacer()
-                
-                Text("Camera: We use this to display drawings and allow you to draw in Augmented Reality.")
-                    .padding(64)
-                Text("Location: We use this to upload and download drawings close to you.")
-                    .padding(64)
-                
-                
-                Spacer()
-            }
-            
-            Spacer()
-            
-            HStack {
-                Spacer()
-                
-                Button(action: viewRouter.requestAuthorization)
-                {
-                    Text("Next")
+                if viewRouter.permissionStatus == .denied {
+                    Text("Virtual Graffiti permissions were denied")
+                        .font(.title)
+                        .multilineTextAlignment(.center)
                         .padding(64)
+                    
+                    Spacer()
+                    
+                    Text("To enable permissions, go to Settings > Virtual Graffiti and enable 'Camera' and 'Location Services'")
+                        .multilineTextAlignment(.center)
+                        .padding(64)
+                    
+                    Spacer()
+                }
+                else {
+                    Text("Virtual Graffiti is requesting the following permissions")
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                        .padding(64)
+                    
+                    Spacer()
+                    
+                    Text("Camera: We use this to display drawings and allow you to draw in Augmented Reality.")
+                        .padding(64)
+                    Text("Location: We use this to upload and download drawings close to you.")
+                        .padding(64)
+                    
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    
+                    Button(action: viewRouter.requestAuthorization)
+                    {
+                        Text("Next")
+                            .padding(64)
+                    }
                 }
             }
         }
