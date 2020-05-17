@@ -22,7 +22,7 @@
 		7746C3CC23DE581E00DDC27C /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3CB23DE581E00DDC27C /* LoginTests.swift */; };
 		7746C3D723DE581E00DDC27C /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7746C3D623DE581E00DDC27C /* LoginUITests.swift */; };
 		77811513245B95AB00985F42 /* QRNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77811512245B95AB00985F42 /* QRNode.swift */; };
-		7791645A23DECE6600BDDDCC /* GoogleService-Info-old.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info-old.plist */; };
+		7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info.plist */; };
 		77D57EF423EE23D400A665A3 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770663F823EB860600E98F63 /* AppAuth.framework */; };
 		77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */; };
 		77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */; };
@@ -248,7 +248,7 @@
 				77E804CD23EB6AE300432DCD /* Experience.rcproject */,
 				C07CB34D246F3421003D396E /* GoogleService-Info.plist */,
 				7746C3BF23DE581D00DDC27C /* LaunchScreen.storyboard */,
-				7791645923DECE6600BDDDCC /* GoogleService-Info-old.plist */,
+				7791645923DECE6600BDDDCC /* GoogleService-Info.plist */,
 				7746C3C223DE581D00DDC27C /* Info.plist */,
 			);
 			path = "Virtual Graffiti";
@@ -510,7 +510,7 @@
 				7746C3C123DE581D00DDC27C /* LaunchScreen.storyboard in Resources */,
 				C07CB34E246F3421003D396E /* GoogleService-Info.plist in Resources */,
 				0FA4124A244A94CC00C5FA8E /* emojis.scnassets in Resources */,
-				7791645A23DECE6600BDDDCC /* GoogleService-Info-old.plist in Resources */,
+				7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */,
 				7746C3BE23DE581D00DDC27C /* Assets.xcassets in Resources */,
 				7746C3BC23DE581C00DDC27C /* Main.storyboard in Resources */,
 			);
@@ -900,7 +900,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.ecs-193.virtual-graffiti";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -923,7 +923,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.ecs-193.virtual-graffiti";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
