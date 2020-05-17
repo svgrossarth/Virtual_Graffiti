@@ -77,15 +77,14 @@ class DrawState: State, ARSCNViewDelegate {
                 // Get center
                 let center = CGPoint(x: rect.midX, y: rect.midY)
                 
-                
-                let box = SCNBox(width: 0, height: rect.height, length: rect.width, chamferRadius: 0.01)
-
-                let rectangleMaterial = SCNMaterial()
-                rectangleMaterial.diffuse.contents = UIImage(named: "square")
-                box.materials = [rectangleMaterial]
-                
+                let plane = SCNPlane(width: rect.width, height: rect.height)
+                let planeMaterial = SCNMaterial()
+                planeMaterial.diffuse.contents = UIImage(named: "square")
+                plane.materials = [planeMaterial]
+                    
                 let node = SCNNode()
-                node.geometry = box
+                node.geometry = plane
+                
                 
                 self.qrNode = QRNode(QRValue: self.QRValue, name: UUID().uuidString)
                 if self.tileName != "" {
@@ -100,7 +99,6 @@ class DrawState: State, ARSCNViewDelegate {
                     
                     node.position = pointVector
                 }
-                
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
                 self.qrNode!.uid = self.userUID
@@ -108,7 +106,12 @@ class DrawState: State, ARSCNViewDelegate {
                     print("ERROR: sceneNode not available to place qrNode, this is a problem with the new ARCL library")
                     return
                 }
-                print(self.qrNode?.geometry)
+                /*
+                 Fixes orientation issue with the image
+                 */
+                let screenOrientation = self.sceneView.pointOfView?.orientation
+                node.orientation = screenOrientation!
+                
                 sceneNode.addChildNode(self.qrNode!)
                 sceneNode.addChildNode(node)
                 
