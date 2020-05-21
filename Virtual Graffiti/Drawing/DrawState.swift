@@ -77,14 +77,14 @@ class DrawState: State, ARSCNViewDelegate {
                 // Get center
                 let center = CGPoint(x: rect.midX, y: rect.midY)
                 
-                let box = SCNBox(width: rect.width, height: rect.height, length: 0, chamferRadius: 0.01)
-
-                let rectangleMaterial = SCNMaterial()
-                rectangleMaterial.diffuse.contents = UIImage(named: "square")
-                box.materials = [rectangleMaterial]
-                
+                let plane = SCNPlane(width: rect.width, height: rect.height)
+                let planeMaterial = SCNMaterial()
+                planeMaterial.diffuse.contents = UIImage(named: "square")
+                plane.materials = [planeMaterial]
+                    
                 let node = SCNNode()
-                node.geometry = box
+                node.geometry = plane
+                
                 
                 self.qrNode = QRNode(QRValue: self.QRValue, name: UUID().uuidString)
                 if self.tileName != "" {
@@ -96,9 +96,9 @@ class DrawState: State, ARSCNViewDelegate {
                     let pointTransform = SCNMatrix4(hitResult.worldTransform) //turns the point into a point on the world grid
                     let pointVector = SCNVector3Make(pointTransform.m41, pointTransform.m42, pointTransform.m43) //the X, Y, and Z of the clicked coordinate
                     self.qrNode!.position = pointVector
+                    
                     node.position = pointVector
                 }
-                
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
                 self.qrNode!.uid = self.userUID
@@ -106,7 +106,12 @@ class DrawState: State, ARSCNViewDelegate {
                     print("ERROR: sceneNode not available to place qrNode, this is a problem with the new ARCL library")
                     return
                 }
-                print(self.qrNode?.geometry)
+                /*
+                 Fixes orientation issue with the image
+                 */
+                let screenOrientation = self.sceneView.pointOfView?.orientation
+                node.orientation = screenOrientation!
+                
                 sceneNode.addChildNode(self.qrNode!)
                 sceneNode.addChildNode(node)
                 
@@ -211,9 +216,9 @@ class DrawState: State, ARSCNViewDelegate {
         userRootNode.uid = userUID
         userRootNode.simdPosition = simd_float3(0, 0, 0)
 
-        if let sceneNode = self.sceneView.sceneNode{
-            sceneNode.light = addLighting()
-        }
+//        if let sceneNode = self.sceneView.sceneNode{
+//            sceneNode.light = addLighting()
+//        }
     }
     
     

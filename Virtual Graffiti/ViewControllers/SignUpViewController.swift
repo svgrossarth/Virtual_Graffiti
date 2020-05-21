@@ -38,12 +38,6 @@ class SignUpViewController: UIViewController {
     }
     */
     
-    
-    func isPasswordValid(_ password : String) -> Bool{
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[$@$#!%*?&])[A-Za-z\\d$@$#!%*?&]{8,}")
-        return passwordTest.evaluate(with: password)
-    }
-    
     // Check the fields and validate that the data is correct. If everything is correct return nil, else return error messsage
     
     func validateFields() -> String? {
@@ -54,13 +48,6 @@ class SignUpViewController: UIViewController {
             emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             return "Please fill in all fields."
-        }
-        
-        // Check if password is secure
-        let cleanPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if isPasswordValid(cleanPassword) == false {
-            return "Please make sure your password is at least 8 characters, contains a special character and a number."
         }
         
         return nil

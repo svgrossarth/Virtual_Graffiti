@@ -80,9 +80,10 @@ class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if firstTime == true {
-            showAppInfo()
-        }
+//        if firstTime == true {
+//            showAppInfo()
+//        }
+        showAppInfo()
     }
     
     @IBAction func signoutAction(_ sender: Any) {
@@ -93,7 +94,7 @@ class HomeViewController: UIViewController {
         do {
             try Auth.auth().signOut()
             self.navigationController?.isNavigationBarHidden = false;
-            _ = navigationController?.popToRootViewController(animated: true)
+            _ = navigationController?.popToRootViewController(animated: false)
             
         } catch let signOutError {
             print("Error signing out: %@", signOutError)
@@ -308,7 +309,8 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     if !self.doubleTapHappened {
                         print("tap count is 1")
-                        if !self.editState.eraserOn && !self.editState.EmojiOn {
+                        if !self.editState.eraserOn && !self.editState.EmojiOn
+                            && self.drawState.touchMovedFirst {
                             self.drawState.placeSingleTapBall(touches: touches)
                         } else {
                             self.editState.touchesBegan(touches, with: event)

@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.217097925426-dol7g6u1lqbq3ffv7vhv5uubqfg92dt7</string>
+				<string>com.googleusercontent.apps.467074486071-3t408pp7v3a66rh8jdsmqr746psvs155</string>
 			</array>
 		</dict>
 		<dict>
@@ -37,7 +37,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.Login</string>
+				<string>edu.ecs-193.virtual-graffiti</string>
 			</array>
 		</dict>
 	</array>
@@ -67,11 +67,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Virtual Graffiti requires access to your phone’s camera.</string>
+	<string>Virtual Graffiti would like to access your camera so you can draw in AR.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Where are you?</string>
+	<string>Virtual Graffiti would like to access your location so we can save your drawings based on your location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location?</string>
+	<string>Virtual Graffiti would like to access your location so we can save your drawings based on your location.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
