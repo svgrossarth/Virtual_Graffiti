@@ -55,10 +55,12 @@ struct CameraDeniedView: View {
                 .font(.title)
                 .multilineTextAlignment(.center)
                 .padding(64)
+                .lineLimit(nil)
             Spacer()
             Text("To enable the camera, go to Settings > Virtual Graffiti and enable 'Camera'")
                 .multilineTextAlignment(.center)
-                .padding(64)
+                .padding(8)
+                .lineLimit(nil)
             Spacer()
             HStack {
                 Spacer()
@@ -80,9 +82,12 @@ struct RequestingCameraView: View {
                 .font(.title)
                 .multilineTextAlignment(.center)
                 .padding(64)
+                .lineLimit(nil)
             Spacer()
             Text("Drawing is done in augmented reality. To use our app, please enable the camera.")
-                .padding(64)
+                .multilineTextAlignment(.center)
+                .padding(8)
+                .lineLimit(nil)
             Spacer()
             HStack {
                 Spacer()
@@ -104,11 +109,12 @@ struct RequestingLocationView: View {
                 .font(.title)
                 .multilineTextAlignment(.center)
                 .padding(64)
+                .lineLimit(nil)
             Spacer()
-            Text("We use this to save and download drawings close to you.")
-                .padding(64)
-            Text("Saving and loading drawings will be disabled if you don't enable this.")
-                .padding(64)
+            Text("We use this to save and download drawings close to you. Saving and loading drawings will be disabled if you don't enable this.")
+                .multilineTextAlignment(.center)
+                .padding(8)
+                .lineLimit(nil)
             Spacer()
             HStack {
                 Spacer()
@@ -240,7 +246,6 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     
     
     func transitionOut() {
-        print("Transitioning out")
         sceneLocationManager.locationManager.delegate = sceneLocationManager
         
         DispatchQueue.main.async {
