@@ -890,7 +890,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 49143AAF3F0F9F07745D4977 /* Pods-Virtual Graffiti.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				CODE_SIGN_ENTITLEMENTS = "Virtual Graffiti/Virtual Graffiti.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -913,7 +913,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4DDD39B1CD0AF522C942535E /* Pods-Virtual Graffiti.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				CODE_SIGN_ENTITLEMENTS = "Virtual Graffiti/Virtual Graffiti.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

@@ -15,7 +15,7 @@ import AVFoundation
 
 
 enum PermissionStatus {
-    case authorized
+    case cameraAuthorized
     case denied
     case notDetermined
 }
@@ -27,49 +27,18 @@ struct PermissionsMotherView: View {
     var body: some View {
         VStack {
             if viewRouter.initialized == false {
-                // Blank, don't display anything until fully initialized
+                // Blank, should just display a splash screen
             }
             else {
                 if viewRouter.permissionStatus == .denied {
-                    Text("Virtual Graffiti permissions were denied")
-                        .font(.title)
-                        .multilineTextAlignment(.center)
-                        .padding(64)
-                    
-                    Spacer()
-                    
-                    Text("To enable permissions, go to Settings > Virtual Graffiti and enable 'Camera' and 'Location Services'")
-                        .multilineTextAlignment(.center)
-                        .padding(64)
-                    
-                    Spacer()
+                    CameraDeniedView(viewRouter: viewRouter)
                 }
                 else {
-                    Text("Virtual Graffiti is requesting the following permissions")
-                        .font(.title)
-                        .multilineTextAlignment(.center)
-                        .padding(64)
-                    
-                    Spacer()
-                    
-                    Text("Camera: We use this to display drawings and allow you to draw in Augmented Reality.")
-                        .padding(64)
-                    Text("Location: We use this to upload and download drawings close to you.")
-                        .padding(64)
-                    
-                    
-                    Spacer()
-                }
-                
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
-                    Button(action: viewRouter.requestAuthorization)
-                    {
-                        Text("Next")
-                            .padding(64)
+                    if viewRouter.permissionStatus == .cameraAuthorized {
+                        RequestingLocationView(viewRouter: viewRouter)
+                    }
+                    else {
+                        RequestingCameraView(viewRouter: viewRouter)
                     }
                 }
             }
@@ -77,20 +46,99 @@ struct PermissionsMotherView: View {
     }
 }
 
+struct CameraDeniedView: View {
+    @ObservedObject var viewRouter: ViewRouter
+    
+    var body: some View {
+        VStack() {
+            Text("Camera permissions were denied")
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(64)
+                .lineLimit(nil)
+            Spacer()
+            Text("To enable the camera, go to Settings > Virtual Graffiti and enable 'Camera'")
+                .multilineTextAlignment(.center)
+                .padding(8)
+                .lineLimit(nil)
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: viewRouter.deniedButtonPressed) {
+                    Text("Next")
+                        .padding(64)
+                }
+            }
+        }
+    }
+}
+
+struct RequestingCameraView: View {
+    @ObservedObject var viewRouter: ViewRouter
+    
+    var body: some View {
+        VStack() {
+            Text("Virtual Graffiti is requesting permission to use the camera.")
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(64)
+                .lineLimit(nil)
+            Spacer()
+            Text("Drawing is done in augmented reality. To use our app, please enable the camera.")
+                .multilineTextAlignment(.center)
+                .padding(8)
+                .lineLimit(nil)
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: viewRouter.cameraButtonPressed) {
+                    Text("Next")
+                        .padding(64)
+                }
+            }
+        }
+    }
+}
+
+struct RequestingLocationView: View {
+    @ObservedObject var viewRouter: ViewRouter
+    
+    var body: some View {
+        VStack() {
+            Text("Virtual Graffiti is requesting permission to use Location Services.")
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(64)
+                .lineLimit(nil)
+            Spacer()
+            Text("We use this to save and download drawings close to you. Saving and loading drawings will be disabled if you don't enable this.")
+                .multilineTextAlignment(.center)
+                .padding(8)
+                .lineLimit(nil)
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: viewRouter.locationButtonPressed) {
+                    Text("Next")
+                        .padding(64)
+                }
+            }
+        }
+    }
+}
 
 class ViewRouter: ObservableObject, LocationManagerDelegate {
     let objectWillChange = PassthroughSubject<ViewRouter, Never>()
     var viewController : PermissionsViewController?
+    var initialized : Bool = false
     var permissionStatus : PermissionStatus = .notDetermined {
-        didSet {
-            objectWillChange.send(self)
+        didSet { // didSet will get called when value is changed
+            objectWillChange.send(self) // Refresh SwiftUI Views that observe this object
         }
     }
-    var initialized : Bool = false
     
     
-    func permissionsAccepted() {
-        permissionStatus = .authorized
+    func transitionOut() {
         viewController?.transitionOut()
     }
     
@@ -98,9 +146,53 @@ class ViewRouter: ObservableObject, LocationManagerDelegate {
         permissionStatus = .denied
     }
     
-    func checkPermissions() -> Bool {
-        return checkCameraAuthorization() && checkLocationAuthorization()
+    
+    func deniedButtonPressed() {
+        if checkCameraAuthorization() {
+            permissionStatus = .notDetermined
+        }
     }
+    
+    func cameraButtonPressed() {
+        if checkCameraAuthorization() == true {
+            cameraAuthorized()
+            return
+        }
+        
+        AVCaptureDevice.requestAccess(for: .video, completionHandler: { success in
+            if success {
+                self.cameraAuthorized()
+            }
+            else {
+                self.permissionsDenied()
+            }
+        })
+    }
+    
+    func cameraAuthorized() {
+        if checkLocationDetermined() {
+            transitionOut()
+        }
+        else {
+            permissionStatus = .cameraAuthorized
+        }
+    }
+    
+    func locationButtonPressed() -> Void {
+        if checkLocationDetermined() == true {
+            transitionOut()
+        }
+        else {
+            sceneLocationManager.locationManager.requestAuthorization()
+        }
+    }
+    
+    func locationManagerDidChangeAuthorization(_ locationManager: LocationManager, status: CLAuthorizationStatus) {
+        if status != .notDetermined {
+            transitionOut()
+        }
+    }
+    
     
     func checkCameraAuthorization() -> Bool {
         return AVCaptureDevice.authorizationStatus(for: .video) == .authorized
@@ -108,58 +200,15 @@ class ViewRouter: ObservableObject, LocationManagerDelegate {
     
     func checkLocationAuthorization() -> Bool {
         let locationAuthorization = CLLocationManager.authorizationStatus()
-        return (locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse)
+        return locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse
     }
     
-    func checkAuthorizationDetermined() -> Bool {
-        let determined = AVCaptureDevice.authorizationStatus(for: .video) != .notDetermined && CLLocationManager.authorizationStatus() != .notDetermined
-        return determined
+    func checkCameraDetermined() -> Bool {
+        return AVCaptureDevice.authorizationStatus(for: .video) != .notDetermined
     }
     
-    
-    func requestAuthorization() -> Void {
-        // If permissions already authorized, move on
-        if checkPermissions() {
-            permissionsAccepted()
-            return
-        }
-        
-        // Authorize location closure
-        let authorizeLocation = {
-            if self.checkLocationAuthorization() == true {
-                self.permissionsAccepted()
-            }
-            else {
-                sceneLocationManager.locationManager.requestAuthorization()
-            }
-        }
-        
-        // Authorize camera first
-        if checkCameraAuthorization() == true {
-            authorizeLocation()
-        }
-        else {
-            AVCaptureDevice.requestAccess(for: .video, completionHandler: { _ in
-                authorizeLocation()
-            })
-        }
-        
-        
-        if checkAuthorizationDetermined() && checkPermissions() == false {
-            permissionsDenied()
-        }
-    }
-
-    
-    func locationManagerDidChangeAuthorization(_ locationManager: LocationManager, status: CLAuthorizationStatus) {
-        if checkAuthorizationDetermined() {
-            if checkPermissions() {
-                permissionsAccepted()
-            }
-            else {
-                permissionsDenied()
-            }
-        }
+    func checkLocationDetermined() -> Bool {
+        return CLLocationManager.authorizationStatus() != .notDetermined
     }
 }
 
@@ -177,21 +226,22 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
         super.viewDidLoad()
         
         viewRouter.viewController = self
-        viewRouter.permissionStatus = .notDetermined
         sceneLocationManager.locationManager.delegate = viewRouter
         
-        if viewRouter.checkAuthorizationDetermined() {
-            if viewRouter.checkPermissions() {
-                viewRouter.permissionsAccepted()
+        if viewRouter.checkCameraDetermined() {
+            if viewRouter.checkCameraAuthorization() {
+                if viewRouter.checkLocationDetermined() {
+                    transitionOut()
+                    return
+                }
+                viewRouter.cameraAuthorized()
             }
             else {
                 viewRouter.permissionsDenied()
-                viewRouter.initialized = true
             }
         }
-        else {
-            viewRouter.initialized = true
-        }
+        
+        viewRouter.initialized = true
     }
     
     
@@ -199,7 +249,8 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
         sceneLocationManager.locationManager.delegate = sceneLocationManager
         
         DispatchQueue.main.async {
-            // Segue has to be asynchronous or it won't automatically transition if permissions are enabled.
+            // Segue has to be asynchronous or it won't automatically transition
+            // if permissions are enabled on app startup.
             // Why? Who knows.
             self.performSegue(withIdentifier: "next", sender: self)
         }

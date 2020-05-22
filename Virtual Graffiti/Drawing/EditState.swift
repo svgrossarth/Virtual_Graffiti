@@ -286,11 +286,7 @@ class EditState: State {
         }
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
-        guard let sceneNode = drawState.sceneView.sceneNode else {
-            print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
-            return
-        }
-        sceneNode.addChildNode(refSphere)
+        drawState.rootOfTheScene.addChildNode(refSphere)
 
     }
     
@@ -313,11 +309,7 @@ class EditState: State {
         } else {
             refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         }
-        guard let sceneNode = drawState.sceneView.sceneNode else {
-            print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
-            return
-        }
-        sceneNode.addChildNode(refSphere)
+        drawState.rootOfTheScene.addChildNode(refSphere)
         //emojiScale = drawState.width / defaultWidth
         print("drawing state width", drawState.width)
         print("emoji scale", emojiScale)
@@ -503,10 +495,6 @@ class EditState: State {
     func undoErase(){
         if let stroke = erasedStack.pop(){
             undoStack.push(stroke)
-            guard let sceneNode = drawState.sceneView.sceneNode else {
-                print("ERROR: sceneNode not available to remove stroke, this is a problem with the new ARCL library")
-                return
-            }
             guard let parentName = stroke.first?.key else {
                 print("can't get parent name")
                 return
@@ -515,7 +503,7 @@ class EditState: State {
                 print("can't get drawing node")
                 return
             }
-            for node in sceneNode.childNodes {
+            for node in drawState.rootOfTheScene.childNodes {
                 if let qrNode = node as? QRNode{
                     guard let userRootNode = qrNode.childNodes.first as? SecondTierRoot else {
                         print("can't get userRootNode from qrNode")
