@@ -11,41 +11,44 @@ import FirebaseAuth
 import Firebase
 
 class SignUpViewController: UIViewController {
-    @IBOutlet weak var firstNameTextField: UITextField!
-    
-    @IBOutlet weak var lastNameTextField: UITextField!
     
     @IBOutlet weak var emailTextField: UITextField!
-    
     @IBOutlet weak var passwordTextField: UITextField!
-    
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var signUpButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        createGradientBackground()
+        tapViewToDismissKeyboard()
+        roundButtonCorners()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func roundButtonCorners() {
+        signUpButton.layer.cornerRadius = 5
     }
-    */
     
-    // Check the fields and validate that the data is correct. If everything is correct return nil, else return error messsage
+    func tapViewToDismissKeyboard() {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func createGradientBackground() {
+        let topColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0).cgColor
+        let bottomColor = UIColor(red: 0.0/255.0, green: 40.0/255.0, blue: 85.0/255.0, alpha: 1.0).cgColor
+
+        let gradient = CAGradientLayer()
+        gradient.frame = self.view.bounds
+        gradient.colors = [topColor, bottomColor]
+        gradient.locations = [0.0, 1.0]
+        
+        self.view.layer.insertSublayer(gradient, at: 0)
+    }
     
     func validateFields() -> String? {
         
         // Check that all fields are filled in
-        if firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             return "Please fill in all fields."
         }
@@ -62,12 +65,7 @@ class SignUpViewController: UIViewController {
             // show error if something went wrong when filling out text fields
             showError(error!)
         } else {
-            
-            // Take out whitespaces and newlines from the fields
-            let firstName = firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            let lastName = lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-            
+                        
             let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             
             let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)

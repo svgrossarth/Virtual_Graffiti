@@ -39,6 +39,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         signUpConstraints()
         createSignUpLabel()
         tapViewToDismissKeyboard()
+        roundButtonCorners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +47,11 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         if Auth.auth().currentUser?.uid != nil {
             transitionToHome(userUID: Auth.auth().currentUser?.uid ?? "")
         }
+    }
+    
+    func roundButtonCorners() {
+        loginButton.layer.cornerRadius = 5
+        googleLoginButton.layer.cornerRadius = 5
     }
     
     func tapViewToDismissKeyboard() {
@@ -88,7 +94,6 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         gradient.frame = self.view.bounds
         gradient.colors = [topColor, bottomColor]
         gradient.locations = [0.0, 1.0]
-        
         self.view.layer.insertSublayer(gradient, at: 0)
     }
     
