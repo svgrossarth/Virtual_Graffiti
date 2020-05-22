@@ -21,7 +21,7 @@ import CoreLocation
 import SwiftUI
 import Firebase
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, ChangeEmojiDelegate {
     var drawState = DrawState()
     var editState = EditState()
     var state : State = State()
@@ -44,7 +44,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var changeColorButton: UIButton!
     
     @IBOutlet weak var distanceSlider: UISlider!
-    @IBOutlet weak var distanceValue: UILabel!
     @IBOutlet weak var distanceLable: UILabel!
     @IBOutlet weak var widthSlider: UISlider!
     @IBOutlet weak var widthLabel: UILabel!
@@ -58,25 +57,36 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var sceneView: SceneLocationView!
     var userUID = ""
     @IBOutlet weak var signoutButton: UIButton!
+    var vc:EmojiViewController = EmojiViewController()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.addSubview(drawState)
-//        self.view.bringSubviewToFront(signoutButton)
         drawState.initialize(_sceneView: sceneView, userUID: userUID)
-        
+
         state = drawState
         state.enter()
         uiSetup()
 
         eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
+        vc =  storyboard!.instantiateViewController(withIdentifier: "ListVC") as! EmojiViewController
+        vc.delegate = self
+        addChild(vc)
+
 
         view.addSubview(editState)
-        editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceValue: distanceValue, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
+        editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
     }
+
+    //   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //           if let newVC = segue.destination as? EmojiViewController {
+    //               emoji = newVC.selectedEmoji
+    //               newVC.delegate = self
+    //           }
+    //    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -85,7 +95,7 @@ class HomeViewController: UIViewController {
 //        }
         showAppInfo()
     }
-    
+
     @IBAction func signoutAction(_ sender: Any) {
         signOut()
     }
@@ -112,19 +122,23 @@ class HomeViewController: UIViewController {
         distanceSlider.minimumValue = 0.2
         distanceSlider.maximumValue = 2
         distanceSlider.value = 1
-        distanceValue.text = String(format: "%.2f", distanceSlider.value)
         widthSlider.minimumValue = 0.2
         widthSlider.maximumValue = 2
         widthSlider.value = 1
-        widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        widthLabel.text = String(format: "Width")
         blueButton.layer.cornerRadius = 0.5 * blueButton.bounds.size.width
         redButton.layer.cornerRadius = 0.5 * redButton.bounds.size.width
         greenButton.layer.cornerRadius = 0.5 * greenButton.bounds.size.width
         yellowButton.layer.cornerRadius = 0.5 * yellowButton.bounds.size.width
         orangeButton.layer.cornerRadius = 0.5 * orangeButton.bounds.size.width
+        emojiButton.layer.cornerRadius = 0.2 * emojiButton.bounds.size.width
+        eraseButton.layer.cornerRadius = 0.2 * eraseButton.bounds.size.width
+        changeColorButton.layer.cornerRadius = 0.2 * eraseButton.bounds.size.width
+        pencilButton.layer.cornerRadius = 0.2 * pencilButton.bounds.size.width
+        signoutButton.layer.cornerRadius = 0.2 * signoutButton.bounds.size.width
+        
         self.view.bringSubviewToFront(distanceSlider)
         self.view.bringSubviewToFront(distanceLable)
-        self.view.bringSubviewToFront(distanceValue)
         self.view.bringSubviewToFront(changeColorButton)
         self.view.bringSubviewToFront(eraseButton)
         self.view.bringSubviewToFront(menuButton)
@@ -161,6 +175,9 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func pencilButton(_ sender: Any) {
+        if editState.EmojiOn{
+            removeVC()
+        }
         editState.pencilButtonTouched()
     }
 
@@ -207,36 +224,56 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func colorSelectorButton(_ sender: Any) {
+        if editState.EmojiOn{
+            removeVC()
+        }
         editState.changeColor()
     }
 
     @IBAction func eraseButtonTouchUp(_ sender: Any) {
+        if editState.EmojiOn{
+            removeVC()
+        }
         editState.eraseButtonTouchUp()
         changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
     }
 
     @IBAction func emojiButtonPressed(_ sender: Any) {
-        print("emojiButtonPressed")
-        editState.emojiButtonTouched()
-        changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
+        if !editState.EmojiOn{
+            vc.view.tag = 999
+            self.view.addSubview(vc.view)
+            self.view.bringSubviewToFront(distanceSlider)
+            self.view.bringSubviewToFront(eraseButton)
+            self.view.bringSubviewToFront(menuButton)
+            self.view.bringSubviewToFront(emojiButton)
+            self.view.bringSubviewToFront(changeColorButton)
+            self.view.bringSubviewToFront(pencilButton)
+            self.view.bringSubviewToFront(signoutButton)
+            self.view.bringSubviewToFront(redo)
+            self.view.bringSubviewToFront(undo)
+            editState.emojiButtonTouched()
+            changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
+        }else{
+            removeVC()
+            editState.emojiButtonTouched()
+        }
+    }
+
+    func removeVC(){
+        if let viewTag = self.view.viewWithTag(999) {
+             viewTag.removeFromSuperview()
+        } else{
+            fatalError()
+        }
     }
 
     @IBAction func menuButtonTouched(_ sender: Any) {
         editState.menuButtonTouched()
     }
 
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-           if let newVC = segue.destination as? EmojiViewController {
-               emoji = newVC.selectedEmoji
-               newVC.delegate = self
-           }
-    }
-
     func changeHiddenOfEditMode(){
         if menuButton.isHidden {
             distanceSlider.isHidden = false
-            distanceValue.isHidden = false
             distanceLable.isHidden = false
             widthSlider.isHidden = false
             widthLabel.isHidden = false
@@ -245,7 +282,6 @@ class HomeViewController: UIViewController {
             menuButton.isHidden = false
         } else {
             distanceSlider.isHidden = true
-            distanceValue.isHidden = true
             distanceLable.isHidden = true
             changeColorButton.isHidden = true
             eraseButton.isHidden = true
@@ -292,8 +328,20 @@ class HomeViewController: UIViewController {
     @IBAction func widthSliderTouchUpOutside(_ sender: Any) {
         editState.removeSphere()
     }
-    
-    
+
+    func changeEmoji(emoji: Emoji){
+        self.dismiss(animated: true)
+        self.emoji = emoji
+        editState.stateChangeEmoji(emoji: emoji)
+        editState.emojiButton.activateButton(imageName: emoji.name)
+        print("home:", emoji.name)
+    }
+
+    func getUpdatedList() ->[Emoji] {
+        editState.updateRecentEmojiList()
+        return editState.getEmojiList()
+    }
+
     func createReferenceSphere() -> SCNNode {
         let sphere = SCNSphere(radius: 0.1)
         let material = SCNMaterial()
@@ -397,16 +445,16 @@ class State : UIView {
     }
 }
 
-extension HomeViewController : ChangeEmojiDelegate{
-    func changeEmoji(emoji: Emoji){
-        self.dismiss(animated: true)
-        self.emoji = emoji
-        editState.stateChangeEmoji(emoji: emoji)
-        editState.emojiButton.activateButton(imageName: emoji.name)
-        editState.menuButton.setImage(UIImage(named: emoji.name), for: .normal )
-        print("home:", emoji.name)
-    }
-    func getUpdatedList() ->[Emoji] {
-        return editState.getEmojiList()
-    }
-}
+//extension HomeViewController : ChangeEmojiDelegate{
+//    func changeEmoji(emoji: Emoji){
+//        self.dismiss(animated: true)
+//        self.emoji = emoji
+//        editState.stateChangeEmoji(emoji: emoji)
+//        editState.emojiButton.activateButton(imageName: emoji.name)
+//        editState.menuButton.setImage(UIImage(named: emoji.name), for: .normal )
+//        print("home:", emoji.name)
+//    }
+//    func getUpdatedList() ->[Emoji] {
+//        return editState.getEmojiList()
+//    }
+//}
