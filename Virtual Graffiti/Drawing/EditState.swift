@@ -12,7 +12,7 @@ import ARKit
 
 
 class EditState: State {
-    var pencilKitCanvas =  PKCanvas()
+//    var pencilKitCanvas =  PKCanvas()
     var sphereCallbackCanceled = false
     var menuExpand = false
     var colorStack = UIStackView()
@@ -24,7 +24,6 @@ class EditState: State {
     var signoutButton = UIButton()
     var menuButton = UIButton()
     var distanceSlider = UISlider()
-    var distanceValue = UILabel()
     var distanceLabel = UILabel()
     var widthSlider = UISlider()
     var widthLabel = UILabel()
@@ -36,7 +35,7 @@ class EditState: State {
     lazy var pathName = String()
     var eraserOn = false
     var EmojiOn = false
-    var pencilOn = true
+    var pencilOn = false
     weak var sceneView: ARSCNView!
     var erasedStack = Stack<[String : SCNNode]>()
     var undoStack = Stack<[String : SCNNode]>()
@@ -45,16 +44,16 @@ class EditState: State {
     var emojiScale : Float = 1
     var emojiInitialScale : SCNVector3?
     var prePopEmoji = [Emoji]()
+    let DavisBlue = UIColor(red: 63/255, green: 87/255, blue: 119/255, alpha: 1)
     
     
-    func initialize(signoutButton: UIButton, pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceValue : UILabel, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
+    func initialize(signoutButton: UIButton, pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
         self.pencilButton = pencilButton
         self.menuButton = menuButton
         self.emojiButton = emojiButton
         self.eraseButton = eraseButton
         self.distanceSlider = distanceSlider
         self.distanceLabel = distanceLabel
-        self.distanceValue = distanceValue
         self.drawState = drawState
         self.refSphere = refSphere
         self.sceneView = sceneView
@@ -78,15 +77,13 @@ class EditState: State {
     
     override func enter() {
         isHidden = false
-//        LoadRecentEmoji()
         self.menuButton.setImage(UIImage(named: "dropDown"), for: .normal)
-        widthSlider.minimumTrackTintColor = .darkGray
+        widthSlider.minimumTrackTintColor = DavisBlue
         widthSlider.maximumTrackTintColor = .lightGray
-        widthSlider.thumbTintColor = .darkGray
-        distanceSlider.minimumTrackTintColor = .darkGray
+        widthSlider.thumbTintColor = DavisBlue
+        distanceSlider.minimumTrackTintColor = DavisBlue
         distanceSlider.maximumTrackTintColor = .lightGray
-        distanceSlider.thumbTintColor = .darkGray
-
+        distanceSlider.thumbTintColor = DavisBlue
     }
     
     
@@ -120,7 +117,6 @@ class EditState: State {
 
                 //hide labels and sliders
                 self.distanceLabel.isHidden = true
-                self.distanceValue.isHidden = true
                 self.distanceSlider.isHidden = true
                 self.widthLabel.isHidden = true
                 self.widthSlider.isHidden = true
@@ -128,31 +124,80 @@ class EditState: State {
             }else{
                 //close menu
                 self.menuExpand = false
-                self.menuButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                self.eraseButton.transform = CGAffineTransform(translationX: 0, y: -15)
-                self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -20)
-                self.pencilButton.transform = CGAffineTransform(translationX: 0, y: -25)
-                self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -33)
-                self.signoutButton.transform = CGAffineTransform(translationX: 0, y: -41)
-                self.colorStack.isHidden = true
-                self.emojiButton.isHidden = true
-                self.eraseButton.isHidden = true
-                self.pencilButton.isHidden = true
                 self.changeColorButton.isHidden = true
-                self.signoutButton.isHidden = true
                 self.changeColorButton.setImage(UIImage(named: "colorOff"), for: .normal)
                 if self.EmojiOn {
-                    self.menuButton.setImage(UIImage(named: self.emoji.name), for: .normal)
-                }else if self.eraserOn {
-                    self.menuButton.setImage(UIImage(named: "eraserOn"), for: .normal)
-                }else{
-                    self.pencilOn = true
-                    self.menuButton.setImage(UIImage(named: self.drawState.currentPen), for: .normal)
                     self.distanceLabel.isHidden = false
-                    self.distanceValue.isHidden = false
+                    self.distanceSlider.isHidden = false
+
+                    self.eraseButton.isHidden = true
+                    self.emojiButton.isHidden = false
+                    self.colorStack.isHidden = true
+                    self.pencilButton.isHidden = true
+                    self.signoutButton.isHidden = true
+
+                    self.menuButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                    self.eraseButton.transform = CGAffineTransform(translationX: 0, y: -15)
+                    self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -45)//to keep
+                    self.pencilButton.transform = CGAffineTransform(translationX: 0, y: -25)
+                    self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -33)
+                    self.signoutButton.transform = CGAffineTransform(translationX: 0, y: -41)
+                }else if self.eraserOn {
+                    self.eraseButton.isHidden = false
+                    self.emojiButton.isHidden = true
+                    self.pencilButton.isHidden = true
+                    self.colorStack.isHidden = true
+                    self.changeColorButton.isHidden = true
+                    self.signoutButton.isHidden = true
+
+                    self.menuButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                    self.eraseButton.transform = CGAffineTransform(translationX: 0, y: 0)//to keep
+                    self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -20)
+                    self.pencilButton.transform = CGAffineTransform(translationX: 0, y: -25)
+                    self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -33)
+                    self.signoutButton.transform = CGAffineTransform(translationX: 0, y: -41)
+
+                }else if self.pencilOn{
+                    self.pencilOn = true
+
+                    self.distanceLabel.isHidden = false
                     self.distanceSlider.isHidden = false
                     self.widthLabel.isHidden = false
                     self.widthSlider.isHidden = false
+
+                    self.eraseButton.isHidden = true
+                    self.emojiButton.isHidden = true
+                    self.pencilButton.isHidden = false
+                    self.colorStack.isHidden = true
+                    self.changeColorButton.isHidden = true
+                    self.signoutButton.isHidden = true
+
+                    self.menuButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                    self.eraseButton.transform = CGAffineTransform(translationX: 0, y: -15)
+                    self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -20)
+                    self.pencilButton.transform = CGAffineTransform(translationX: 0, y: -85)//to keep
+                    self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -33)
+                    self.signoutButton.transform = CGAffineTransform(translationX: 0, y: -41)
+                }else{
+                    self.menuButton.setImage(UIImage(named: "dropDown"), for: .normal)
+                    self.distanceLabel.isHidden = false
+                    self.distanceSlider.isHidden = false
+                    self.widthLabel.isHidden = false
+                    self.widthSlider.isHidden = false
+
+                    self.colorStack.isHidden = true
+                    self.emojiButton.isHidden = true
+                    self.eraseButton.isHidden = true
+                    self.pencilButton.isHidden = true
+                    self.changeColorButton.isHidden = true
+                    self.signoutButton.isHidden = true
+
+                    self.menuButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                    self.eraseButton.transform = CGAffineTransform(translationX: 0, y: -15)
+                    self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -20)
+                    self.pencilButton.transform = CGAffineTransform(translationX: 0, y: -25)
+                    self.changeColorButton.transform = CGAffineTransform(translationX: 0, y: -33)
+                    self.signoutButton.transform = CGAffineTransform(translationX: 0, y: -41)
                 }
             }
         })
@@ -184,9 +229,10 @@ class EditState: State {
     func pencilButtonTouched(){
         pencilOn = true
         pencilButton.setImage(UIImage(named: drawState.currentPen), for: .normal)
-        menuButton.setImage(UIImage(named: drawState.currentPen), for: .normal)
+//        menuButton.setImage(UIImage(named: drawState.currentPen), for: .normal)
         if eraserOn{
-            eraseButtonTouchUp()
+            eraserOn = false
+            eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
         }
         if EmojiOn{
             EmojiOn = false
@@ -195,7 +241,7 @@ class EditState: State {
         menuButtonTouched()
 
         self.distanceLabel.isHidden = false
-        self.distanceValue.isHidden = false
+//        self.distanceValue.isHidden = false
         self.distanceSlider.isHidden = false
         self.widthLabel.isHidden = false
         self.widthSlider.isHidden = false
@@ -203,13 +249,14 @@ class EditState: State {
     }
 
     func eraseButtonTouchUp() {
-        if eraserOn == true {
+        //turn off eraser
+        if eraserOn {
             eraserOn = false
             eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
             if EmojiOn == false && pencilOn == false{
-                pencilButtonTouched()
+                menuButtonTouched()
             }
-        } else {
+        } else {//turn on eraser
             eraserOn = true
             pencilOn = false
             if EmojiOn{
@@ -221,7 +268,6 @@ class EditState: State {
             menuButtonTouched()
 
             self.distanceLabel.isHidden = true
-            self.distanceValue.isHidden = true
             self.distanceSlider.isHidden = true
             self.widthLabel.isHidden = true
             self.widthSlider.isHidden = true
@@ -238,14 +284,9 @@ class EditState: State {
         } else {
             drawState.distance = defaultDistance * distanceSlider.value
         }
-        distanceValue.text = String(format: "%.2f", drawState.distance)
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
-        guard let sceneNode = drawState.sceneView.sceneNode else {
-            print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
-            return
-        }
-        sceneNode.addChildNode(refSphere)
+        drawState.rootOfTheScene.addChildNode(refSphere)
 
     }
     
@@ -259,7 +300,6 @@ class EditState: State {
             drawState.width = defaultWidth * widthSlider.value
             emojiScale = widthSlider.value
         }
-        //emojiScale = widthSlider.value
         widthLabel.text = String(format: "Width: %.3f", drawState.width)
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
@@ -269,11 +309,7 @@ class EditState: State {
         } else {
             refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         }
-        guard let sceneNode = drawState.sceneView.sceneNode else {
-            print("ERROR: sceneNode not available to place refSphere, this is a problem with the new ARCL library")
-            return
-        }
-        sceneNode.addChildNode(refSphere)
+        drawState.rootOfTheScene.addChildNode(refSphere)
         //emojiScale = drawState.width / defaultWidth
         print("drawing state width", drawState.width)
         print("emoji scale", emojiScale)
@@ -291,22 +327,29 @@ class EditState: State {
 
     //MARK: Emoji Functions
     func emojiButtonTouched(){
+        if !EmojiOn{
             EmojiOn = true;
             pencilOn = false
             emojiButton.activateButton(imageName: emoji.name)
-            menuButton.setImage(UIImage(named: emoji.name), for: .normal)
-            menuButtonTouched()
             if eraserOn {
-                eraseButtonTouchUp()// if emoji is on, deactivate eraser
+                eraserOn = false
+                eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
             }
             pencilButton.setImage(UIImage(named: "pencil"), for: .normal)
             colorStack.isHidden = true;
             self.distanceLabel.isHidden = false
-            self.distanceValue.isHidden = false
             self.distanceSlider.isHidden = false
             self.widthLabel.isHidden = true
             self.widthSlider.isHidden = true
             colorStack.isHidden = true;
+            menuButtonTouched()
+        }else{
+            EmojiOn = false
+            emojiButton.deactivateButton()
+            if eraserOn == false && pencilOn == false{
+                menuButtonTouched()
+            }
+        }
     }
 
     func setModel(){
@@ -335,16 +378,10 @@ class EditState: State {
     }
 
     func getEmojiList() -> [Emoji]{
-        if prePopEmoji.count == 0 {
-            setupRecentList()
-        }
-        if recentUsedEmoji.count == 0{
-            print("prePopEmoji emoji:", prePopEmoji.count)
-            return prePopEmoji
-        }
         print("recent used emoji:", recentUsedEmoji.count)
         return recentUsedEmoji
     }
+
     func setupRecentList(){
         prePopEmoji.append(Emoji(name:"bandage", ID:"Group50555" ))
         prePopEmoji.append(Emoji(name:"tired", ID:"Group3677"))
@@ -369,7 +406,7 @@ class EditState: State {
         if EmojiOn {
             if menuExpand {
                 menuButtonTouched()
-                menuButton.setImage(UIImage(named: emoji.name), for: .normal)
+//                menuButton.setImage(UIImage(named: emoji.name), for: .normal)
             }
             if let singleTouch = touches.first{
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
@@ -387,18 +424,20 @@ class EditState: State {
                     return
                 }
                 cloneEmoji.scale = SCNVector3(initialScale.x * emojiScale, initialScale.y * emojiScale, initialScale.z * emojiScale)
-//  cloneEmoji facing to User Screen
+                //  cloneEmoji facing to User Screen
                 let screenOrientation = sceneView.pointOfView?.orientation
                 cloneEmoji.orientation = screenOrientation!
-
-//  cloneEmojis would follow the camera as it moves
-//                let billboardConstraint = SCNBillboardConstraint()
-//                billboardConstraint.freeAxes = SCNBillboardAxis.Y
-//                cloneEmoji.constraints = [billboardConstraint]
+                // animation moving up/down
+                let moveDown = SCNAction.move(by: SCNVector3(0, -0.05, 0), duration: 1)
+                let moveUp = SCNAction.move(by: SCNVector3(0,0.05
+                    ,0), duration: 1)
+//                let waitAction = SCNAction.wait(duration: 0.25)
+                let hoverSequence = SCNAction.sequence([moveUp,moveDown])
+                let loopSequence = SCNAction.repeatForever(hoverSequence)
+                cloneEmoji.runAction(loopSequence)
 
                 drawState.userRootNode.addChildNode(cloneEmoji)
-                menuButton.setImage(UIImage(named: emoji.name), for: .normal)
-                updateRecentEmojiList()
+//                updateRecentEmojiList()
             } else {
                 print("can't get touch")
             }
@@ -406,7 +445,7 @@ class EditState: State {
             if menuExpand && !eraserOn{
                 let penName = drawState.currentPen
                 menuButtonTouched()
-                menuButton.setImage(UIImage(named: penName), for: .normal)
+//                menuButton.setImage(UIImage(named: penName), for: .normal)
             }
             eraseNode(touches: touches)
         }
@@ -456,10 +495,6 @@ class EditState: State {
     func undoErase(){
         if let stroke = erasedStack.pop(){
             undoStack.push(stroke)
-            guard let sceneNode = drawState.sceneView.sceneNode else {
-                print("ERROR: sceneNode not available to remove stroke, this is a problem with the new ARCL library")
-                return
-            }
             guard let parentName = stroke.first?.key else {
                 print("can't get parent name")
                 return
@@ -468,7 +503,7 @@ class EditState: State {
                 print("can't get drawing node")
                 return
             }
-            for node in sceneNode.childNodes {
+            for node in drawState.rootOfTheScene.childNodes {
                 if let qrNode = node as? QRNode{
                     guard let userRootNode = qrNode.childNodes.first as? SecondTierRoot else {
                         print("can't get userRootNode from qrNode")

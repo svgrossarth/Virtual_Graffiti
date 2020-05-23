@@ -38,7 +38,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         createUnderLineText(text: "Sign Up", button: signUpButton)
         signUpConstraints()
         createSignUpLabel()
-        tapViewToDismissKeyboard()
+        //tapViewToDismissKeyboard()
         roundButtonCorners()
     }
     

@@ -49,6 +49,9 @@ class DrawState: State, ARSCNViewDelegate {
     var tileName = ""
     var dataBase = Database()
     
+    var locationPermission = false
+    var rootOfTheScene = SCNNode()
+    
     lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
             guard error == nil else {
@@ -102,18 +105,14 @@ class DrawState: State, ARSCNViewDelegate {
                 self.userRootNode.removeFromParentNode()
                 self.qrNode!.addChildNode(self.userRootNode)
                 self.qrNode!.uid = self.userUID
-                guard let sceneNode = self.sceneView.sceneNode else {
-                    print("ERROR: sceneNode not available to place qrNode, this is a problem with the new ARCL library")
-                    return
-                }
                 /*
                  Fixes orientation issue with the image
                  */
                 let screenOrientation = self.sceneView.pointOfView?.orientation
                 node.orientation = screenOrientation!
-                
-                sceneNode.addChildNode(self.qrNode!)
-                sceneNode.addChildNode(node)
+
+                self.rootOfTheScene.addChildNode(self.qrNode!)
+                self.rootOfTheScene.addChildNode(node)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { // Change `2.0` to the desired number of seconds.
                     node.removeFromParentNode()
@@ -137,11 +136,7 @@ class DrawState: State, ARSCNViewDelegate {
                 print("can't get qr nodes user root node")
                 return
             }
-            guard let sceneNode = self.sceneView.sceneNode else {
-                print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
-                return
-            }
-            for node in sceneNode.childNodes {
+            for node in self.rootOfTheScene.childNodes {
                 if let userRootNode = node as? SecondTierRoot{
                     guard let userRootName = userRootNode.name else {
                         print("can't get userRootName")
@@ -160,7 +155,7 @@ class DrawState: State, ARSCNViewDelegate {
                     if qrNode.name == childQRNode.name && childQRNode.name != self.qrNode?.name {
                         qrNode.position = childQRNode.position
                         childQRNode.removeFromParentNode()
-                        sceneNode.addChildNode(qrNode)
+                        self.rootOfTheScene.addChildNode(qrNode)
                         duplicateQRNode = true
                     } else if qrNode.name == childQRNode.name && childQRNode.name == self.qrNode?.name {
                         duplicateQRNode = true
@@ -170,7 +165,7 @@ class DrawState: State, ARSCNViewDelegate {
             if !duplicateQRNode{
                 if let localQRNode = self.qrNode {
                     qrNode.position = localQRNode.position
-                    sceneNode.addChildNode(qrNode)
+                    self.rootOfTheScene.addChildNode(qrNode)
                 }
             }
         }
@@ -180,8 +175,44 @@ class DrawState: State, ARSCNViewDelegate {
     func initialize(_sceneView: SceneLocationView!, userUID: String) {
         self.userUID = userUID
         _initializeSceneView(_sceneView: _sceneView)
-        load()
+        initializeUserRootNode()
+        if self.locationPermission {
+            setupSceneWithLocation()
+        }
+        
     }
+    
+    func setupSceneWithLocation(){
+        guard let location = sceneLocationManager.currentLocation else {
+            // No location, try again in a second
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: setupSceneWithLocation)
+            return
+        }
+        initUserRootNodeLocation(location: location)
+        replaceRootNode()
+        load(location: location)
+    }
+    
+    func replaceRootNode(){
+        if let sceneNode = sceneView.sceneNode {
+            for childNode in self.rootOfTheScene.childNodes {
+                if let userRootChild = childNode as? SecondTierRoot{
+                    //ok to have but shouldn't really be possible to here
+                    userRootChild.removeFromParentNode()
+                    sceneView.addLocationNodeWithConfirmedLocation(locationNode: userRootChild)
+                } else if childNode != sceneNode {
+                    childNode.removeFromParentNode()
+                    sceneNode.addChildNode(childNode)
+                }
+            }
+            sceneNode.name = "scene Node from ARCL"
+            self.rootOfTheScene = sceneNode
+        } else {
+            print("ERROR: You should be able to get sceneNode here")
+            return
+        }
+    }
+    
     
     
     override func enter() {
@@ -192,48 +223,68 @@ class DrawState: State, ARSCNViewDelegate {
         // sceneView.session.pause()
     }
     
-    
-    func initializeUserRootNode() {
-        guard let location = sceneLocationManager.currentLocation else {
-            // No location, try again in a second
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: initializeUserRootNode)
-            return
-        }
-        
-        let df = DateFormatter()
-        df.dateFormat = "yyy-MM-dd hh:mm:ss"
-        let now = df.string(from: Date())
-        
-        userRootNode = SecondTierRoot()
-        userRootNode.name = UUID().uuidString
+    func initUserRootNodeLocation(location: CLLocation){
         self.tileName = self.dataBase.getTile(location: location)
         userRootNode.tileName = self.tileName
         if qrNode != nil {
             qrNode?.tileName = self.tileName
         }
-        //print("Initialized at tile \(Database().getTile(location: location))")
+        userRootNode.removeFromParentNode()
         sceneView.addLocationNodeForCurrentPosition(locationNode: userRootNode)
-        userRootNode.uid = userUID
-        userRootNode.simdPosition = simd_float3(0, 0, 0)
-
-//        if let sceneNode = self.sceneView.sceneNode{
-//            sceneNode.light = addLighting()
-//        }
+        if let qrNode = qrNode {
+            userRootNode.removeFromParentNode()
+            qrNode.addChildNode(userRootNode)
+        }
+        self.userRootNode.worldPosition = SCNVector3(0,0,0)
     }
+    
+    
+    func initializeUserRootNode() {
+        userRootNode = SecondTierRoot()
+        userRootNode.name = UUID().uuidString
+        userRootNode.uid = userUID
+        self.rootOfTheScene.addChildNode(userRootNode)
+        userRootNode.simdPosition = simd_float3(0, 0, 0)
+    }
+    
+    
     
     
     func _initializeSceneView(_sceneView: SceneLocationView!) {
         sceneView = _sceneView
+        
         addSubview(sceneView)
-       // sceneView.showsStatistics = true
+        // sceneView.showsStatistics = true
         let scene = SCNScene()
         sceneView.scene = scene
         
         sceneView.run() // Run the view's session
         
-         sceneView.arViewDelegate = self
-         sceneView.session.delegate = self
+        sceneView.arViewDelegate = self
+        sceneView.session.delegate = self
+        
+        self.rootOfTheScene = self.sceneView.scene.rootNode
+        self.sceneView.scene.rootNode.name = "the og root"
+        
         // sceneView.showsStatistics = true
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .denied:
+                print("location has been deined")
+                self.locationPermission = false
+            case .authorizedAlways, .authorizedWhenInUse:
+                print("Location is approved")
+                self.locationPermission = true
+            default:
+                print("Location is not approved or denied, we will count it as enabled (this might be wrong)")
+                self.locationPermission = true
+            }
+        } else {
+            print("Location services are not enabled")
+            self.locationPermission = false
+            
+        }
+        
     }
     
     
@@ -317,13 +368,6 @@ extension DrawState {
 
 extension DrawState: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-         cameraTrans = frame.camera.transform * simd_float4(x: 1, y: 1, z: 1, w: 0)
-        let distance = distanceBetweenPoints(vec1: SCNVector3(cameraTrans.x, cameraTrans.y, cameraTrans.z),
-                                             vec2: SCNVector3(0, 0, 0))
-        if distance > 20 {
-            load()
-        }
-
         frameCount += 1
         if QRValue == "" && frameCount == 100 {
             frameCount = 0
@@ -345,6 +389,16 @@ extension DrawState: ARSessionDelegate {
                     print("error")
                 }
             }
+        }
+        cameraTrans = frame.camera.transform * simd_float4(x: 1, y: 1, z: 1, w: 0)
+        let distance = distanceBetweenPoints(vec1: SCNVector3(cameraTrans.x, cameraTrans.y, cameraTrans.z),
+                                             vec2: SCNVector3(0, 0, 0))
+        if distance > 20 {
+            guard let location = sceneLocationManager.currentLocation else {
+                print("after moving 20 meters I could not get my location to reload the db")
+                return
+            }
+            load(location: location)
         }
     }
     
@@ -368,18 +422,14 @@ extension DrawState {
             print("save in drawstate saving qr node")
             self.dataBase.saveQRNode(qrNode: localQRNode)
         }
-        guard let location = sceneLocationManager.currentLocation else { return }
+        guard let location = sceneLocationManager.currentLocation else {
+            print("Can't get location so no saving the drawing based on location")
+            return }
         self.dataBase.saveDrawing(userRootNode: userRootNode)
     }
     
     
-    func load() {
-        guard let location = sceneLocationManager.currentLocation else {
-            // No location, try again in a second
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: load)
-            return
-        }
-        initializeUserRootNode()
+    func load(location: CLLocation) {
         self.dataBase = Database()
         currentTile = dataBase.getTile(location: location)
         print("load has been called and here is the tile", currentTile)
@@ -394,11 +444,7 @@ extension DrawState {
     
     func checkAndPlaceUserRootNode(newNode : SecondTierRoot) {
         var duplicateUserRootNode = false
-        guard let sceneNode = self.sceneView.sceneNode else {
-            print("ERROR: sceneNode not available to view its children, this is a problem with the new ARCL library")
-            return
-        }
-        let listOfCurrentNodes = sceneNode.childNodes
+        let listOfCurrentNodes = self.rootOfTheScene.childNodes
         for childNode in listOfCurrentNodes {
             if let qrNode = childNode as? QRNode {
                 if let innerUserNode = qrNode.childNodes.first {

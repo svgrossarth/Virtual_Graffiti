@@ -8,54 +8,63 @@
 //https://emojiisland.com/pages/download-new-emoji-icons-in-png-ios-10
 import UIKit
 
-protocol ChangeEmojiDelegate {
+protocol ChangeEmojiDelegate : class {
     func changeEmoji(emoji: Emoji)
     func getUpdatedList()->[Emoji]
 }
 
-class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate {
+class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    var delegate : ChangeEmojiDelegate?
+    var delegate : ChangeEmojiDelegate!
 
     var Models = [Emoji]()
     var recentModels = [Emoji]()
     var filteredModels:[Emoji] = []
     var selectedEmoji = Emoji(name: "bandage", ID: "Group50555")
     private var selectedModelIndex = 0
+//    var homeVC = HomeViewController()
 
     @IBOutlet weak var MenuCollection: UICollectionView!
-    @IBOutlet weak var searchbar: UISearchBar!
+    var emojiVC : EmojiViewController!
+
+    static func makeMemeDetailVC(emojiVC: EmojiViewController) -> EmojiViewController {
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ListVC") as! EmojiViewController
+
+        newViewController.emojiVC = emojiVC
+
+        return newViewController
+}
+//    @IBOutlet weak var searchbar: UISearchBarUI!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchbar.delegate = self
+
         setupEmojiModels()
-        setupRecentModels()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @IBAction func doneButtonTap(_ sender: Any) {
-        print("emoji menu dismissed")
-        self.dismiss(animated: true, completion: nil)
-    }
+//    @IBAction func doneButtonTap(_ sender: Any) {
+//        print("emoji menu dismissed")
+//        self.dismiss(animated: true, completion: nil)
+//    }
 
-    @objc func keyboardWillShow(notification: NSNotification) {
-        var userInfo = notification.userInfo
-        let keyboardFrame: NSValue = userInfo?.removeValue(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardHeight = keyboardFrame.cgRectValue.height
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            let newYOrigin = CGFloat(-keyboardHeight) // or whatever new value you want
-            self.view.frame.origin.y = newYOrigin
-        }
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            let newYOrigin = CGFloat(0) // or whatever new value you want
-            self.view.frame.origin.y = newYOrigin
-        }
-    }
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        var userInfo = notification.userInfo
+//        let keyboardFrame: NSValue = userInfo?.removeValue(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+//        let keyboardHeight = keyboardFrame.cgRectValue.height
+//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            let newYOrigin = CGFloat(-keyboardHeight)
+//            self.view.frame.origin.y = newYOrigin
+//        }
+//    }
+//
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            let newYOrigin = CGFloat(0)
+//            self.view.frame.origin.y = newYOrigin
+//        }
+//    }
 
     func setupEmojiModels(){
         Models.append(Emoji(name:"bandage", ID:"Group50555" ))
@@ -102,7 +111,11 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
             if section == 1{
                 return filteredModels.count
             }else{
-                recentModels = delegate!.getUpdatedList()
+                if recentModels.isEmpty{
+                    setupRecentModels()
+                }else{
+                    recentModels = delegate.getUpdatedList()
+                }
                 if recentModels.count < 5 {
                     return recentModels.count
                 }
@@ -134,7 +147,6 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
 
     func collectionView(collecitonView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-        print(section)
         if section == 1{
             return Models.count
         }
@@ -165,25 +177,27 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        recentModels = delegate!.getUpdatedList()
+        collectionView.reloadData()
         if indexPath.section == 0 {
             selectedEmoji = recentModels[indexPath.item]
         } else{
             selectedEmoji = filteredModels[indexPath.item]
         }
+        print("emoji list: ", recentModels.count)
         delegate?.changeEmoji(emoji: selectedEmoji)
-        self.dismiss(animated: true, completion: nil)
     }
 
 
     //MARK: - search
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard !searchText.isEmpty else {
-            filteredModels = Models
-            MenuCollection.reloadData()
-            print(recentModels.count)
-            return
-        }
-        filteredModels = Models.filter({ emo -> Bool in emo.name.lowercased().contains(searchText.lowercased())})
-        MenuCollection.reloadData()
-    }
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        guard !searchText.isEmpty else {
+//            filteredModels = Models
+//            MenuCollection.reloadData()
+//            print(recentModels.count)
+//            return
+//        }
+//        filteredModels = Models.filter({ emo -> Bool in emo.name.lowercased().contains(searchText.lowercased())})
+//        MenuCollection.reloadData()
+//    }
 }
