@@ -38,7 +38,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         createUnderLineText(text: "Sign Up", button: signUpButton)
         signUpConstraints()
         createSignUpLabel()
-        //tapViewToDismissKeyboard()
+        tapViewToDismissKeyboard()
         roundButtonCorners()
     }
     
@@ -56,6 +56,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
     
     func tapViewToDismissKeyboard() {
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
     }
     
