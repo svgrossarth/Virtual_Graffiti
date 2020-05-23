@@ -29,6 +29,7 @@ class ResetPasswordViewController: UIViewController {
     
     func tapViewToDismissKeyboard() {
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
     }
     
