@@ -330,7 +330,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     }
 
     func changeEmoji(emoji: Emoji){
-        self.dismiss(animated: true)
         self.emoji = emoji
         editState.stateChangeEmoji(emoji: emoji)
         editState.emojiButton.activateButton(imageName: emoji.name)
