@@ -480,9 +480,11 @@ class EditState: State {
                             if let parentName = parent.name {
                                 hitTestResult.node.removeFromParentNode()
                                 erasedStack.push([parentName : hitTestResult.node])
-                                Database().saveDrawing(userRootNode: parent)
                                 if let qrNode = parent.parent as? QRNode{
                                     Database().saveQRNode(qrNode: qrNode)
+                                }
+                                if drawState.locationPermission {
+                                    Database().saveDrawing(userRootNode: parent)
                                 }
                             }
                         }
@@ -511,14 +513,18 @@ class EditState: State {
                     }
                     if parentName == userRootNode.name{
                         userRootNode.addChildNode(drawingNode)
-                        Database().saveDrawing(userRootNode: userRootNode)
                         Database().saveQRNode(qrNode: qrNode)
+                        if drawState.locationPermission {
+                            Database().saveDrawing(userRootNode: userRootNode)
+                        }
                         return
                     }
                 } else if let userRootNode = node as? SecondTierRoot {
                     if parentName == userRootNode.name{
                         userRootNode.addChildNode(drawingNode)
-                        Database().saveDrawing(userRootNode: userRootNode)
+                        if drawState.locationPermission{
+                            Database().saveDrawing(userRootNode: userRootNode)
+                        }
                         return
                     }
                 }
@@ -532,13 +538,15 @@ class EditState: State {
                 print("can't get drawing node")
                 return
             }
-            drawingNode.removeFromParentNode()
             if let userRootNode = drawingNode.parent as? SecondTierRoot{
                 if let qrNode = userRootNode.parent as? QRNode {
                     Database().saveQRNode(qrNode: qrNode)
                 }
-                Database().saveDrawing(userRootNode: userRootNode)
+                if drawState.locationPermission {
+                    Database().saveDrawing(userRootNode: userRootNode)
+                }
             }
+            drawingNode.removeFromParentNode()
             erasedStack.push(stroke)
         }
     }
