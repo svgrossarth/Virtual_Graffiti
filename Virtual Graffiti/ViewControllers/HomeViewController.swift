@@ -12,7 +12,27 @@
 
 //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
-//https://iconsplace.com/custom-color/pencil-icon/
+//emoji icon from https://iconsplace.com/custom-color/pencil-icon/
+
+//eraserOn icon https://icons8.com/icon/43024/eraser from <a href="https://icons8.com/icon/43024/eraser">Eraser icon by Icons8</a>
+//eraserOfficon https://icons8.com/icon/48914/eraser from <a href="https://icons8.com/icon/48914/eraser">Eraser icon by Icons8</a>
+
+//emojiOff https://icons8.com/icon/25565/smiling from <a href="https://icons8.com/icon/25565/smiling">Smiling icon by Icons8</a>
+//emojiOn sets from
+//    https://emojiisland.com/pages/free-download-emoji-icons-png
+//    https://emojiisland.com/pages/download-new-emoji-icons-in-png-ios-10
+
+//Color Palette Off icon https://icons8.com/icon/4922/paint-palette from <a href="https://icons8.com/icon/4922/paint-palette">Paint Palette icon by Icons8</a>
+//Color Palette On icon https://icons8.com/icon/13369/paint-palette from <a href="https://icons8.com/icon/13369/paint-palette">Paint Palette icon by Icons8</a>
+
+//menu bar icon https://icons8.com/icon/36389/menu-rounded from <a href="https://icons8.com/icon/36389/menu-rounded">Menu Rounded icon by Icons8</a>
+
+//Filled pencil License: This icon is provided by icons8.com as Creative Commons Attribution-NoDerivs 3.0 Unported
+//        orange pen icon from https://iconsplace.com/orange-icons/pencil-icon-11/
+//        yellow pen icon from https://iconsplace.com/yellow-icons/pencil-icon-19/
+//        red pen icon from  https://iconsplace.com/custom-color/pencil-icon/
+//        blue pen icon from  https://iconsplace.com/custom-color/pencil-icon/
+//        green pen icon from  https://iconsplace.com/custom-color/pencil-icon-17/
 
 import UIKit
 import SceneKit
@@ -80,13 +100,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
         editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
     }
-
-    //   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //           if let newVC = segue.destination as? EmojiViewController {
-    //               emoji = newVC.selectedEmoji
-    //               newVC.delegate = self
-    //           }
-    //    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

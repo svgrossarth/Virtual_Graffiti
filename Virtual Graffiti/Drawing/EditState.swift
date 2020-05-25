@@ -424,20 +424,26 @@ class EditState: State {
                     return
                 }
                 cloneEmoji.scale = SCNVector3(initialScale.x * emojiScale, initialScale.y * emojiScale, initialScale.z * emojiScale)
+
                 //  cloneEmoji facing to User Screen
-                let screenOrientation = sceneView.pointOfView?.orientation
-                cloneEmoji.orientation = screenOrientation!
+                if emoji.name == "money" {
+                    let screenOrientation = sceneView.pointOfView?.orientation
+                    cloneEmoji.orientation = screenOrientation!
+                    let rotate = SCNAction.rotateBy(x: 0, y: CGFloat(degToRadians(degrees: 180)), z: 0, duration: 0.01)
+                    cloneEmoji.runAction(rotate)
+                } else if emoji.name != "money" {
+                    let screenOrientation = sceneView.pointOfView?.orientation
+                    cloneEmoji.orientation = screenOrientation!
+                }
+
                 // animation moving up/down
                 let moveDown = SCNAction.move(by: SCNVector3(0, -0.05, 0), duration: 1)
-                let moveUp = SCNAction.move(by: SCNVector3(0,0.05
-                    ,0), duration: 1)
-//                let waitAction = SCNAction.wait(duration: 0.25)
+                let moveUp = SCNAction.move(by: SCNVector3(0, 0.05, 0), duration: 1)
                 let hoverSequence = SCNAction.sequence([moveUp,moveDown])
                 let loopSequence = SCNAction.repeatForever(hoverSequence)
                 cloneEmoji.runAction(loopSequence)
 
                 drawState.userRootNode.addChildNode(cloneEmoji)
-//                updateRecentEmojiList()
             } else {
                 print("can't get touch")
             }
@@ -445,7 +451,6 @@ class EditState: State {
             if menuExpand && !eraserOn{
                 let penName = drawState.currentPen
                 menuButtonTouched()
-//                menuButton.setImage(UIImage(named: penName), for: .normal)
             }
             eraseNode(touches: touches)
         }
