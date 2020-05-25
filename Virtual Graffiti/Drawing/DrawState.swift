@@ -110,7 +110,6 @@ class DrawState: State, ARSCNViewDelegate {
                  */
                 let screenOrientation = self.sceneView.pointOfView?.orientation
                 node.orientation = screenOrientation!
-                
                 self.rootOfTheScene.addChildNode(self.qrNode!)
                 self.rootOfTheScene.addChildNode(node)
                 

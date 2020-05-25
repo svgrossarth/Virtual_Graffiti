@@ -17,6 +17,13 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var googleLoginButton: GIDSignInButton!
+    @IBOutlet weak var forgotPasswordButton: UIButton!
+    
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var errorLabel: UILabel!
+    let appleButton = ASAuthorizationAppleIDButton()
+    let signUpLabel = UILabel()
     
     // Unhashed nonce.
     fileprivate var currentNonce: String?
@@ -26,6 +33,13 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance()?.presentingViewController = self
         createAppleIDButton()
+        createGradientBackground()
+        createUnderLineText(text: "Forgot password?", button: forgotPasswordButton)
+        createUnderLineText(text: "Sign Up", button: signUpButton)
+        signUpConstraints()
+        createSignUpLabel()
+        tapViewToDismissKeyboard()
+        roundButtonCorners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,13 +49,61 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         }
     }
     
+    func roundButtonCorners() {
+        loginButton.layer.cornerRadius = 5
+        googleLoginButton.layer.cornerRadius = 5
+    }
+    
+    func tapViewToDismissKeyboard() {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func createSignUpLabel() {
+        signUpLabel.text = "Not on Virtual Graffiti yet?"
+        signUpLabel.textColor = .white
+        signUpLabel.font = signUpLabel.font.withSize(14)
+        self.view.addSubview(signUpLabel)
+        signUpLabel.translatesAutoresizingMaskIntoConstraints = false
+        signUpLabel.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 15).isActive = true
+        signUpLabel.rightAnchor.constraint(equalTo: signUpButton.leftAnchor, constant: -5).isActive = true
+    }
+    
+    func signUpConstraints() {
+        signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        signUpButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 9).isActive = true
+        signUpButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+    }
+    
+    func createUnderLineText(text: String, button: UIButton) {
+        let underlineAttributes: [NSAttributedString.Key: Any] = [
+        .font: UIFont.systemFont(ofSize: 14),
+        .underlineStyle: NSUnderlineStyle.single.rawValue]
+        
+        let attributeString = NSMutableAttributedString(string: text,
+                                                        attributes: underlineAttributes)
+        button.setAttributedTitle(attributeString, for: .normal)
+        button.titleLabel?.textColor = .white
+    }
+    
+    func createGradientBackground() {
+        let topColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0).cgColor
+        let bottomColor = UIColor(red: 0.0/255.0, green: 40.0/255.0, blue: 85.0/255.0, alpha: 1.0).cgColor
+
+        let gradient = CAGradientLayer()
+        gradient.frame = self.view.bounds
+        gradient.colors = [topColor, bottomColor]
+        gradient.locations = [0.0, 1.0]
+        self.view.layer.insertSublayer(gradient, at: 0)
+    }
+    
     func createAppleIDButton() {
-        let appleButton = ASAuthorizationAppleIDButton()
         view.addSubview(appleButton)
         appleButton.translatesAutoresizingMaskIntoConstraints = false
-        appleButton.topAnchor.constraint(equalTo: googleLoginButton.bottomAnchor, constant: 10).isActive = true
-        appleButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 110).isActive = true
-        appleButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -114).isActive = true
+        appleButton.topAnchor.constraint(equalTo: googleLoginButton.bottomAnchor, constant: 15).isActive = true
+        appleButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 22).isActive = true
+        appleButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -23).isActive = true
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
     }
     
@@ -185,6 +247,46 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
     /*
     Google Sign In [END]
     */
+    
+    // MARK: Login code
+    func showError(_ message: String) {
+        errorLabel.text = message
+        errorLabel.alpha = 1
+    }
+    
+    func validateFields() -> String? {
+        
+        // Check that all fields are filled in
+        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+            passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            return "Please fill in all fields."
+        }
+        
+        return nil
+    }
+    
+    @IBAction func loginTapped(_ sender: Any) {
+        // Validate text fields
+        let error =  validateFields()
+        
+        if error != nil {
+            // show error if something went wrong when filling out text fields
+            showError(error!)
+        } else {
+            // Take our whitespaces and newlines the fields
+            let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Signing in as user
+            Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
+                if err != nil {
+                    self.showError("Please use a valid email or password.")
+                } else {
+                    self.transitionToHome(userUID: Auth.auth().currentUser!.uid)
+                }
+            }
+        }
+    }
     
     func transitionToHome(userUID: String) {
         

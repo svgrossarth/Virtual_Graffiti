@@ -13,13 +13,36 @@ import ProgressHUD
 class ResetPasswordViewController: UIViewController {
 
     @IBOutlet weak var emailTextField: UITextField!
-    
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var resetButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        createGradientBackground()
+        tapViewToDismissKeyboard()
+        roundButtonCorners()
+    }
+    
+    func roundButtonCorners() {
+        resetButton.layer.cornerRadius = 5
+    }
+    
+    func tapViewToDismissKeyboard() {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func createGradientBackground() {
+        let topColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0).cgColor
+        let bottomColor = UIColor(red: 0.0/255.0, green: 40.0/255.0, blue: 85.0/255.0, alpha: 1.0).cgColor
 
-        // Do any additional setup after loading the view.
+        let gradient = CAGradientLayer()
+        gradient.frame = self.view.bounds
+        gradient.colors = [topColor, bottomColor]
+        gradient.locations = [0.0, 1.0]
+        
+        self.view.layer.insertSublayer(gradient, at: 0)
     }
     
     func validateField() -> String? {

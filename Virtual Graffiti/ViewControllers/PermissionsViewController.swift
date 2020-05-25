@@ -146,7 +146,6 @@ class ViewRouter: ObservableObject, LocationManagerDelegate {
         permissionStatus = .denied
     }
     
-    
     func deniedButtonPressed() {
         if checkCameraAuthorization() {
             permissionStatus = .notDetermined
