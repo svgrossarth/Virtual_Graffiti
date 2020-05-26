@@ -73,7 +73,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
     func signUpConstraints() {
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
         signUpButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 9).isActive = true
-        signUpButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+        signUpButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 130).isActive = true
     }
     
     func createUnderLineText(text: String, button: UIButton) {
@@ -101,9 +101,9 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
     func createAppleIDButton() {
         view.addSubview(appleButton)
         appleButton.translatesAutoresizingMaskIntoConstraints = false
+        appleButton.widthAnchor.constraint(equalToConstant: 330).isActive = true
         appleButton.topAnchor.constraint(equalTo: googleLoginButton.bottomAnchor, constant: 15).isActive = true
-        appleButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 22).isActive = true
-        appleButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -23).isActive = true
+        appleButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
     }
     
