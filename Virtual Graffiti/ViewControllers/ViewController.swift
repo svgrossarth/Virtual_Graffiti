@@ -102,7 +102,7 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         view.addSubview(appleButton)
         appleButton.translatesAutoresizingMaskIntoConstraints = false
         appleButton.widthAnchor.constraint(equalToConstant: 330).isActive = true
-        appleButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        appleButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         appleButton.topAnchor.constraint(equalTo: googleLoginButton.bottomAnchor, constant: 15).isActive = true
         appleButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
