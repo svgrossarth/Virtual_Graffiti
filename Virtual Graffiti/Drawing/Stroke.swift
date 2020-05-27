@@ -44,6 +44,7 @@ class Stroke : SCNNode {
         drawingColor = color
         self.thickness = thickness
         super.init()
+        self.name = UUID().uuidString
     }
     
     required init?(coder: NSCoder) {

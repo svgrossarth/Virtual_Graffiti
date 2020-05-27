@@ -97,7 +97,7 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
 
 
         view.addSubview(editState)
-        editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID)
+        editState.initialize(signoutButton: signoutButton, pencilButton: pencilButton, menuButton: menuButton, emojiButton: emojiButton, eraseButton: eraseButton, distanceSlider: distanceSlider, distanceLabel: distanceLable, drawState: drawState, refSphere: refSphere, sceneView: sceneView, widthSlider: widthSlider, widthLabel: widthLabel, userUID: userUID, undoButton: undo, redoButton: redo)
         editState.createColorSelector(changeColorButton: changeColorButton, colorStack: colorStack)
     }
     
@@ -290,8 +290,8 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
             distanceLable.isHidden = false
             widthSlider.isHidden = false
             widthLabel.isHidden = false
-            undo.isHidden = false
-            redo.isHidden = false
+            editState.changeRedoVisability()
+            editState.changeUndoVisability()
             menuButton.isHidden = false
         } else {
             distanceSlider.isHidden = true
@@ -341,6 +341,7 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     @IBAction func widthSliderTouchUpOutside(_ sender: Any) {
         editState.removeSphere()
     }
+    
 
     func changeEmoji(emoji: Emoji){
         self.emoji = emoji
@@ -370,7 +371,7 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
                     if !self.doubleTapHappened {
                         print("tap count is 1")
                         if !self.editState.eraserOn && !self.editState.EmojiOn
-                            && self.drawState.touchMovedFirst {
+                            && self.drawState.touchMovedFirst &&  self.drawState.placeBall {
                             self.drawState.placeSingleTapBall(touches: touches)
                         } else {
                             self.editState.touchesBegan(touches, with: event)
@@ -380,6 +381,7 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
                         self.changeState()
                     }
                     self.doubleTapHappened = false
+                    self.drawState.placeBall = true
                 }
             } else if touch.tapCount == 2 {
                 doubleTapHappened = true

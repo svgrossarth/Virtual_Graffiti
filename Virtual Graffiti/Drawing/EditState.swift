@@ -45,9 +45,11 @@ class EditState: State {
     var emojiInitialScale : SCNVector3?
     var prePopEmoji = [Emoji]()
     let DavisBlue = UIColor(red: 63/255, green: 87/255, blue: 119/255, alpha: 1)
+    var undoButton = UIButton()
+    var redoButton = UIButton()
     
     
-    func initialize(signoutButton: UIButton, pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String) {
+    func initialize(signoutButton: UIButton, pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String, undoButton : UIButton, redoButton : UIButton) {
         self.pencilButton = pencilButton
         self.menuButton = menuButton
         self.emojiButton = emojiButton
@@ -67,6 +69,8 @@ class EditState: State {
         let lightNode = SCNNode()
         lightNode.light = directionalLighting()
         sceneView.pointOfView?.addChildNode(lightNode)
+        self.undoButton = undoButton
+        self.redoButton = redoButton
     }
     
     func createColorSelector(changeColorButton: UIButton, colorStack: UIStackView) {
@@ -442,7 +446,7 @@ class EditState: State {
                 let hoverSequence = SCNAction.sequence([moveUp,moveDown])
                 let loopSequence = SCNAction.repeatForever(hoverSequence)
                 cloneEmoji.runAction(loopSequence)
-
+                cloneEmoji.name = UUID().uuidString
                 drawState.userRootNode.addChildNode(cloneEmoji)
             } else {
                 print("can't get touch")
@@ -485,6 +489,9 @@ class EditState: State {
                             if let parentName = parent.name {
                                 hitTestResult.node.removeFromParentNode()
                                 erasedStack.push([parentName : hitTestResult.node])
+                                undoStack.searchAndRemoveDup(node: hitTestResult.node)
+                                changeRedoVisability()
+                                changeUndoVisability()
                                 if let qrNode = parent.parent as? QRNode{
                                     Database().saveQRNode(qrNode: qrNode)
                                 }
@@ -502,6 +509,8 @@ class EditState: State {
     func undoErase(){
         if let stroke = erasedStack.pop(){
             undoStack.push(stroke)
+            changeUndoVisability()
+            changeRedoVisability()
             guard let parentName = stroke.first?.key else {
                 print("can't get parent name")
                 return
@@ -553,6 +562,24 @@ class EditState: State {
             }
             drawingNode.removeFromParentNode()
             erasedStack.push(stroke)
+            changeUndoVisability()
+            changeRedoVisability()
+        }
+    }
+    
+    func changeRedoVisability(){
+        if(undoStack.count() > 0){
+            redoButton.isHidden = false
+        } else {
+            redoButton.isHidden = true
+        }
+    }
+    
+    func changeUndoVisability(){
+        if(erasedStack.count() > 0){
+            undoButton.isHidden = false
+        } else {
+            undoButton.isHidden = true
         }
     }
 }
