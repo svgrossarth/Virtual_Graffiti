@@ -304,7 +304,7 @@ class EditState: State {
             drawState.width = defaultWidth * widthSlider.value
             emojiScale = widthSlider.value
         }
-        widthLabel.text = String(format: "Width: %.3f", drawState.width)
+        widthLabel.text = String(format: "Width")
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
         if EmojiOn{
