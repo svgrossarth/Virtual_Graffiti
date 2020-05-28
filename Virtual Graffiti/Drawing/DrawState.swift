@@ -51,6 +51,7 @@ class DrawState: State, ARSCNViewDelegate {
     
     var locationPermission = false
     var rootOfTheScene = SCNNode()
+    var placeBall = true
     
     lazy var detectBarcodeRequest: VNDetectBarcodesRequest = {
         return VNDetectBarcodesRequest(completionHandler: { (request, error) in
@@ -312,6 +313,7 @@ extension DrawState {
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let singleTouch = touches.first{
+            placeBall = false
             let touchLocation = touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
             if touchMovedFirst {
                 touchMovedFirst =  false
@@ -343,6 +345,7 @@ extension DrawState {
             let sphereNode = createSphere(position: touchLocation)
             sphereNode.geometry?.firstMaterial?.lightingModel = SCNMaterial.LightingModel.constant;
             sphereNode.categoryBitMask = ~1
+            sphereNode.name = UUID().uuidString
             userRootNode.addChildNode(sphereNode)
         }
     }
