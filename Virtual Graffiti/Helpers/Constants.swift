@@ -18,6 +18,8 @@ struct Constants {
         static let loginViewController = "LoginVC"
         // goes to main menu
         static let viewController = "VC"
+        // Goes to Permissions view
+        static let permissionsViewController = "PermissionsVC"
     }
     
 }

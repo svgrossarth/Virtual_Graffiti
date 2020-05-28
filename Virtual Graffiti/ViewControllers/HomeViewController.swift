@@ -110,13 +110,18 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     }
 
     @IBAction func signoutAction(_ sender: Any) {
-        signOut()
+        if userUID == "" {
+            signIn()
+        }
+        else {
+            signOut()
+        }
     }
     
     func signOut() {
         do {
             try Auth.auth().signOut()
-            self.navigationController?.isNavigationBarHidden = false;
+            self.navigationController?.isNavigationBarHidden = false
             _ = navigationController?.popToRootViewController(animated: false)
             
         } catch let signOutError {
@@ -124,11 +129,41 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
         }
     }
     
+    func signIn() {
+        let locationAuthorization = CLLocationManager.authorizationStatus()
+        if locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse || locationAuthorization == .notDetermined {
+            self.navigationController?.isNavigationBarHidden = true
+            _ = navigationController?.popToRootViewController(animated: false)
+            return
+        }
+        
+        checkLocationPermissions()
+    }
+    
     func showAppInfo() {
         let alert = UIAlertController(title: "Virtual Graffiti Functionalities", message: "Virtual Graffiti has a double tap feature that brings up the drawing menu and a QR code scanning functionality that will save your drawings based on the scanned QR code.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: {
+            if self.userUID == "" {
+                let logInAlert = UIAlertController(title: "Saving Drawings", message: "To save drawings, please enable location permissions and sign in.", preferredStyle: .alert)
+                logInAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(logInAlert, animated: true, completion: self.checkLocationPermissions)
+            }
+        })
     }
+    
+    
+    func checkLocationPermissions() {
+        let locationAuthorization = CLLocationManager.authorizationStatus()
+        if locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse || locationAuthorization == .notDetermined{
+            return
+        }
+        
+        let locationAlert = UIAlertController(title: "Location Services are disabled", message: "To sign in, please enable location permissions by going to Settings > Virtual Graffiti > Location > While Using the App.", preferredStyle: .alert)
+        locationAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(locationAlert, animated: true, completion: nil)
+    }
+    
     
     func uiSetup () {
         distanceSlider.transform = CGAffineTransform(rotationAngle: .pi / -2)
