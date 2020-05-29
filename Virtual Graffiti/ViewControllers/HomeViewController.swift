@@ -121,9 +121,9 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     func signOut() {
         do {
             try Auth.auth().signOut()
-            self.navigationController?.isNavigationBarHidden = false
-            _ = navigationController?.popToRootViewController(animated: false)
-            
+            //self.navigationController?.isNavigationBarHidden = false
+            //_ = navigationController?.popToRootViewController(animated: false)
+            performSegue(withIdentifier: "logout", sender: self)
         } catch let signOutError {
             print("Error signing out: %@", signOutError)
         }
@@ -132,8 +132,9 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     func signIn() {
         let locationAuthorization = CLLocationManager.authorizationStatus()
         if locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse || locationAuthorization == .notDetermined {
-            self.navigationController?.isNavigationBarHidden = true
-            _ = navigationController?.popToRootViewController(animated: false)
+            //self.navigationController?.isNavigationBarHidden = true
+            //_ = navigationController?.popToRootViewController(animated: false)
+            performSegue(withIdentifier: "logout", sender: self)
             return
         }
         
@@ -184,6 +185,12 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
         changeColorButton.layer.cornerRadius = 0.2 * eraseButton.bounds.size.width
         pencilButton.layer.cornerRadius = 0.2 * pencilButton.bounds.size.width
         signoutButton.layer.cornerRadius = 0.2 * signoutButton.bounds.size.width
+        if userUID == "" {
+            signoutButton.setImage(UIImage(named: "login")!, for: .normal)
+        }
+        else {
+            signoutButton.setImage(UIImage(named: "logout")!, for: .normal)
+        }
         
         self.view.bringSubviewToFront(distanceSlider)
         self.view.bringSubviewToFront(distanceLable)

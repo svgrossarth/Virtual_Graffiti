@@ -19,6 +19,7 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.isNavigationBarHidden = false
         createGradientBackground()
         tapViewToDismissKeyboard()
         roundButtonCorners()

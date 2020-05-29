@@ -248,17 +248,17 @@ class PermissionsViewController: UIHostingController<PermissionsMotherView> {
     func transitionOut() {
         sceneLocationManager.locationManager.delegate = sceneLocationManager
         
-        if self.viewRouter.checkLocationAuthorization() {
-            let viewController = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.viewController) as! ViewController
-            self.navigationController?.isNavigationBarHidden = true;
-            self.navigationController?.pushViewController(viewController, animated: false)
+        DispatchQueue.main.async {
+            // Has to be asynchronous or it crashes
+            // Why? Who knows
+            if self.viewRouter.checkLocationAuthorization() {
+                self.performSegue(withIdentifier: "login", sender: self)
+            }
+            else {
+                self.performSegue(withIdentifier: "drawing", sender: self)
+            }
         }
-        else {
-            let homeViewController = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as! HomeViewController
-            homeViewController.userUID = ""
-            self.navigationController?.isNavigationBarHidden = true;
-            self.navigationController?.pushViewController(homeViewController, animated: false)
-        }
+
     }
 }
 
