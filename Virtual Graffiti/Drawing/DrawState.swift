@@ -289,7 +289,7 @@ class DrawState: State, ARSCNViewDelegate {
     
     
     func createSphere(position : SCNVector3) -> SCNNode {
-        let sphere = SCNSphere(radius: sphereRadius)
+        let sphere = SCNSphere(radius: CGFloat(width))
         let material = SCNMaterial()
         material.diffuse.contents = self.drawingColor
         sphere.materials = [material]
