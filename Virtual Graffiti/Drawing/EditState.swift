@@ -289,6 +289,7 @@ class EditState: State {
             drawState.distance = defaultDistance * distanceSlider.value
         }
         let screenCenter = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
+        refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
         drawState.rootOfTheScene.addChildNode(refSphere)
 
@@ -309,10 +310,8 @@ class EditState: State {
         refSphere.position = drawState.touchLocationIn3D(touchLocation2D: screenCenter)
         if EmojiOn{
             let sphereEmojiWidth : Float = emojiScale / 19
-            refSphere.geometry = SCNSphere(radius: CGFloat(sphereEmojiWidth))
-        } else {
-            refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         }
+        refSphere.geometry = SCNSphere(radius: CGFloat(drawState.width))
         drawState.rootOfTheScene.addChildNode(refSphere)
         //emojiScale = drawState.width / defaultWidth
         print("drawing state width", drawState.width)
