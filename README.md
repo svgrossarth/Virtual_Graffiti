@@ -21,7 +21,7 @@ https://github.com/svgrossarth/Virtual_Graffiti/blob/master/Terms_and_Conditions
 
 
 ## Credits
-The [app logo](https://www.flaticon.com/free-icon/spray-can_1791945?term=spray%20can&page=1&position=86) was created by [Pixelmeetup](https://www.flaticon.com/authors/pixelmeetup) from  www.flaticon.com.
+Thank you Brittiny for the help on designing the logo and UI.
 
 The [undo icon](https://www.flaticon.com/free-icon/undo_565344?term=undo&page=1&position=19) was created by [Google](https://www.flaticon.com/authors/google) from www.flaticon.com.
 
