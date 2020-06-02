@@ -183,14 +183,14 @@ class DrawState: State, ARSCNViewDelegate {
     }
     
     func setupSceneWithLocation(){
-        guard let location = sceneLocationManager.currentLocation else {
+        if let location = sceneLocationManager.currentLocation, let sceneNode = sceneView.sceneNode {
             // No location, try again in a second
+            initUserRootNodeLocation(location: location)
+            replaceRootNode()
+            load(location: location)
+        } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: setupSceneWithLocation)
-            return
         }
-        initUserRootNodeLocation(location: location)
-        replaceRootNode()
-        load(location: location)
     }
     
     func replaceRootNode(){
