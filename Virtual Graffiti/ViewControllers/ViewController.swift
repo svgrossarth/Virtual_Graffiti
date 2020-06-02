@@ -41,6 +41,9 @@ class ViewController: UIViewController, GIDSignInDelegate, ASAuthorizationContro
         createSignUpLabel()
         tapViewToDismissKeyboard()
         roundButtonCorners()
+        // This allows the navigation bar to be transparent
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
