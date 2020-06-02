@@ -376,10 +376,6 @@ class EditState: State {
         self.pathName = "emojis.scnassets/" + modelName
     }
 
-    func getEmojiList() -> [Emoji]{
-        return recentUsedEmoji
-    }
-
     func setupRecentList(){
         prePopEmoji.append(Emoji(name:"bandage", ID:"Group50555" ))
         prePopEmoji.append(Emoji(name:"tired", ID:"Group3677"))
@@ -387,6 +383,10 @@ class EditState: State {
     }
 
     func updateRecentEmojiList(){
+        if recentUsedEmoji.isEmpty{
+            setupRecentList()
+            recentUsedEmoji = prePopEmoji
+        }
         if recentUsedEmoji.contains(emoji) {
              recentUsedEmoji.remove(at: recentUsedEmoji.firstIndex(of: emoji)!)
         }else if recentUsedEmoji.count == 5{

@@ -387,7 +387,7 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
 
     func getUpdatedList() ->[Emoji] {
         editState.updateRecentEmojiList()
-        return editState.getEmojiList()
+        return editState.recentUsedEmoji
     }
 
     func createReferenceSphere() -> SCNNode {

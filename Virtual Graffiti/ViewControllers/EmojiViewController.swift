@@ -87,6 +87,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
                 }else{
                     recentModels = delegate.getUpdatedList()
                 }
+                print("recentModel num: ", recentModels.count)
                 if recentModels.count < 5 {
                     return recentModels.count
                 }
@@ -152,13 +153,15 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
   //MARK: section selection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         recentModels = delegate!.getUpdatedList()
-        collectionView.reloadData()
         if indexPath.section == 0 {
+            print(recentModels)
             selectedEmoji = recentModels[indexPath.item]
         } else{
             selectedEmoji = filteredModels[indexPath.item]
         }
+        collectionView.reloadData()
         delegate?.changeEmoji(emoji: selectedEmoji)
     }
+
 
 }
