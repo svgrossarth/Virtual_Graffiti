@@ -50,7 +50,6 @@ class Stroke : SCNNode {
     required init?(coder: NSCoder) {
         self.previousPoint = SCNVector3()
         super.init(coder: coder)
-        //fatalError("init(coder:) has not been implemented")
     }
     
     func addVertices(point3D: SCNVector3, initialNearFarLine: SCNVector3, lineBetweenNearFar: SCNVector3){
@@ -104,10 +103,9 @@ class Stroke : SCNNode {
             material.lightingModel = SCNMaterial.LightingModel.constant
             customGeom.materials = [material]
             
-            //points[points.count - 1].material = material
             self.geometry = customGeom
         } else {
-            // (number of points - 2 becuase already did first 2 points) * 4 becuase 4 vertices per point
+            // (number of points - 2 because already did first 2 points) * 4 because 4 vertices per point
             let indexAdder = UInt32(((strokeVertices.count / 4) - 2) * 4)
             
             var newIndices = [UInt32]()
@@ -130,10 +128,4 @@ class Stroke : SCNNode {
             self.geometry = customGeom
         }
     }
-
-    
-    
-    
-    
-    
 }

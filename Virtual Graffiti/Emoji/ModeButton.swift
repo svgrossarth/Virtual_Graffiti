@@ -10,31 +10,30 @@ import UIKit
 
 class ModeButton: UIButton {
 
+    static var isOn = false
 
-        static var isOn = false
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initButton()
+    }
 
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            initButton()
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initButton()
+    }
+
+    func initButton() {
+        setImage(UIImage(named: "emojiOff"), for: .normal)
+        addTarget(self, action: #selector( ModeButton.buttonPressed), for: .touchUpInside)
+    }
+
+    @objc func buttonPressed() {
+        if ModeButton.isOn{
+            deactivateButton()
+        } else{
+            activateButton(imageName: "bandage")
         }
-
-        required init?(coder aDecoder: NSCoder) {
-            super.init(coder: aDecoder)
-            initButton()
-        }
-
-        func initButton() {
-            setImage(UIImage(named: "emojiOff"), for: .normal)
-            addTarget(self, action: #selector( ModeButton.buttonPressed), for: .touchUpInside)
-        }
-
-        @objc func buttonPressed() {
-            if ModeButton.isOn{
-                deactivateButton()
-            } else{
-                activateButton(imageName: "bandage")
-            }
-        }
+    }
 
     func activateButton(imageName: String) {
             ModeButton.isOn = true
@@ -44,7 +43,7 @@ class ModeButton: UIButton {
 
             setTitle(title, for: .normal)
             setImage(image, for: .normal)
-        }
+    }
 
     func deactivateButton(){
         ModeButton.isOn = false
@@ -56,21 +55,20 @@ class ModeButton: UIButton {
         setImage(image, for: .normal)
 
     }
+}
 
+class ChoiceButton : UIButton {
+    override init(frame: CGRect) {
+       super.init(frame: frame)
+       initButton()
     }
 
-    class ChoiceButton : UIButton {
-        override init(frame: CGRect) {
-               super.init(frame: frame)
-               initButton()
-           }
+   required init?(coder aDecoder: NSCoder) {
+       super.init(coder: aDecoder)
+       initButton()
+   }
 
-           required init?(coder aDecoder: NSCoder) {
-               super.init(coder: aDecoder)
-               initButton()
-           }
-
-           func initButton() {
-                setImage(UIImage(named: "emojiOff"), for: .normal)
-           }
+   func initButton() {
+        setImage(UIImage(named: "emojiOff"), for: .normal)
+   }
 }

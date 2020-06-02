@@ -66,7 +66,6 @@ class DrawState: State, ARSCNViewDelegate {
     }()
     
     func processClassification(for request: VNRequest) {
-        // TODO: Extract payload
         DispatchQueue.main.async {
             if let bestResult = request.results?.first as? VNBarcodeObservation,
                 let payload = bestResult.payloadStringValue {
@@ -146,9 +145,7 @@ class DrawState: State, ARSCNViewDelegate {
                         print("can't get qrUserRootName")
                         return
                     }
-                    //print("checkForDupUserRootNode: Checking if user root node with name: ", userRootName, "matches any qr user root nodes")
                     if userRootName == qrUserRootName {
-                        //print("checkForDupUserRootNode: found duplicated userRootNode and removing, name of node is ", userRootName)
                         userRootNode.removeFromParentNode()
                     }
                 } else if let childQRNode = node as? QRNode {
@@ -238,7 +235,6 @@ class DrawState: State, ARSCNViewDelegate {
         self.userRootNode.worldPosition = SCNVector3(0,0,0)
     }
     
-    
     func initializeUserRootNode() {
         userRootNode = SecondTierRoot()
         userRootNode.name = UUID().uuidString
@@ -247,14 +243,10 @@ class DrawState: State, ARSCNViewDelegate {
         userRootNode.simdPosition = simd_float3(0, 0, 0)
     }
     
-    
-    
-    
     func _initializeSceneView(_sceneView: SceneLocationView!) {
         sceneView = _sceneView
         
         addSubview(sceneView)
-        // sceneView.showsStatistics = true
         let scene = SCNScene()
         sceneView.scene = scene
         
@@ -266,7 +258,6 @@ class DrawState: State, ARSCNViewDelegate {
         self.rootOfTheScene = self.sceneView.scene.rootNode
         self.sceneView.scene.rootNode.name = "the og root"
         
-        // sceneView.showsStatistics = true
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .denied:
@@ -287,7 +278,6 @@ class DrawState: State, ARSCNViewDelegate {
         
     }
     
-    
     func createSphere(position : SCNVector3) -> SCNNode {
         let sphere = SCNSphere(radius: CGFloat(width))
         let material = SCNMaterial()
@@ -298,7 +288,6 @@ class DrawState: State, ARSCNViewDelegate {
         return node
     }
 }
-
 
 extension DrawState {
 
@@ -387,7 +376,6 @@ extension DrawState: ARSessionDelegate {
                     
                 } catch
                 {
-                    //self.showAlert(withTitle: "Error Decoding Barcode", message: error.localizedDescription)
                     print("error")
                 }
             }
@@ -436,9 +424,7 @@ extension DrawState {
         currentTile = dataBase.getTile(location: location)
         print("load has been called and here is the tile", currentTile)
         dataBase.retrieveDrawing(location: location, drawFunction: { retrievedNodes in
-            //self.sceneView.removeAllNodes() // Clear nodes
             for node in retrievedNodes {
-                //print("drawFunction: node going to placed in scene with name: ", node.name)
                 self.checkAndPlaceUserRootNode(newNode: node)
             }
         })

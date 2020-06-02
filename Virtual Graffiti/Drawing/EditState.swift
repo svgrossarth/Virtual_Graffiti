@@ -12,7 +12,6 @@ import ARKit
 
 
 class EditState: State {
-//    var pencilKitCanvas =  PKCanvas()
     var sphereCallbackCanceled = false
     var menuExpand = false
     var colorStack = UIStackView()

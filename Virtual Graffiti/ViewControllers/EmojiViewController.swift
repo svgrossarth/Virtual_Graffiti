@@ -149,7 +149,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
         fatalError("no header")
     }
 
-  //MARK: section seleciton
+  //MARK: section selection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         recentModels = delegate!.getUpdatedList()
         collectionView.reloadData()

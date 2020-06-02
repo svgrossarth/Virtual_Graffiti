@@ -14,12 +14,10 @@ struct Stack<Element> {
     
     mutating func push(_ element: [String : SCNNode]) {
         array.append(element)
-        print("in push count is ", array.count)
     }
     
     mutating func pop() -> [String : SCNNode]? {
         return array.popLast()
-        print("in pop count is ", array.count)
     }
     
     func peek() -> [String : SCNNode]? {
@@ -53,7 +51,5 @@ struct Stack<Element> {
                 }
             }
         }
-        
-        
     }
 }

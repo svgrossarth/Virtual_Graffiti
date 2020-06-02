@@ -103,9 +103,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        if firstTime == true {
-//            showAppInfo()
-//        }
         showAppInfo()
     }
 
@@ -121,8 +118,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     func signOut() {
         do {
             try Auth.auth().signOut()
-            //self.navigationController?.isNavigationBarHidden = false
-            //_ = navigationController?.popToRootViewController(animated: false)
             performSegue(withIdentifier: "logout", sender: self)
         } catch let signOutError {
             print("Error signing out: %@", signOutError)
@@ -132,8 +127,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     func signIn() {
         let locationAuthorization = CLLocationManager.authorizationStatus()
         if locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse || locationAuthorization == .notDetermined {
-            //self.navigationController?.isNavigationBarHidden = true
-            //_ = navigationController?.popToRootViewController(animated: false)
             performSegue(withIdentifier: "logout", sender: self)
             return
         }
@@ -433,7 +426,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //state.touchesMoved(touches, with: event)
         if !editState.eraserOn && !editState.EmojiOn {
             drawState.touchesMoved(touches, with: event)
         } else {
@@ -442,7 +434,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-   //     state.touchesEnded(touches, with: event)
         if !editState.eraserOn {
             drawState.touchesEnded(touches, with: event)
         } else {
@@ -450,7 +441,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
         }
     }
     
-    //MARK: - iOS override properties
     override var prefersHomeIndicatorAutoHidden: Bool {
           return true
       }
@@ -470,14 +460,6 @@ class HomeViewController: UIViewController, ChangeEmojiDelegate {
     }
     
 }
-
-// debug purposes
-extension UIView {
-    func subviewsRecursive() -> [UIView] {
-        return subviews + subviews.flatMap { $0.subviewsRecursive() }
-    }
-}
-
 
 class State : UIView {
     func enter() {
@@ -500,17 +482,3 @@ class State : UIView {
         // Override
     }
 }
-
-//extension HomeViewController : ChangeEmojiDelegate{
-//    func changeEmoji(emoji: Emoji){
-//        self.dismiss(animated: true)
-//        self.emoji = emoji
-//        editState.stateChangeEmoji(emoji: emoji)
-//        editState.emojiButton.activateButton(imageName: emoji.name)
-//        editState.menuButton.setImage(UIImage(named: emoji.name), for: .normal )
-//        print("home:", emoji.name)
-//    }
-//    func getUpdatedList() ->[Emoji] {
-//        return editState.getEmojiList()
-//    }
-//}

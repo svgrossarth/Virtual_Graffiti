@@ -21,8 +21,6 @@ class QRNode : SCNNode {
     }
     
     required init?(coder: NSCoder) {
-        //let node = coder.decodeObject(forKey: Keys.node.rawValue) as! SCNNode
         super.init(coder: coder)
-        //.fatalError("init(coder:) has not been implemented")
     }
 }

@@ -43,7 +43,6 @@ class Database {
         let docPath = collectionPath + "/" + nodeName
         docRef = db.document(docPath)
         
-        // TODO: Save drawing!
         var dataToSave: [String: Any] = [:]
         
         do{
@@ -61,14 +60,10 @@ class Database {
                 if let error = error {
                     print("Error saving drawing: \(error.localizedDescription)")
                 }
-               else {
-                   //print("Data has been saved at \(docPath)")
-               }
-           }
-       } catch{
-           print("Can't convert node to data")
-
-       }
+            }
+        } catch{
+            print("Can't convert node to data")
+        }
    }
 
     
@@ -95,9 +90,6 @@ class Database {
              qrRef.setData(qrData) { (error) in
                  if let error = error {
                      print("Error saving drawing: \(error.localizedDescription)")
-                 }
-                 else {
-                     //print("QRNode has been saved at \(qrPath)")
                  }
              }
          } catch{
@@ -197,7 +189,6 @@ class Database {
         // Tiles divided into 0.01 of a degree, or around 0.06 x 0.06 miles at the equator
         // Longitude gets bigger at the equator and smaller at poles
         let tile = doubleToString(number:latitude, numberOfDecimalPlaces:degreeDecimalPlaces) + ", " + doubleToString(number:longitude, numberOfDecimalPlaces:degreeDecimalPlaces)
-        //print("all tiles near by ", tile)
         
         if currentlyPulledTiles.contains(tile) {
             return
@@ -218,7 +209,6 @@ class Database {
     
     
     func dbCallback(querySnapshot : QuerySnapshot?, err : Error?, drawFunction: @escaping (_ nodes : [SecondTierRoot]) -> Void){
-        //print("dbcallback called for drawings")
         if let err = err {
                 print("Error with query snapshot: \(err.localizedDescription)")
                 return
@@ -239,12 +229,10 @@ class Database {
                             let newLocation = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeLocation) as! CLLocation
                             let newUID = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeUID) as! String
                             let newTileName = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(nodeTileName) as! String
-                            //print(newNode.location)
                             newNode.location = newLocation
                             newNode.uid = newUID
                             newNode.tileName = newTileName
                             nodes.append(newNode)
-                            //print("Got one node and its name is", newNode.name!, " from tile ", newNode.tileName)
                         } catch {
                             print("Could not pull down node")
                         }
