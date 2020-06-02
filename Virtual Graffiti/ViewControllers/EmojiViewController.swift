@@ -21,50 +21,21 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
     var recentModels = [Emoji]()
     var filteredModels:[Emoji] = []
     var selectedEmoji = Emoji(name: "bandage", ID: "Group50555")
-    private var selectedModelIndex = 0
-//    var homeVC = HomeViewController()
-
-    @IBOutlet weak var MenuCollection: UICollectionView!
     var emojiVC : EmojiViewController!
+    private var selectedModelIndex = 0
+    @IBOutlet weak var MenuCollection: UICollectionView!
 
     static func makeMemeDetailVC(emojiVC: EmojiViewController) -> EmojiViewController {
         let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ListVC") as! EmojiViewController
-
         newViewController.emojiVC = emojiVC
-
         return newViewController
 }
-//    @IBOutlet weak var searchbar: UISearchBarUI!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupEmojiModels()
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
-//    @IBAction func doneButtonTap(_ sender: Any) {
-//        print("emoji menu dismissed")
-//        self.dismiss(animated: true, completion: nil)
-//    }
 
-//    @objc func keyboardWillShow(notification: NSNotification) {
-//        var userInfo = notification.userInfo
-//        let keyboardFrame: NSValue = userInfo?.removeValue(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
-//        let keyboardHeight = keyboardFrame.cgRectValue.height
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-//            let newYOrigin = CGFloat(-keyboardHeight)
-//            self.view.frame.origin.y = newYOrigin
-//        }
-//    }
-//
-//    @objc func keyboardWillHide(notification: NSNotification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-//            let newYOrigin = CGFloat(0)
-//            self.view.frame.origin.y = newYOrigin
-//        }
-//    }
 
     func setupEmojiModels(){
         Models.append(Emoji(name:"bandage", ID:"Group50555" ))
@@ -94,7 +65,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
         Models.append(Emoji(name:"yum", ID:"Group46695"))
         filteredModels = Models
     }
-
+// MARK: setup pre-populated emojis for "RECENTLY USED"
     func setupRecentModels(){
         recentModels.append(Emoji(name:"bandage", ID:"Group50555" ))
         recentModels.append(Emoji(name:"tired", ID:"Group3677"))
@@ -102,11 +73,11 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
 
     //MARK: - collectionView
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
        return 2
     }
 
+  //MARK: section cell nums
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             if section == 1{
                 return filteredModels.count
@@ -123,6 +94,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
             }
     }
 
+  //MARK: section cell setup
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let recentCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Menu Cell", for: indexPath) as! MenuCollectionViewCell
@@ -141,6 +113,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
         return menuCell
     }
 
+  //MARK: section cell nums
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
         return CGSize(width: view.frame.width/8, height: view.frame.width/8)
@@ -153,9 +126,9 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
         return recentModels.count
     }
 
- //section header view
+
+    //MARK: section header
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        print("set height")
         return CGSize(width: self.view.frame.width, height: 200)
     }
 
@@ -176,6 +149,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
         fatalError("no header")
     }
 
+  //MARK: section seleciton
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         recentModels = delegate!.getUpdatedList()
         collectionView.reloadData()
@@ -184,20 +158,7 @@ class EmojiViewController: UIViewController, UICollectionViewDelegate, UICollect
         } else{
             selectedEmoji = filteredModels[indexPath.item]
         }
-        print("emoji list: ", recentModels.count)
         delegate?.changeEmoji(emoji: selectedEmoji)
     }
 
-
-    //MARK: - search
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        guard !searchText.isEmpty else {
-//            filteredModels = Models
-//            MenuCollection.reloadData()
-//            print(recentModels.count)
-//            return
-//        }
-//        filteredModels = Models.filter({ emo -> Bool in emo.name.lowercased().contains(searchText.lowercased())})
-//        MenuCollection.reloadData()
-//    }
 }

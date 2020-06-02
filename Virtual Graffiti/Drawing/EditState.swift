@@ -196,6 +196,7 @@ class EditState: State {
                     self.changeColorButton.isHidden = true
                     self.signoutButton.isHidden = true
 
+                    //close everything
                     self.menuButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
                     self.eraseButton.transform = CGAffineTransform(translationX: 0, y: -15)
                     self.emojiButton.transform = CGAffineTransform(translationX: 0, y: -20)
@@ -233,7 +234,6 @@ class EditState: State {
     func pencilButtonTouched(){
         pencilOn = true
         pencilButton.setImage(UIImage(named: drawState.currentPen), for: .normal)
-//        menuButton.setImage(UIImage(named: drawState.currentPen), for: .normal)
         if eraserOn{
             eraserOn = false
             eraseButton.setImage(UIImage(named: "eraserOff"), for: .normal)
@@ -245,7 +245,6 @@ class EditState: State {
         menuButtonTouched()
 
         self.distanceLabel.isHidden = false
-//        self.distanceValue.isHidden = false
         self.distanceSlider.isHidden = false
         self.widthLabel.isHidden = false
         self.widthSlider.isHidden = false
@@ -260,12 +259,13 @@ class EditState: State {
             if EmojiOn == false && pencilOn == false{
                 menuButtonTouched()
             }
-        } else {//turn on eraser
+        } else {
+            //turn on eraser
             eraserOn = true
             pencilOn = false
             if EmojiOn{
                 EmojiOn = false
-                emojiButton.deactivateButton()//if eraser is on, deactivate emoji
+                emojiButton.deactivateButton()
             }
             eraseButton.setImage(UIImage(named: "eraserOn"), for: .normal)
             pencilButton.setImage(UIImage(named: "pencil"), for: .normal)
@@ -276,7 +276,6 @@ class EditState: State {
             self.widthLabel.isHidden = true
             self.widthSlider.isHidden = true
             colorStack.isHidden = true;
-
         }
     }
     
@@ -356,7 +355,6 @@ class EditState: State {
     }
 
     func setModel(){
-        print("pathname:",pathName)
         guard let emojiScene = SCNScene(named: pathName) else {
             print("model with path: ", pathName," does not exist")
             fatalError()
@@ -377,11 +375,9 @@ class EditState: State {
         self.emoji = emoji
         self.modelName = emoji.name + ".scn"
         self.pathName = "emojis.scnassets/" + modelName
-        print("EditState change emoji:", emoji.name)
     }
 
     func getEmojiList() -> [Emoji]{
-        print("recent used emoji:", recentUsedEmoji.count)
         return recentUsedEmoji
     }
 
@@ -409,7 +405,6 @@ class EditState: State {
         if EmojiOn {
             if menuExpand {
                 menuButtonTouched()
-//                menuButton.setImage(UIImage(named: emoji.name), for: .normal)
             }
             if let singleTouch = touches.first{
                 let touchLocation = drawState.touchLocationIn3D(touchLocation2D: singleTouch.location(in: sceneView))
