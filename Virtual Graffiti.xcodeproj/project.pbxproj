@@ -25,8 +25,6 @@
 		7791645A23DECE6600BDDDCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7791645923DECE6600BDDDCC /* GoogleService-Info.plist */; };
 		77D57EF423EE23D400A665A3 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770663F823EB860600E98F63 /* AppAuth.framework */; };
 		77D57EFA23EE29D800A665A3 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */; };
-		77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */; };
-		77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DD9B5224078DA6005AF15C /* PKCanvas.swift */; };
 		77E74DC623E222C100C6E65C /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DC523E222C100C6E65C /* SignUpViewController.swift */; };
 		77E74DC823E222CF00C6E65C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DC723E222CF00C6E65C /* LoginViewController.swift */; };
 		77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E74DC923E222E700C6E65C /* HomeViewController.swift */; };
@@ -115,8 +113,6 @@
 		77814ACF246E0C0600AEA19D /* Virtual Graffiti.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Virtual Graffiti.entitlements"; sourceTree = "<group>"; };
 		7791645923DECE6600BDDDCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		77D57EF923EE29D800A665A3 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
-		77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilKitInterface.swift; sourceTree = "<group>"; };
-		77DD9B5224078DA6005AF15C /* PKCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCanvas.swift; sourceTree = "<group>"; };
 		77E74DC523E222C100C6E65C /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		77E74DC723E222CF00C6E65C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		77E74DC923E222E700C6E65C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -237,7 +233,6 @@
 			children = (
 				77814ACF246E0C0600AEA19D /* Virtual Graffiti.entitlements */,
 				0FA41240244A94CB00C5FA8E /* Emoji */,
-				77DD9B5024078D7A005AF15C /* PencilKit */,
 				C0086EC02412B0FE001C4A22 /* Drawing */,
 				77E74DCB23E240BF00C6E65C /* Helpers */,
 				77E74DC423E2217100C6E65C /* ViewControllers */,
@@ -270,15 +265,6 @@
 				7746C3D823DE581E00DDC27C /* Info.plist */,
 			);
 			path = Virtual_GraffitiUITests;
-			sourceTree = "<group>";
-		};
-		77DD9B5024078D7A005AF15C /* PencilKit */ = {
-			isa = PBXGroup;
-			children = (
-				77DD9B5124078DA6005AF15C /* PencilKitInterface.swift */,
-				77DD9B5224078DA6005AF15C /* PKCanvas.swift */,
-			);
-			path = PencilKit;
 			sourceTree = "<group>";
 		};
 		77E74DC423E2217100C6E65C /* ViewControllers */ = {
@@ -705,13 +691,11 @@
 				77E74DCA23E222E700C6E65C /* HomeViewController.swift in Sources */,
 				C0086EC42412B33E001C4A22 /* SecondTierRoot.swift in Sources */,
 				0F0E0E952450F61B00AC6004 /* ListHeaderView.swift in Sources */,
-				77DD9B5424078DA6005AF15C /* PKCanvas.swift in Sources */,
 				CE87C3B2245BD64C00524D4B /* SceneLocationView.swift in Sources */,
 				CE87C3A5245BD64C00524D4B /* LocationAnnotationNode.swift in Sources */,
 				0F0E0E89244E95F900AC6004 /* EmojiViewController.swift in Sources */,
 				77811513245B95AB00985F42 /* QRNode.swift in Sources */,
 				CE87C3A7245BD64C00524D4B /* SceneLocationEstimate.swift in Sources */,
-				77DD9B5324078DA6005AF15C /* PencilKitInterface.swift in Sources */,
 				C01B55FA245E58ED004007BC /* DrawState.swift in Sources */,
 				CE87C3A3245BD64C00524D4B /* LocationNode.swift in Sources */,
 				CE87C3A6245BD64C00524D4B /* SceneLocationView+ARSCNViewDelegate.swift in Sources */,

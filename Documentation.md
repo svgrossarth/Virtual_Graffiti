@@ -44,11 +44,70 @@ This class is the SCNNode that is created when a QR Code is scanned. The local u
 - **init(QRValue: String, name: String)**: Initialized the QRNode with a name and the payload of the QR code. 
 - **init?(coder: NSCoder)**: Needed to convert this class to bytes. 
 
+### EditState
+This class handles editing of drawings, including erasing stroke,changing pencil color and new features including placing emoji, signing in and signing out.It provides with the User Interface
+- **initialize(signoutButton: UIButton, pencilButton: UIButton, menuButton: UIButton, emojiButton: ModeButton, eraseButton: UIButton, distanceSlider : UISlider, distanceLabel : UILabel, drawState : DrawState, refSphere : SCNNode, sceneView : ARSCNView, widthSlider : UISlider, widthLabel : UILabel, userUID: String, undoButton : UIButton, redoButton : UIButton)**: Initialize the EditState, Initialize all buttons needed for editing UI
+- **createColorSelector(changeColorButton: UIButton, colorStack: UIStackView)**:initialization for changeColorButton and colorStack
+- **enter()**: initial setup for button and sliders when entering EditState
+- **exit()**: reset all variables to be default value when exits EditState
+- **menuButtonTouched()**: create animation when “menu bar” icon is clicked. Either close drop-down buttons or open up drop down buttons. Closing drop-down animation depends on which functionality mode is on
+- **changeColor()**: enable colorStack or disable colorStack and set image for color selction button. Disable eraser and emoji if they are on.
+- **pencilButtonTouched()**: enable pencil or disable pencil and set image for pencil button. Disable any other mode
+- **eraseButtonTouchUp()**: enable eraser or disable eraser and set image for eraser button. Disable any other mode
+- **distanceSliderChange()**: change distance and apply the value to reference Sphere
+- **widthSliderChange()**: change width and apply the value to reference Sphere
+- **removeSphere()**: modify reference Sphere
+- **emojiButtonTouched()**: emoji button is touched and set emoji button. Disable any other mode
+- **setModel()**: initial setup for emoji model
+- **directionalLighting() ->SCNLight**: lighting setup
+- **stateChangeEmoji(emoji: Emoji)**: change current emoji model
+- **setupRecentList()**: initial setup for prePopEmoji for recently used emoji models
+- **updateRecentEmojiList()**: update recently used emoji model list
+- **degToRadians(degrees:Double) -> Double**: mathematical conversion from degree to radius
+- **touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)**: Callback function when the user put their finger on the screen. This function enables placing emoji or erasing drawings
+- **touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)**: Callback function when the user moves their finger. This function allows erasing based on touches
+- **eraseNode(touches: Set<UITouch>)**: function to erase user-specific stroke or emoji from userRootNode and from database based on UID.
+- **undoErase()**: function for undo erasing. Adding previous erased node back to userRootNode and to database
+- **redoErase()**: function for redo erasing. Removing previous erased but undo-erased node from userRootNode and to database
+- **changeRedoVisability()**: redo button UI. Make redo button visible or not depends on undo erasing action
+- **changeUndoVisability()**: undo button UI. Make undo button visible or not depends on erasing action
 
-	
-	
-	
-	
+### EmojiViewController
+This class is the emoji Menu. It contains recently used section and all emoji section. It allows user to select from either one
+- **viewDidLoad()**: initialization for EmojiViewController view
+- **setupEmojiModels()**: setup and append emoji models name and ID
+- **setupRecentModels()**: setup pre-populated emojis for "RECENTLY USED"
+- **numberOfSections(in collectionView: UICollectionView) -> Int**: returns number of collections sections
+- **collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int**: returns numbers of cells in each section
+- **collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell**: returns a configured cell object that corresponds to the specified item in the collection view. 
+- **func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize**: returns customized cell size.
+- **collectionView(collecitonView: UICollectionView, numberOfItemsInSection section: Int) -> Int**: returns the number of items in each section
+- **collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize**: returns customized header size
+- **collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView**: returns header label
+- **collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)**: poping up user selected emoji mode from the menu and change recently used emoji list.
+
+### ChangeEmojiDelegate
+- **changeEmoji(emoji: Emoji)**：function to change emoji 
+- **getUpdatedList()->[Emoji]**：returns updated list of recently used emoji
+
+
+### ModeButton
+This class is emoji button in EditState
+- **init(frame: CGRect)**: class initialization
+- **init?(coder aDecoder: NSCoder)**: an initializer using the data in decoder
+- **initButton()**: initialization for Emoji Button. setup button image
+- **buttonPressed()**: activate or deactivate emoji Button
+- **activateButton(imageName: String)**: activate emoji Button. change button image
+- **deactivateButton(imageName: String)**: deactivate emoji Button. change button image
+
+### ListHeaderView
+This class is customizing header text in section view in EmojiViewController 
+### MenuCollectionViewCell
+This class is customizing ModelImage in emoji menu cell in EmojiViewController 
+### Emoji
+This class is for Emoji Model
+- **init(name: String, ID: String)**-: initialize emoji model with its name and ID
+
 
 
 	
